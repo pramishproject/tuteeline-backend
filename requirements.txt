@@ -1,0 +1,39 @@
+# base requirements
+
+# Django
+# --------------------------------------------------------------
+Django==3.2.6
+django-environ==0.4.5
+argon2-cffi==21.1.0  # password
+Pillow==8.3.1
+django-celery-beat==2.2.1
+django-redis==5.0.0
+django-debug-toolbar
+django-extensions
+
+# Rest Framework
+# --------------------------------------------------------------
+djangorestframework==3.12.4
+django-cors-headers==3.8.0
+drf-yasg==1.20.0   # API Documentation
+django-filter==2.4.0
+djangorestframework-simplejwt==4.8.0  # JWT
+drf-api-tracking==1.8.0                   # api tracking
+django-templated-mail==1.1.1
+pyotp==2.6.0
+
+# Database
+# --------------------------------------------------------------
+#psycopg2==2.9.1
+psycopg2-binary
+
+# channels
+channels==3.0.4
+
+geopy==2.2.0
+
+#production
+gunicorn==20.1.0
+Collectfast==2.2.0
+django-storages==1.11.1
+boto3==1.18.31

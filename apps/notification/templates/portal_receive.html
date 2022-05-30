@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Receive</title>
+    <script  type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>Portal User</h1>
+<script>
+    var loc = window.location
+    var wsStart = "ws://"
+    if (loc.protocol === "https:"){
+        wsStart = "wss://"
+    }
+    var webSocketEndpoint =  wsStart + loc.host + '/notification' + '?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM2OTkwMTgyLCJqdGkiOiIzNzdiYjI5YTg0M2E0ZjI3ODc1OTA3YmEyY2UyZGQ2ZiIsInVzZXJfaWQiOiI0NWEwNTBiOS1mMTY2LTRhMjEtOGI0Ni0wY2FmY2JkZjQyYzgifQ.f4LzkLvvqL47V2UCa-IWId0jrULrj6HbwK5I2NCbaTE'
+    console.log(webSocketEndpoint)
+
+
+    var socket = new WebSocket(webSocketEndpoint) // Creating a new Web Socket Connection
+
+    // Socket On receive message Functionality
+    socket.onmessage = function(e){
+        console.log('message', e)
+        $("body").append("<h3>"+e.data+"</h3>")
+        // Can write any functionality based on your requirement
+
+    }
+
+    // Socket Connet
+    socket.onopen = function(e){
+        console.log('open', e)
+    }
+
+    // Socket Error
+    socket.onerror = function(e){
+        console.log('error', e)
+    }
+
+    // Socket close
+    socket.onclose = function(e){
+        console.log('closed', e)
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<VirtualHost *:80>
+ServerAdmin webmaster@localhost
+DocumentRoot /home/ubuntu/eduexplor
+#LogLevel info ssl:warn
+ErrorLog ${APACHE_LOG_DIR}/error.log
+CustomLog ${APACHE_LOG_DIR}/access.log combined
+Alias /staticfiles/ /home/ubuntu/eduexplor/staticfiles/
+
+<Directory /home/ubuntu/eduexplor/staticfiles >
+Require all granted
+</Directory>
+
+<Directory /home/ubuntu/eduexplor/config >
+<Files wsgi.py>
+Require all granted
+</Files>
+</Directory>
+WSGIDaemonProcess eduexplor python-path=/home/ubuntu/eduexplor python-home=/home/ubuntu/eduexplor/eduexplor home=/home/ubuntu/eduexplor/
+WSGIProcessGroup eduexplor
+WSGIScriptAlias / /home/ubuntu/eduexplor/config/wsgi.py
+</VirtualHost>
