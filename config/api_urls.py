@@ -87,5 +87,9 @@ urlpatterns = [
     path(
         'review/',
         include('apps.review.urls')
+    ),
+    path(
+        'councelling/',
+        include('apps.counselling.urls')
     )
 ]

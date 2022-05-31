@@ -13,14 +13,16 @@ from apps.students.models import StudentModel
 from django.db.models.signals import pre_save
 from apps.academic.utils import check_score,upload_academic_doc_to
 
-class Academic(BaseModel):
-    LEVEL_CHOICE=(
+
+LEVEL_CHOICE=(
         ('school','school'),
         ('high_school','high_school'),
         ('undergraduate','undergraduate'),
         ('graduate','graduate'),
         ('post_graduate','post_graduate')
     )
+class Academic(BaseModel):
+
     student = models.ForeignKey(StudentModel ,on_delete=CASCADE)
     institute_name = models.CharField(max_length=200)
     duration = models.FloatField(

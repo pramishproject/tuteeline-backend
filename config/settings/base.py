@@ -64,6 +64,7 @@ DJANGO_APPS = [
     # "django.contrib.humanize", # Handy template tags
     "django.contrib.admin",
     "django.forms",
+    'django.contrib.gis',
 ]
 THIRD_PARTY_APPS = [
     "django_celery_beat",
@@ -99,7 +100,7 @@ LOCAL_APPS = [
     "apps.language.apps.LanguageConfig",
     "apps.activity.apps.ActivityConfig",
     "apps.review.apps.ReviewConfig",
-    "apps.counselling.apps.CounsellingConfig"
+    "apps.counselling.apps.CounsellingConfig",
 
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
