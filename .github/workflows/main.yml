@@ -38,9 +38,6 @@ jobs:
           key: ${{secrets.SSH_KEY}} #ssh private key obtained by running ssh-keygen
           username: ${{secrets.SSH_USERNAME}} #user of the server
 
-          ## passphrase that I added while creating ssh key,
-          ## not required if passphrase isn't added
-          passphrase: ${{secrets.SSH_PASSPHRASE}}
           script: |
             cd backend/tuteeline-backend
             echo cloning successful
