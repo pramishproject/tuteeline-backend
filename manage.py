@@ -2,9 +2,10 @@
 import os
 import sys
 from pathlib import Path
-
+from config.settings.base import env
 if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")
+    settings_file = env("SETTING_CONFIG")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", settings_file)
 
     try:
         from django.core.management import execute_from_command_line

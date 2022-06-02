@@ -331,4 +331,5 @@ apps/media/
 
 .ipython/
 .env
+backup.txt
 .envs/*

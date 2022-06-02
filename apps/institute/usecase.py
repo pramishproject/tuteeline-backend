@@ -1,3 +1,5 @@
+from django.db.models import Q
+
 from apps.institute.email import SendEmailToInstituteStaff
 from apps.auth.jwt import serializers
 from datetime import datetime
@@ -95,8 +97,11 @@ class ListInstituteUseCase(BaseUseCase):
         return self._institute
 
     def _factory(self):
-        self._institute = Institute.objects.all()
-
+        # Institute.objects.distinct().filter(instituteCourse__program="Bachelor")
+        ins = Institute.objects.distinct().filter(Q(course_related__course__name__isnull=False))
+        print(ins)
+        # self._institute = Institute.objects.all()
+        self._institute = ins
 
 class GetInstituteUseCase(BaseUseCase):
     def __init__(self,institute_id:str):

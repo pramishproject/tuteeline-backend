@@ -1,4 +1,6 @@
 from django.http.response import JsonResponse
+
+from apps.institute.filter import  CustomSchema
 from apps.institute.models import Institute
 from apps import institute
 from apps.institute.mixins import InstituteMixins, ScholorshipMixins, SocialMediaMixins
@@ -6,7 +8,8 @@ from apps.studentIdentity import usecases
 from django.utils.translation import gettext_lazy as _
 from rest_framework.parsers import MultiPartParser, FileUploadParser
 from rest_framework.permissions import AllowAny
-
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 from apps.institute import serializers
 from apps.core import generics
 from apps.institute import usecase
@@ -116,6 +119,11 @@ class UpdateInstituteCoverimageView(generics.UpdateWithMessageAPIView,InstituteM
 class ListInstituteView(generics.ListAPIView):
     permission_classes = (AllowAny,)
     serializer_class = serializers.ListInstituteSerializer
+    # filter_backends = [DjangoFilterBackend]
+    # schema = CustomSchema()
+    filter_backends = [CustomSchema]
+
+    # https://www.django-rest-framework.org/api-guide/filtering/
     def get_queryset(self):
         return usecase.ListInstituteUseCase().execute()
 
