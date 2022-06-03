@@ -1,6 +1,6 @@
 from django.http.response import JsonResponse
 
-from apps.institute.filter import  CustomSchema
+from apps.institute.filter import  InstituteFilter
 from apps.institute.models import Institute
 from apps import institute
 from apps.institute.mixins import InstituteMixins, ScholorshipMixins, SocialMediaMixins
@@ -119,12 +119,13 @@ class UpdateInstituteCoverimageView(generics.UpdateWithMessageAPIView,InstituteM
 class ListInstituteView(generics.ListAPIView):
     permission_classes = (AllowAny,)
     serializer_class = serializers.ListInstituteSerializer
-    # filter_backends = [DjangoFilterBackend]
-    # schema = CustomSchema()
-    filter_backends = [CustomSchema]
-
+    filter_class = InstituteFilter
+    filter_backends = [filters.SearchFilter,DjangoFilterBackend]
+    search_fields = ['name','course_related__course__name','course_related__faculty__name']
     # https://www.django-rest-framework.org/api-guide/filtering/
+
     def get_queryset(self):
+        print(self.request.GET.get('name', None))
         return usecase.ListInstituteUseCase().execute()
 
 
@@ -278,4 +279,7 @@ class GetFacilityView(generics.ListAPIView,InstituteMixins):
         return usecase.GetFacilityUseCase(
             institute= self.get_object()
         ).execute()
+
+
+
 # class Dashboard(generics.)

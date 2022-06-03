@@ -77,7 +77,11 @@ class InstituteStaff(BaseModel):
 
     @property
     def get_institute_full_name(self):
-        return self.user.fulname
+        return self.user.fullname
+
+    @property
+    def get_user_role(self):
+        return self.role.name
 
     def __self__(self):
         return self.user.email 

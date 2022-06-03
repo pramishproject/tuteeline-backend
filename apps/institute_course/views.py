@@ -234,3 +234,9 @@ class StudentMarkToSendView(APIView,StudentMixin,CourseMixin):
     def get(self,request,student_id,institute_course_id):
         data =usecases.GetAccessDocument(student=student_id,course=institute_course_id).execute()
         return Response({"data":data})
+
+
+
+class CompareInstitute(generics.RetrieveAPIView): #TODO SPRINT1
+    pass
+

@@ -23,13 +23,15 @@ from apps.utils.currency import RealTimeCurrencyConverter
 
 class Faculty(BaseModel):
     name = models.CharField(max_length=200)
-    # def __str__(self):
-    #     self.name
+    def __str__(self):
+       return str(self.name)
 
 class Course(BaseModel):
     faculty=models.ForeignKey(Faculty , on_delete=models.CASCADE)
     name=models.CharField(max_length=200)
     description=models.TextField()
+    def __str__(self):
+        return str(self.name)
     
 
 class InstituteCourse(BaseModel):

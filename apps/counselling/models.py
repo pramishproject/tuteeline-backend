@@ -16,12 +16,22 @@ class InstituteCounselling(BaseModel):
     institute = models.ForeignKey(to=Institute,on_delete=models.CASCADE)
     education_level = models.CharField(choices=LEVEL_CHOICE,max_length=200)
     which_time = models.DateTimeField(blank=True)
-    physical_counelling = models.BooleanField(default=True)
+    physical_counselling = models.BooleanField(default=True)
     assign_to = models.ForeignKey(to=InstituteStaff,on_delete=models.DO_NOTHING,blank=True,null=True)
     status = models.CharField(max_length=100,choices=COUNCELLING_STATUS,default="not_start")
     notes = models.TextField(default="",blank=True,null=True)
     class Meta:
         unique_together= ("student","institute")
+
+
+    @property
+    def get_interested_course(self):
+
+        interested_course=InterestedCourse.objects.filter(counselling=self.id)
+        list_course = [course.course.course.name for course in interested_course]
+        return list_course
+
+
 
 class InterestedCourse(BaseModel):
     counselling = models.ForeignKey(to=InstituteCounselling,on_delete=models.CASCADE)

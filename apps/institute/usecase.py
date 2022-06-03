@@ -98,10 +98,10 @@ class ListInstituteUseCase(BaseUseCase):
 
     def _factory(self):
         # Institute.objects.distinct().filter(instituteCourse__program="Bachelor")
-        ins = Institute.objects.distinct().filter(Q(course_related__course__name__isnull=False))
-        print(ins)
-        # self._institute = Institute.objects.all()
-        self._institute = ins
+        # ins = Institute.objects.distinct().filter(Q(course_related__course__name__isnull=False))
+
+        self._institute = Institute.objects.all()
+        # self._institute = ins
 
 class GetInstituteUseCase(BaseUseCase):
     def __init__(self,institute_id:str):
