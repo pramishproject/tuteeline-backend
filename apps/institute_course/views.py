@@ -17,15 +17,15 @@ from apps.institute_course.serializers import (
     ApplicationSerializerDashboard,
     CancelStudentApplicationSerializer,
     CommentApplicationSerializer,
-    CourseSerializer, 
+    CourseSerializer,
     FacultySerializer,
     GetStudentApplicantSerializer,
-    GetStudentApplicationInstituteSerializer, 
+    GetStudentApplicationInstituteSerializer,
     InstituteCourseSerializer,
     AddInstituteCourseSerializer,
-    ListApplicationCommentSerializer, 
-    ListInstituteCourseSerializer, 
-    StudentApplySerializer)
+    ListApplicationCommentSerializer,
+    ListInstituteCourseSerializer,
+    StudentApplySerializer, CompareInstituteSerializer, StudentAccessDetail)
 from collections import OrderedDict
 from apps.students.mixins import StudentMixin
 from apps.institute_course import usecases
@@ -208,10 +208,7 @@ class ApplicantDashboard(generics.ListAPIView,InstituteMixins):
             institute=self.get_object()
         ).execute()
 
-class ListStudentApplicationView(generics.ListAPIView,StudentMixin):
-    """
-    list student application view
-    """
+
     
 
 @permission_classes((permissions.AllowAny,))
@@ -237,6 +234,24 @@ class StudentMarkToSendView(APIView,StudentMixin,CourseMixin):
 
 
 
-class CompareInstitute(generics.RetrieveAPIView): #TODO SPRINT1
-    pass
+class CompareInstituteView(generics.RetrieveAPIView,CourseMixin): #TODO SPRINT1
+    """
+    Api For compare institute
+    """
+    serializer_class = CompareInstituteSerializer
+    def get_object(self):
+        return self.get_institutecourse()
 
+    def get_queryset(self):
+        return usecases.CompareInstituteCourseUseCase(
+            course=self.get_object(),
+        ).execute()
+
+
+class StudentAccessDetail(generics.CreateAPIView): #TODO Test for select student doc to send institute
+    """
+    create api view
+    """
+    serializer_class = StudentAccessDetail
+    def perform_create(self, serializer):
+        pass

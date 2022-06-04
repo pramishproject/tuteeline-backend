@@ -28,9 +28,6 @@ class GetInstituteSerializer(serializers.ModelSerializer):
             'state',
         )
 
-class GetInterestedCourse(serializers.ModelSerializer):
-    class Meta:
-        pass
 
 class ListStudentCounsellingSerializer(serializers.ModelSerializer):
     institute = GetInstituteSerializer(read_only=True)

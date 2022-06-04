@@ -527,6 +527,17 @@ class GetAccessDocument():
         
 
 
+class CompareInstituteCourseUseCase(BaseUseCase):
+    def __init__(self,course):
+        self._course = course
+
+    def execute(self):
+        self._factory()
+        return self._institute_course
+
+    def _factory(self):
+        self._institute_course = InstituteCourse.objects.filter(pk=self._course).prefetch_related("institute")
+
 
 
 

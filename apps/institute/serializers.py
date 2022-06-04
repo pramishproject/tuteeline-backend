@@ -186,6 +186,7 @@ class FacilitySerializer(serializers.ModelSerializer):
 class InstituteDetailSerilaizer(serializers.ModelSerializer):
     course_related = InstituteDetailCourseSerializer(many=True,read_only =True)
     facility_related = FacilitySerializer(many=True,read_only =True)
+    social_media_data = serializers.ListSerializer(child=serializers.DictField(),source="social_media")
     class Meta:
         model = Institute
         fields = (
@@ -206,7 +207,8 @@ class InstituteDetailSerilaizer(serializers.ModelSerializer):
             'city',
             'street_address',
             'facility_related',
-            'course_related'
+            'course_related',
+            'social_media_data'
         )
 
 

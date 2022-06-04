@@ -84,6 +84,10 @@ class InstituteCourse(BaseModel):
     def get_course_name(self):
         return self.course.name
 
+    @property
+    def get_faculty_name(self):
+        return self.faculty.name
+
     class Meta:
         unique_together = ('course','institute')
 

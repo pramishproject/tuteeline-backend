@@ -29,7 +29,9 @@ class CreateInstituteCounsellingUseCase(BaseUseCase):
                     "counselling":counciling,
                     "course":courseId
                 })
-        InterestedCourse.objects.bulk_create(bulk_interested_course)
+        if len(bulk_interested_course)>0:
+            InterestedCourse.objects.bulk_create(bulk_interested_course)
+
 
 
 class GetCounselling(BaseUseCase):

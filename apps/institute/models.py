@@ -59,7 +59,10 @@ class Institute(BaseModel):
     type = models.TextField(max_length=200,choices=TYPE_CHOICE,blank=True,null=True)
     def __str__(self):
         return self.name
-
+    @property
+    def social_media(self):
+        self._social_media = [{"name":social_media.name,"link":social_media.link} for social_media in SocialMediaLink.objects.filter(institute=self.id)]
+        return self._social_media
 
 class InstituteStaff(BaseModel):
     user = models.OneToOneField(InstituteUser, on_delete=models.CASCADE)

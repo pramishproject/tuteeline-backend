@@ -210,7 +210,7 @@ class VerifyConsultanyUserOTPSerializer(CodeSerializer, OTPMixin):
         # get current user from views
         user = self.context['view'].get_object()
         # check for otp code validation
-        print("user",user.id)
+
         consultancy_staff = ConsultancyStaff.objects.get(user=user)
         position=consultancy_staff.role.name
         try:

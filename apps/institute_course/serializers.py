@@ -1,8 +1,5 @@
-import re
 
-from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from apps.institute_course import models
@@ -11,6 +8,7 @@ from rest_framework.validators import UniqueTogetherValidator
 from apps.institute_course.models import CommentApplicationInstitute, Course, Faculty, InstituteApply, InstituteCourse
 from apps.core import fields
 from apps.students.models import StudentModel,StudentAddress
+from apps.institute.models import Institute
 
 
 User = get_user_model()
@@ -207,13 +205,13 @@ class GetStudentApplicationInstituteSerializer(serializers.ModelSerializer):
     class Meta:
         model = InstituteApply
         fields = (
-            'institute'
+            'institute',
             'id',
             'student',
             'student_name',
-            'course_name'
+            'course_name',
             'course',
-            'consultancy_name'
+            'consultancy_name',
             'consultancy',
             'action',
             'cancel',
@@ -269,3 +267,50 @@ class StudentAdmissionApplicationSerializer(serializers.ModelSerializer):
             'forward',
             'cancel',
         )
+
+
+class GetInstituteCompareDetail(serializers.ModelSerializer):
+    class Meta:
+        model = Institute
+        fields = (
+            'id',
+            'name',
+            'university',
+            'established',
+            'rating',
+            'country',
+            'city',
+            'state',
+            'street_address',
+            'type',
+            'logo',
+        )
+class CompareInstituteSerializer(serializers.ModelSerializer):
+    institute = GetInstituteCompareDetail(read_only=True)
+    course_name = serializers.CharField(source="get_course_name")
+    faculty_name = serializers.CharField(source="get_faculty_name")
+    class Meta:
+        model = InstituteCourse
+        fields = (
+            'course_name',
+            'institute',
+            'faculty_name',
+            'program',
+            'intake',
+            'eligibility',
+            'score',
+            'last_mini_academic_score',
+            'duration_year',
+            'total_fee',
+            'reg_fee',
+            'fee_currency',
+            'academic',
+            'lor',
+            'sop',
+            'citizenship',
+            'passport',
+            'essay'
+        )
+
+class StudentAccessDetail(serializers.Serializer):
+    academics = serializers.ListSerializer(child=serializers.CharField())

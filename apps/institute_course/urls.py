@@ -66,5 +66,17 @@ urlpatterns = [
     path(
         '<student_id>/<institute_course_id>/document_tracker',
         views.StudentMarkToSendView.as_view(),
-        name="document_tracker")
+        name="document_tracker"
+    ),
+    path(
+        '<institute_course_id>/course/compare',
+        views.CompareInstituteView.as_view(),
+        name="compare-coure"
+    ),
+    path(
+        'access',
+        views.StudentAccessDetail.as_view(),
+        name="response"
+    )
+
 ]

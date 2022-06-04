@@ -10,7 +10,7 @@ from apps.core.mixins import LoggingErrorsMixin, ResponseMixin
 from apps.user.mixins import ConsultancyUserMixin, PortalUserMixin,InstituteUserMixin
 
 
-class StudentUserLoginView(generics.CreateAPIView, ResponseMixin):
+class StudentUserLoginView(generics.CreateWithMessageAPIView, ResponseMixin):
     """
     Use this end-point to get access token for normal user
     """
