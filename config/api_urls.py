@@ -91,5 +91,9 @@ urlpatterns = [
     path(
         'councelling/',
         include('apps.counselling.urls')
-    )
+    ),
+    # path(
+    #     'location/',
+    #     include('apps.geo_location.urls')
+    # )
 ]

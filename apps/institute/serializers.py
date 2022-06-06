@@ -1,9 +1,8 @@
 from apps.institute_course.models import InstituteCourse
 import re
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
-from rest_framework import generics, serializers
+from rest_framework import  serializers
 from rest_framework.exceptions import ValidationError
 from apps.institute import models
 
@@ -208,7 +207,7 @@ class InstituteDetailSerilaizer(serializers.ModelSerializer):
             'street_address',
             'facility_related',
             'course_related',
-            'social_media_data'
+            'social_media_data',
         )
 
 

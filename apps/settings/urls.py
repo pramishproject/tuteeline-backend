@@ -14,6 +14,11 @@ urlpatterns = [
         '<setting_id>/update-color',
         views.UpdateSettingColorView.as_view()
     ),
+    path(
+        '<setting_id>/update-2fa',
+        views.Update2FAView.as_view(),
+        name="update-2fa"
+    )
     # path(
     #     '<setting_id>/delete-color',
     #     views.DeleteSettingColorView.as_view()

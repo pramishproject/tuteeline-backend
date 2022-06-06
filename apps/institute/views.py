@@ -12,7 +12,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from apps.institute import serializers
 from apps.core import generics
-from apps.institute import usecase
+
 from apps.institute import usecase
 # Create your views here.
 
@@ -283,3 +283,6 @@ class GetFacilityView(generics.ListAPIView,InstituteMixins):
 
 
 # class Dashboard(generics.)
+class InstituteDetailView(generics.RetrieveAPIView):#todo institute detail view
+    pass
+

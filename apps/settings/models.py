@@ -15,7 +15,6 @@ class Settings(BaseModel):
         blank=True,
         default='#800000'
     )
-    # two_fa = models.BooleanField(default=False)
-
+    two_fa = models.BooleanField(default=False)
     def __str__(self):
         return self.user.username

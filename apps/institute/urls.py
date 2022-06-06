@@ -94,7 +94,11 @@ urlpatterns = [
         '<institute_id>/staff/list',
         views.ListInstituteStaffView.as_view(),
         name = 'list-staff'
-    )
+    ),
+    # path( #todo
+    #     '<staff_id>/staff/role/update',
+    #
+    # )
 
-    # path()
+
 ]

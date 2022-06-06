@@ -1,19 +1,5 @@
 version: '3.7'
 services:
-  nginx:
-    container_name: core_web
-    restart: on-failure
-    image: nginx:stable
-    volumes:
-      - ./nginx/nginx.dev.conf:/etc/nginx/conf.d/default.conf
-      - static_volume:/app/static
-    ports:
-      - "80:80"
-    depends_on:
-      - web
-    networks:
-      edu-network:
-
   web:
     container_name: core_app
     build: .
@@ -28,19 +14,20 @@ services:
     volumes:
      - .:/app
      - static_volume:/app/static
+    depends_on:
+      - database
+
     networks:
       edu-network:
-  postgres:
-    image: postgres:13.0-alpine
-    depends_on:
-      - web
+  database:
+    image: postgis/postgis:13-3.1
 
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=root        
       - POSTGRES_PASSWORD=root1234    
-      - POSTGRES_DB=student_master
+      - POSTGRES_DB=tuteeline
     networks:
       edu-network:
   redis:

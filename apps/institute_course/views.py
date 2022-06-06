@@ -55,6 +55,7 @@ class ListInstituteCourse(generics.ListAPIView,InstituteMixins):
     serializer_class = ListInstituteCourseSerializer
     permission_classes = (AllowAny,)
     no_content_error_message = _("No Consultancy staff at the moment.")
+    queryset = ''
     def get_object(self):
         return self.get_institute()
 

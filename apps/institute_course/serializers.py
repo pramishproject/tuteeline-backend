@@ -89,29 +89,36 @@ class ListInstituteCourseSerializer(InstituteCourseSerializer):
 
     course = CourseSerializer(read_only =True)
     faculty =FacultySerializer(read_only = True)
+    # related_student_is_apply = serializers.SerializerMethodField()
+
+    # @classmethod
+    # def get_related_student_is_apply(self,obj ): #TODO implement
+    #     pass
+
     class Meta(InstituteCourseSerializer.Meta):
-        fields = (
-            'id',
-            'program',
-            'faculty',
-            'course',
-            'intake',
-            'eligibility',
-            'score',
-            'last_mini_academic_score',
-            'duration_year',
-            'total_fee',
-            'fee_currency',
-            'reg_status',
-            'reg_open',
-            'reg_close',
-            'academic',
-            'citizenship',  
-            'passport', 
-            'essay', 
-            'lor', 
-            'sop'
-        )
+            fields = (
+                'id',
+                'program',
+                'faculty',
+                'course',
+                'intake',
+                'eligibility',
+                'score',
+                'last_mini_academic_score',
+                'duration_year',
+                'total_fee',
+                'fee_currency',
+                'reg_status',
+                'reg_open',
+                'reg_close',
+                'academic',
+                'citizenship',
+                'passport',
+                'essay',
+                'lor',
+                'sop',
+
+            )
 
     
 class CommentApplicationSerializer(serializers.ModelSerializer):

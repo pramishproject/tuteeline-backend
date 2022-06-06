@@ -50,3 +50,17 @@ class UpdateSettingColorView(generics.UpdateWithMessageAPIView, SettingMixin):
             setting=self.get_object()
         ).execute()
 
+class Update2FAView(generics.UpdateWithMessageAPIView,SettingMixin):
+    message = _("2fa update successfully")
+    serializer_class = serializers.Update2FASerializer
+    queryset = ''
+    permission_classes = (AllowAny,)
+
+    def get_object(self):
+        return self.get_setting()
+
+    def perform_update(self, serializer):
+        return usecases.UpdateSettingColorUseCase(
+            serializer=serializer,
+            setting=self.get_object()
+        ).execute()

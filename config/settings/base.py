@@ -41,10 +41,39 @@ LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 
 # DATABASES
 # ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/dev/ref/settings/#databases
+# https://docs.djangoproject.com/en/dev/ref/settings/#databases #TODO using url
 DATABASES = {"default": env.db("DATABASE_URL")}
+#
+#
+#
+# import dj_database_url
+# DATABASES['default'] = dj_database_url.config()
+# DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
+# DATABASES = {
+#     'default': {
+#          'ENGINE': 'django.contrib.gis.db.backends.postgis',
+#          'NAME': 'tuteeline',
+#          'USER': 'postgres',
+#          'PASSWORD': 'root1234',
+#          # 'HOST': '127.0.0.1',
+#          'HOST':'database',
+#          'PORT': '5432',
+#     }
+# }
 
+# DATABASE_URL=postgres://postgres:root1234@127.0.0.1:5432/tuteeline
+#leafleat #TODO if nessary then customize it
+LEAFLET_CONFIG = {
+    # "SPATIAL_EXTENT": (5.0, 44.0, 7.5, 46),
+    "DEFAULT_CENTER": (13.3888599, 52.5170365), #set your corordinate
+    "DEFAULT_ZOOM": 16,
+    "MIN_ZOOM": 3,
+    "MAX_ZOOM": 20,
+    "DEFAULT_PRECISION": 6,
+    "SCALE": "both",
+    "ATTRIBUTION_PREFIX": "powered by me",
+}
 # URLS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#root-urlconf
@@ -73,6 +102,8 @@ THIRD_PARTY_APPS = [
     "django_filters",
     "rest_framework_tracking",
     "channels",
+    "django.contrib.gis",
+    "leaflet",
 ]
 
 LOCAL_APPS = [
@@ -100,6 +131,7 @@ LOCAL_APPS = [
     "apps.activity.apps.ActivityConfig",
     "apps.review.apps.ReviewConfig",
     "apps.counselling.apps.CounsellingConfig",
+    # "apps.geo_location.apps.GeoLocationConfig"
 
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -364,3 +396,5 @@ CHANNEL_LAYERS = {
 TIME_FIELD_FORMAT = strftime("%H:%M: %p")
 DATE_FIELD_FORMAT = strftime("%Y-%m-%d")
 DATE_AND_TIME_FORMAT = strftime("%Y-%m-%d %H:%M: %p")
+
+

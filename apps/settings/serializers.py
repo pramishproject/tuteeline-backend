@@ -25,3 +25,10 @@ class ListSettingColorSerializer(SettingSerializer):
 
 class UpdateColorSerializer(AddSettingColorSerializer):
     pass
+
+class Update2FASerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Settings
+        fields = (
+            'two_fa',
+        )
