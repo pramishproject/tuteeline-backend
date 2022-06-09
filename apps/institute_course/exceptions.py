@@ -16,3 +16,6 @@ class InstituteApplyNotFound(NotFound):
              
 class InstituteStaffNotFound(NotFound):
     default_detail = _("staff not found following id")
+
+class UniqueStudentApply(NotFound):
+    default_detail = _("Student Already apply this course")

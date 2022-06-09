@@ -1,16 +1,11 @@
-from apps import institute
-from apps.auth.jwt import serializers
+
 from apps.institute_course.mixins import ApplyMixin, CourseMixin, FacultyMixin
 from apps.institute.mixins import InstituteMixins
-from apps.institute_course import usecases
+
 from django.utils.translation import gettext_lazy as _
-from rest_framework.parsers import MultiPartParser, FileUploadParser
+
 from rest_framework.permissions import AllowAny
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.decorators import permission_classes
-from rest_framework import permissions
 
 from apps.core import generics
 from apps.institute_course.serializers import (
@@ -26,8 +21,7 @@ from apps.institute_course.serializers import (
     ListApplicationCommentSerializer,
     ListInstituteCourseSerializer,
     StudentApplySerializer, CompareInstituteSerializer, StudentAccessDetail)
-from collections import OrderedDict
-from apps.students.mixins import StudentMixin
+
 from apps.institute_course import usecases
 # from apps.institute_course.mixins import InstituteCourseMixin
 
@@ -123,7 +117,7 @@ class ListCourseView(generics.ListAPIView,FacultyMixin):
             faculty= self.get_object()
         ).execute()
 
-class ApplyInstituteCourseView(generics.CreateWithMessageAPIView):
+class ApplyInstituteCourseView(generics.CreateAPIView):
     """
     This endpoint is use to apply
     """
@@ -132,6 +126,7 @@ class ApplyInstituteCourseView(generics.CreateWithMessageAPIView):
     permission_classes = (AllowAny,)
 
     def perform_create(self, serializer):
+
         return usecases.ApplyUseCase(
             serializer = serializer
         ).execute()
@@ -182,7 +177,7 @@ class ListStudentApplicationView(generics.ListAPIView,InstituteMixins):
 
 class CancleStudentApplication(generics.UpdateWithMessageAPIView,ApplyMixin):
     """
-    This endpoint is use to cancle application
+    This endpoint is used to cancel application
     """
     serializer_class = CancelStudentApplicationSerializer
     def get_object(self):
@@ -212,26 +207,26 @@ class ApplicantDashboard(generics.ListAPIView,InstituteMixins):
 
     
 
-@permission_classes((permissions.AllowAny,))
-class StudentMarkToSendView(APIView,StudentMixin,CourseMixin):
-    """
-    {
-        "courseId":"",
-        "student_identity":{"citizenship":"","passport":""},
-        "essay":[],
-        "sop":[],
-        "lor":[],
-        "academic":[],
-        }
-    """
-    def post(self, request,student_id,institute_course_id):
-        usecases.SendedDocumentByStudent(data=request.data,student=self.get_student(),course=self.get_institutecourse()).execute()
-        return Response({"message":"Create mark document successfully"})
-
-
-    def get(self,request,student_id,institute_course_id):
-        data =usecases.GetAccessDocument(student=student_id,course=institute_course_id).execute()
-        return Response({"data":data})
+# @permission_classes((permissions.AllowAny,))
+# class StudentMarkToSendView(APIView,StudentMixin,CourseMixin):
+#     """
+#     {
+#         "courseId":"",
+#         "student_identity":{"citizenship":"","passport":""},
+#         "essay":[],
+#         "sop":[],
+#         "lor":[],
+#         "academic":[],
+#         }
+#     """
+#     def post(self, request,student_id,institute_course_id):
+#         usecases.SendedDocumentByStudent(data=request.data,student=self.get_student(),course=self.get_institutecourse()).execute()
+#         return Response({"message":"Create mark document successfully"})
+#
+#
+#     def get(self,request,student_id,institute_course_id):
+#         data =usecases.GetAccessDocument(student=student_id,course=institute_course_id).execute()
+#         return Response({"data":data})
 
 
 

@@ -193,40 +193,38 @@ class CommentApplicationConsultancy(BaseModel):
     comment = models.TextField()
 
 
-class AccessOfAcademicDocument(BaseModel):
-    student = models.ForeignKey(StudentModel,on_delete=CASCADE,null=True,blank=True)
-    course = models.ForeignKey(InstituteCourse,on_delete=CASCADE,related_name='access_student_academic')
+# class AccessOfAcademicDocument(BaseModel):
+#     student = models.ForeignKey(StudentModel,on_delete=CASCADE,null=True,blank=True)
+#     course = models.ForeignKey(InstituteCourse,on_delete=CASCADE,related_name='access_student_academic')
+#     academic = models.ForeignKey(Academic, on_delete=models.CASCADE)
+#
+#     class Meta:
+#         unique_together = ('course','academic')
+
+class CheckedAcademicDocument(BaseModel):
+    application = models.ForeignKey(InstituteApply,on_delete=CASCADE, related_name='checked_student_academic')
     academic = models.ForeignKey(Academic, on_delete=models.CASCADE)
-
     class Meta:
-        unique_together = ('course','academic')
+        unique_together = ('application','academic')
 
-class AccessStudentIdentity(BaseModel):
-    student = models.ForeignKey(StudentModel,on_delete=CASCADE,null=True,blank=True)
-    course = models.ForeignKey(InstituteCourse,on_delete=CASCADE,related_name='access_student_identity')
+class CheckStudentIdentity(BaseModel):
+    application = models.ForeignKey(InstituteApply,on_delete=CASCADE, related_name='checked_student_identity')
     citizenship=models.ForeignKey(Citizenship, on_delete=models.CASCADE,null=True,blank=True)
     passport = models.ForeignKey(Passport, on_delete=models.CASCADE,null=True,blank=True)
     class Meta:
-        unique_together = ('course','student')
-
-class AccessStudentLor(BaseModel):
-    student = models.ForeignKey(StudentModel,on_delete=CASCADE,null=True,blank=True)
-    course = models.ForeignKey(InstituteCourse,on_delete=CASCADE)
+        unique_together = ('application','citizenship')
+#
+class CheckedStudentLor(BaseModel):
+    application = models.ForeignKey(InstituteApply,on_delete=CASCADE, related_name='checked_student_lor')
     lor = models.ForeignKey(StudentLor, on_delete=models.CASCADE)
 
-    class Meta:
-        unique_together = ('course','lor')
 
-class AccessStudentEssay(BaseModel):
-    student = models.ForeignKey(StudentModel,on_delete=CASCADE,null=True,blank=True)
-    course = models.ForeignKey(InstituteCourse,on_delete=CASCADE)
+class CheckedStudentEssay(BaseModel):
+    application = models.ForeignKey(InstituteApply, on_delete=CASCADE, related_name='checked_student_essay')
     essay = models.ForeignKey(PersonalEssay, on_delete=models.CASCADE)
-    class Meta:
-        unique_together = ('course','essay')
 
-class AccessStudentSop(BaseModel):
-    student = models.ForeignKey(StudentModel,on_delete=CASCADE,null=True,blank=True)
-    course = models.ForeignKey(InstituteCourse,on_delete=CASCADE)
+class CheckedStudentSop(BaseModel):
+    application = models.ForeignKey(InstituteApply, on_delete=CASCADE, related_name='checked_student_sop')
     sop = models.ForeignKey(StudentSop,on_delete=models.CASCADE)
     class Meta:
-        unique_together = ('course','sop')
+        unique_together = ('application','sop')

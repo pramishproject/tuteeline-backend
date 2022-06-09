@@ -2,6 +2,8 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+
+from apps.academic.models import Academic
 from apps.institute_course import models
 from rest_framework.validators import UniqueTogetherValidator
 
@@ -140,22 +142,31 @@ class ListApplicationCommentSerializer(serializers.ModelSerializer):
             'comment'
         )
 class StudentApplySerializer(serializers.ModelSerializer):
-    
+    academic = serializers.ListSerializer(child=serializers.UUIDField(),instance=Academic,write_only=True)
+    citizenship = serializers.UUIDField(write_only=True)
+    passport = serializers.UUIDField(write_only=True)
+    lor = serializers.ListSerializer(child=serializers.UUIDField(),write_only=True)
+    sop = serializers.UUIDField(write_only=True)
     class Meta:
         model = InstituteApply
         fields = (
             'student',
             'course',
             'institute',
-            'consultancy'
+            'consultancy',
+            'academic',
+            'citizenship',
+            'passport',
+            'lor',
+            'sop',
         )
-        validators = [
-            UniqueTogetherValidator(
-                queryset=InstituteApply.objects.all(),
-                fields=['student', 'course'],
-                message="One student can apply one course"
-            )
-        ]
+        # validators = [
+        #     UniqueTogetherValidator(
+        #         queryset=InstituteApply.objects.all(),
+        #         fields=['student', 'course'],
+        #         message="One student can apply one course"
+        #     )
+        # ]
 
 
 class GetStudentAddressSerializer(serializers.ModelSerializer):
