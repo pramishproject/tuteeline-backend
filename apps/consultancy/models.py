@@ -17,6 +17,7 @@ class Consultancy(BaseModel):
     contact = fields.PhoneNumberField()
     country = models.CharField(max_length=200)
     city = models.CharField(max_length=200)
+    consultancy_email = models.EmailField(blank=True,null=True)
     state = models.CharField(max_length=200)
     street_address = models.CharField(max_length=200)
     latitude = models.FloatField()
