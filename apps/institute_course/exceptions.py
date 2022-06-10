@@ -19,3 +19,4 @@ class InstituteStaffNotFound(NotFound):
 
 class UniqueStudentApply(NotFound):
     default_detail = _("Student Already apply this course")
+

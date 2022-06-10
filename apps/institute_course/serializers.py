@@ -142,11 +142,13 @@ class ListApplicationCommentSerializer(serializers.ModelSerializer):
             'comment'
         )
 class StudentApplySerializer(serializers.ModelSerializer):
-    academic = serializers.ListSerializer(child=serializers.UUIDField(),instance=Academic,write_only=True)
-    citizenship = serializers.UUIDField(write_only=True)
-    passport = serializers.UUIDField(write_only=True)
-    lor = serializers.ListSerializer(child=serializers.UUIDField(),write_only=True)
-    sop = serializers.UUIDField(write_only=True)
+    academic = serializers.ListSerializer(child=serializers.UUIDField(),write_only=True,
+                                          required=False,allow_empty=True)
+    citizenship = serializers.CharField(write_only=True,required=False, allow_blank=True)
+    passport = serializers.CharField(write_only=True,required=False,allow_blank=True)
+    lor = serializers.ListSerializer(child=serializers.UUIDField(),write_only=True,required=False,allow_empty=True)
+    sop = serializers.CharField(write_only=True,required=False,allow_blank=True)
+    essay = serializers.CharField(write_only=True,required=False,allow_blank=True)
     class Meta:
         model = InstituteApply
         fields = (
@@ -159,6 +161,7 @@ class StudentApplySerializer(serializers.ModelSerializer):
             'passport',
             'lor',
             'sop',
+            'essay'
         )
         # validators = [
         #     UniqueTogetherValidator(

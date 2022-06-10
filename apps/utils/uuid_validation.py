@@ -6,3 +6,4 @@ def is_valid_uuid(val):
         return True
     except ValueError:
         return False
+

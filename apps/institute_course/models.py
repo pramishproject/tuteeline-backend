@@ -193,13 +193,7 @@ class CommentApplicationConsultancy(BaseModel):
     comment = models.TextField()
 
 
-# class AccessOfAcademicDocument(BaseModel):
-#     student = models.ForeignKey(StudentModel,on_delete=CASCADE,null=True,blank=True)
-#     course = models.ForeignKey(InstituteCourse,on_delete=CASCADE,related_name='access_student_academic')
-#     academic = models.ForeignKey(Academic, on_delete=models.CASCADE)
-#
-#     class Meta:
-#         unique_together = ('course','academic')
+
 
 class CheckedAcademicDocument(BaseModel):
     application = models.ForeignKey(InstituteApply,on_delete=CASCADE, related_name='checked_student_academic')

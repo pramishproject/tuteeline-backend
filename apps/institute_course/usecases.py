@@ -4,6 +4,8 @@ from django.db.models import Count
 from django.utils.datetime_safe import datetime
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
+
+from apps.academic.exceptions import AcademicNotFound, LorNotFound, SopNotFound, EssayNotFound
 from apps.academic.models import Academic, PersonalEssay, StudentLor, StudentSop
 from apps.consultancy.models import Consultancy
 from apps.core.usecases import BaseUseCase
@@ -11,11 +13,12 @@ from apps.institute.models import Institute, InstituteStaff
 from apps.institute_course.exceptions import CourseNotFound, FacultyNotFound, InstituteApplyNotFound, InstituteNotFound, \
     InstituteStaffNotFound, UniqueStudentApply
 from apps.institute_course.models import CommentApplicationInstitute, InstituteApply, InstituteCourse, Course, Faculty, \
-    CheckedAcademicDocument, CheckStudentIdentity, CheckedStudentLor, CheckedStudentSop
+    CheckedAcademicDocument, CheckStudentIdentity, CheckedStudentLor, CheckedStudentSop, CheckedStudentEssay
+from apps.studentIdentity.exceptions import CitizenshipNotFound,PassportNotFound
 from apps.studentIdentity.models import Citizenship, Passport
 from apps.students.exceptions import StudentModelNotFound
 from apps.students.models import StudentModel
-from apps.utils.dict_converter import QueryDataSerializer
+from apps.utils.uuid_validation import is_valid_uuid
 
 
 class AddCourseUseCase(BaseUseCase):
@@ -123,10 +126,11 @@ class ApplyUseCase(BaseUseCase):
 
     def _factory(self):
         academics = self._data.pop('academic')
-        citizenship = self._data.pop("citizenship")
-        passport = self._data.pop("passport")
-        sop =  self._data.pop("sop")
+        citizenship = self._data.pop("citizenship").strip()
+        passport = self._data.pop("passport").strip()
+        sop =  self._data.pop("sop").strip()
         lors = self._data.pop("lor")
+        essay = self._data.pop("essay").strip()
 
         try:
             self._apply = InstituteApply.objects.create(
@@ -137,45 +141,84 @@ class ApplyUseCase(BaseUseCase):
 
         academic_list = []
         for academic in academics:
-            academic_list.append({
-                'application':self._apply,
-                'academic':academic
-            })
-        if len(academic_list) > 0:
             try:
-                CheckedAcademicDocument.objects.bulk_create(
+                academic_obj=Academic.objects.get(pk=academic)
+                academic_list.append(CheckedAcademicDocument(
+                    application=self._apply,
+                    academic=academic_obj
+                ))
+            except Academic.DoesNotExist:
+                raise AcademicNotFound
+
+
+        if len(academic_list) > 0:
+            CheckedAcademicDocument.objects.bulk_create(
                     academic_list
                 )
-            except CheckedAcademicDocument.DoesNotExist:
-                pass
 
 
         if len(citizenship)>0 or len(passport):
+
             identity=CheckStudentIdentity(
                 application = self._apply,
-                citizenship = citizenship,
-                passport = passport,
             )
-            identity.save()
+            ok1 = is_valid_uuid(citizenship)
+            if ok1:
+                try:
+                    citizenship= Citizenship.objects.get(pk=citizenship)
+                except Citizenship.DoesNotExist:
+                    raise CitizenshipNotFound
+                identity.citizenship = citizenship
+            ok = is_valid_uuid(passport)
+            if ok:
+                try:
+                    passport = Passport.objects.get(pk=passport)
+                    identity.passport=passport
+                except Passport.DoesNotExist:
+                    raise PassportNotFound
+            if ok1 or ok:
+                identity.save()
 
         lor_list =[]
         for lor in lors:
-            lor_list.append(
-                {
-                    "application":self._apply,
-                    "lor":lor
-                }
-            )
+            try:
+                lor=StudentLor.objects.get(pk=lor)
+                lor_list.append(
+                    CheckedStudentLor(
+                        application=self._apply,
+                        lor = lor,
+                    )
+                )
+            except StudentLor.DoesNotExist:
+                raise LorNotFound
+
         if len(lor_list)>0:
             CheckedStudentLor.objects.bulk_create(lor_list)
 
         if len(sop) > 0:
-            sop_obj = CheckedStudentSop(
-                application=self._apply,
-                sop = sop
-            )
+            ok = is_valid_uuid(sop)
+            if ok:
+                try:
+                    sop = StudentSop.objects.get(pk=sop)
+                    sop_obj = CheckedStudentSop(
+                        application=self._apply,
+                        sop = sop
+                    )
+                    sop_obj.save()
+                except StudentSop.DoesNotExist:
+                    raise SopNotFound
 
-
+        if len(essay) > 0:
+            ok = is_valid_uuid(essay)
+            if ok:
+                try:
+                    essay = PersonalEssay.objects.get(pk=essay)
+                    CheckedStudentEssay.objects.create(
+                        application=self._apply,
+                        essay=essay
+                    )
+                except PersonalEssay.DoesNotExist:
+                    raise EssayNotFound
 
 
 

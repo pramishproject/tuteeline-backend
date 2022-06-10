@@ -1,7 +1,9 @@
 from django.contrib import admin
 
 from apps.core.admin import BaseModelAdmin
-from apps.institute_course.models import  Faculty, InstituteApply
+from apps.institute_course.models import  Faculty, \
+    InstituteApply,CheckStudentIdentity,\
+    CheckedAcademicDocument,CheckedStudentEssay,CheckedStudentLor,CheckedStudentSop
 from apps.institute_course.models import Course
 from apps.institute_course.models import InstituteCourse
 
@@ -28,35 +30,39 @@ class InstituteApplyAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display  + (
         'institute',
     )
-# @admin.register(AccessOfAcademicDocument)
-# class AccessOfAcademicDocumentAdmin(BaseModelAdmin):
-#     list_display = BaseModelAdmin.list_display + (
-#         "course",
-#         "academic",
-#     )
-# @admin.register(AccessStudentIdentity)
-# class AccessStudentIdentityAdmin(BaseModelAdmin):
-#     list_display = BaseModelAdmin.list_display + (
-#         'course',
-#         'citizenship',
-#         'passport',
-#     )
-# @admin.register(AccessStudentLor)
-# class AccessStudentLorAdmin(BaseModelAdmin):
-#     list_display = BaseModelAdmin.list_display + (
-#         'course',
-#         'lor',
-#     )
-# @admin.register(AccessStudentEssay)
-# class AccessStudentEssayAdmin(BaseModelAdmin):
-#     list_display = BaseModelAdmin.list_display + (
-#         'course',
-#         'essay',
-#     )
-# @admin.register(AccessStudentSop)
-# class AccessStudentSopAdmin(BaseModelAdmin):
-#     list_display = BaseModelAdmin.list_display + (
-#         'course',
-#         'sop',
-#     )
+
+@admin.register(CheckedAcademicDocument)
+class CheckedAcademicDocumentAdmin(BaseModelAdmin):
+    list_display = BaseModelAdmin.list_display + (
+        "application",
+        "academic",
+    )
+
+
+@admin.register(CheckStudentIdentity)
+class CheckStudentIdentityAdmin(BaseModelAdmin):
+    list_display = BaseModelAdmin.list_display + (
+        'application',
+        'citizenship',
+        'passport',
+    )
+@admin.register(CheckedStudentLor)
+class CheckedStudentLorAdmin(BaseModelAdmin):
+    list_display = BaseModelAdmin.list_display + (
+        'application',
+        'lor',
+    )
+
+@admin.register(CheckedStudentEssay)
+class CheckedStudentEssayAdmin(BaseModelAdmin):
+    list_display = BaseModelAdmin.list_display + (
+        'application',
+        'essay',
+    )
+@admin.register(CheckedStudentSop)
+class CheckedStudentEssayAdmin(BaseModelAdmin):
+    list_display = BaseModelAdmin.list_display + (
+        'application',
+        'sop',
+    )
 
