@@ -163,6 +163,30 @@ class StudentApplySerializer(serializers.ModelSerializer):
             'sop',
             'essay'
         )
+
+
+class StudentMyApplicationListSerializer(serializers.ModelSerializer):
+    apply_to = serializers.DictField(source="institute_data")
+    consultancy_name = serializers.CharField(source='get_consultancy_name')
+    course = serializers.CharField(source='get_student_course')
+
+    class Meta:
+        model = InstituteApply
+        fields = (
+            'id',
+            'apply_to',
+            'consultancy_name',
+            'consultancy',
+            'institute',
+            'course',
+            'created_at',
+            'updated_at',
+            'action',
+            'action_data',
+            'view_date',
+            'forward',
+            'cancel',
+        )
         # validators = [
         #     UniqueTogetherValidator(
         #         queryset=InstituteApply.objects.all(),

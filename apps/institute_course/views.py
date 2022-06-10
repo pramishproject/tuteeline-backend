@@ -14,16 +14,16 @@ from apps.institute_course.serializers import (
     CommentApplicationSerializer,
     CourseSerializer,
     FacultySerializer,
-    GetStudentApplicantSerializer,
     GetStudentApplicationInstituteSerializer,
-    InstituteCourseSerializer,
     AddInstituteCourseSerializer,
     ListApplicationCommentSerializer,
     ListInstituteCourseSerializer,
-    StudentApplySerializer, CompareInstituteSerializer, StudentAccessDetail)
+    StudentApplySerializer, CompareInstituteSerializer, StudentAccessDetail, StudentMyApplicationListSerializer)
 
 from apps.institute_course import usecases
 # from apps.institute_course.mixins import InstituteCourseMixin
+from apps.students.mixins import StudentMixin
+
 
 class AddInstituteCourse(generics.CreateWithMessageAPIView,InstituteMixins):
     """
@@ -58,6 +58,16 @@ class ListInstituteCourse(generics.ListAPIView,InstituteMixins):
             inst=self.get_object()
         ).execute()
 
+class ListMyStudentApplication(generics.ListAPIView,StudentMixin):
+    """
+    list application
+    """
+    serializer_class = StudentMyApplicationListSerializer
+
+    def get_queryset(self):
+        return usecases.ListStudentMyApplication(
+            student=self.get_student()
+        ).execute()
 
 class UpdateInstituteCourse(generics.UpdateWithMessageAPIView,CourseMixin):
     """

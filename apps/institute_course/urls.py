@@ -54,6 +54,11 @@ urlpatterns = [
         name='cancle-application'
     ),
     path(
+        '<student_id>/student/application/list',
+        views.ListMyStudentApplication.as_view(),
+        name="std-application"
+    ),
+    path(
         '<apply_id>/application/comment/list',
         views.GetListCommentApplicationView.as_view(),
         name="list-comment"

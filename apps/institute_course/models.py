@@ -137,6 +137,25 @@ class InstituteApply(BaseModel):
     cancel = models.BooleanField(default=False)
 
     @property
+    def institute_data(self):
+        return {
+            "name":self.institute.name,
+            "logo":self.institute.logo.path,
+            "email":self.institute.institute_email,
+            "contact":self.institute.contact,
+            "country":self.institute.country,
+        }
+
+    @property
+    def consultancy_data(self):
+        if self.consultancy is not None:
+            return {
+                "name":self.consultancy.name,
+                "logo":self.consultancy.logo.path,
+                "email":self.consultancy.email,
+                "contact":self.consultancy.contact,
+            }
+    @property
     def institute_user_action(self):
         return self.action_institute_user.user.fullname
     @property

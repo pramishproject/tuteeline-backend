@@ -221,7 +221,16 @@ class ApplyUseCase(BaseUseCase):
                     raise EssayNotFound
 
 
+class ListStudentMyApplication(BaseUseCase):
+    def __init__(self,student):
+        self._student = student
 
+    def execute(self):
+        self._factory()
+        return self._application
+
+    def _factory(self):
+        self._application = InstituteApply.objects.filter(student=self._student)
 
 
 class ListStudentApplicationCourseUseCase(BaseUseCase):
