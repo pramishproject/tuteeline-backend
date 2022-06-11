@@ -131,6 +131,7 @@ LOCAL_APPS = [
     "apps.activity.apps.ActivityConfig",
     "apps.review.apps.ReviewConfig",
     "apps.counselling.apps.CounsellingConfig",
+    "apps.linkage.apps.LinkageConfig"
     # "apps.geo_location.apps.GeoLocationConfig"
 
 ]

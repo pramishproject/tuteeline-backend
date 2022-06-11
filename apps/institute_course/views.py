@@ -58,16 +58,8 @@ class ListInstituteCourse(generics.ListAPIView,InstituteMixins):
             inst=self.get_object()
         ).execute()
 
-class ListMyStudentApplication(generics.ListAPIView,StudentMixin):
-    """
-    list application
-    """
-    serializer_class = StudentMyApplicationListSerializer
 
-    def get_queryset(self):
-        return usecases.ListStudentMyApplication(
-            student=self.get_student()
-        ).execute()
+
 
 class UpdateInstituteCourse(generics.UpdateWithMessageAPIView,CourseMixin):
     """
@@ -126,6 +118,21 @@ class ListCourseView(generics.ListAPIView,FacultyMixin):
         return usecases.ListCourseUseCase(
             faculty= self.get_object()
         ).execute()
+
+
+
+# application -----------------------------------------------------------------------------------------
+class ListMyStudentApplication(generics.ListAPIView,StudentMixin):
+    """
+    list application
+    """
+    serializer_class = StudentMyApplicationListSerializer
+
+    def get_queryset(self):
+        return usecases.ListStudentMyApplication(
+            student=self.get_student()
+        ).execute()
+
 
 class ApplyInstituteCourseView(generics.CreateAPIView):
     """
