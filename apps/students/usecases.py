@@ -35,12 +35,12 @@ class RegisterStudentUseCase(usecases.CreateUseCase, NotificationMixin):
         )
 
         Settings.objects.create(user=user)
-        SendEmailToStudent(
-            context={
-                'uuid': user.id,
-                'name': user.fullname
-            }
-        ).send(to=[user.email])
+        # SendEmailToStudent(
+        #     context={
+        #         'uuid': user.id,
+        #         'name': user.fullname
+        #     }
+        # ).send(to=[user.email])
 
     def get_notification_data(self):
         return {

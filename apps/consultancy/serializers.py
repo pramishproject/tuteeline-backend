@@ -32,6 +32,7 @@ class RegisterConsultancySerializer(ConsultancySerializer):
             'city',
             'state',
             'street_address',
+            'consultancy_email',
             'latitude',
             'longitude',
             'website',

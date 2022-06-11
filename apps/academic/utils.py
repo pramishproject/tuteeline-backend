@@ -11,3 +11,4 @@ def upload_academic_doc_to(instance, filename):
     return 'student/document/{}'.format(
         new_filename
     )
+
