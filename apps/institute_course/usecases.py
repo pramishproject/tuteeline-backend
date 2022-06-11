@@ -232,6 +232,26 @@ class ListStudentMyApplication(BaseUseCase):
     def _factory(self):
         self._application = InstituteApply.objects.filter(student=self._student)
 
+class GetMyApplicationDetailUsecase(BaseUseCase):
+    def __init__(self,application):
+        self._application = application
+
+    def execute(self):
+        self._factory()
+        return self._application_detail
+
+    def _factory(self):
+        self._application_detail = InstituteApply.objects.get(pk= self._application).prefetch_related("course").prefetch_related(
+            "checked_student_academic"
+        ).prefetch_related(
+            "checked_student_lor"
+        ).prefetch_related(
+            "checked_student_identity"
+        ).prefetch_related(
+            "checked_student_sop"
+        ).prefetch_related(
+            "checked_student_essay"
+        )
 
 class ListStudentApplicationCourseUseCase(BaseUseCase):
     def __init__(self,institute):
@@ -256,7 +276,7 @@ class GetApplyInstitute(BaseUseCase):
 
     def _factory(self):
         try:
-            self._apply = InstituteApply.objects.get(pk = self.apply_id)
+            self._apply = InstituteApply.objects.get(pk = "368a2abe-e56e-4793-b43a-c679d32cfbf7")
 
         except InstituteApply.DoesNotExist:
             raise InstituteApplyNotFound

@@ -49,6 +49,11 @@ urlpatterns = [
         name='list-application'
     ),
     path(
+        '<apply_id>/application/detail',
+        views.GetMyApplicationDetailView.as_view(),
+        name="application-detail"
+    ),
+    path(
         '<apply_id>/application/cancle',
         views.CancleStudentApplication.as_view(),
         name='cancle-application'

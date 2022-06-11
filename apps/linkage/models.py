@@ -22,7 +22,8 @@ class Linkage(BaseModel):
             "logo":self.consultancy.logo.name,
             "email":self.consultancy.consultancy_email,
             "contact":self.consultancy.contact,
-            "address": self.consultancy.country + "," +self.consultancy.state +"," + self.consultancy.city
+            "address": self.consultancy.country + "," +self.consultancy.state +"," + self.consultancy.city,
+            "rating":self.consultancy.rating
         }
 
 class LinkageDocs(BaseModel):

@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError as DjangoValidationError
+from django.core.validators import MinValueValidator,MaxValueValidator
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
@@ -34,7 +35,9 @@ class Consultancy(BaseModel):
         validators=[validate_image]
     )
     about = models.TextField(null=True, blank=True)
-
+    rating = models.FloatField(
+        validators=[MinValueValidator(0.0), MaxValueValidator(5.0)], default=0.0
+    )
     def __str__(self):
         return self.name
 

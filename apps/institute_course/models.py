@@ -167,6 +167,10 @@ class InstituteApply(BaseModel):
         return self.course.course.name
 
     @property
+    def get_faculty_name(self):
+        return self.course.faculty
+
+    @property
     def student_address(self):
         try:
             self.address = StudentAddress.objects.get(student=self.student)
@@ -217,6 +221,10 @@ class CommentApplicationConsultancy(BaseModel):
 class CheckedAcademicDocument(BaseModel):
     application = models.ForeignKey(InstituteApply,on_delete=CASCADE, related_name='checked_student_academic')
     academic = models.ForeignKey(Academic, on_delete=models.CASCADE)
+
+    @property
+    def get_academic_doc_name(self):
+        return self.academic.name
     class Meta:
         unique_together = ('application','academic')
 
@@ -224,20 +232,29 @@ class CheckStudentIdentity(BaseModel):
     application = models.ForeignKey(InstituteApply,on_delete=CASCADE, related_name='checked_student_identity')
     citizenship=models.ForeignKey(Citizenship, on_delete=models.CASCADE,null=True,blank=True)
     passport = models.ForeignKey(Passport, on_delete=models.CASCADE,null=True,blank=True)
+
     class Meta:
         unique_together = ('application','citizenship')
 #
 class CheckedStudentLor(BaseModel):
     application = models.ForeignKey(InstituteApply,on_delete=CASCADE, related_name='checked_student_lor')
     lor = models.ForeignKey(StudentLor, on_delete=models.CASCADE)
+    @property
+    def get_lor_name(self):
+        return self.lor.name
 
 
 class CheckedStudentEssay(BaseModel):
     application = models.ForeignKey(InstituteApply, on_delete=CASCADE, related_name='checked_student_essay')
     essay = models.ForeignKey(PersonalEssay, on_delete=models.CASCADE)
 
+
 class CheckedStudentSop(BaseModel):
     application = models.ForeignKey(InstituteApply, on_delete=CASCADE, related_name='checked_student_sop')
     sop = models.ForeignKey(StudentSop,on_delete=models.CASCADE)
+
+    # @property
+    # def get_sop_name(self):
+    #     return self.sop.name
     class Meta:
         unique_together = ('application','sop')

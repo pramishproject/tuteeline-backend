@@ -7,7 +7,8 @@ from apps.academic.models import Academic
 from apps.institute_course import models
 from rest_framework.validators import UniqueTogetherValidator
 
-from apps.institute_course.models import CommentApplicationInstitute, Course, Faculty, InstituteApply, InstituteCourse
+from apps.institute_course.models import CommentApplicationInstitute, Course, Faculty, InstituteApply, InstituteCourse, \
+    CheckedAcademicDocument, CheckStudentIdentity, CheckedStudentLor, CheckedStudentEssay, CheckedStudentSop
 from apps.core import fields
 from apps.students.models import StudentModel,StudentAddress
 from apps.institute.models import Institute
@@ -119,7 +120,6 @@ class ListInstituteCourseSerializer(InstituteCourseSerializer):
                 'essay',
                 'lor',
                 'sop',
-
             )
 
     
@@ -359,3 +359,106 @@ class CompareInstituteSerializer(serializers.ModelSerializer):
 
 class StudentAccessDetail(serializers.Serializer):
     academics = serializers.ListSerializer(child=serializers.CharField())
+
+
+
+
+
+
+
+
+
+class GetApplyInstituteCourseDetail(serializers.ModelSerializer):
+    course_name = serializers.CharField(source='get_course_name')
+    faculty_name = serializers.CharField(source='get_faculty_name')
+    class Meta:
+        model = InstituteCourse
+        fields = (
+
+            'eligibility',
+            'score',
+            'last_mini_academic_score',
+            'reg_fee',
+            'duration_year',
+            'total_fee',
+            'fee_currency',
+            'course_name',
+            'faculty_name',
+            'program',
+            'intake',
+            'sop',
+            'lor',
+            'essay',
+            'passport',
+            'citizenship',
+            'academic',
+            'reg_open',
+            'reg_close',
+            'reg_status',
+        )
+
+class CheckedAcademicDocumentSerializer(serializers.ModelSerializer):
+    doc_name = serializers.CharField(source="get_academic_doc_name")
+    class Meta:
+        model = CheckedAcademicDocument
+        fields = (
+            'academic',
+            'doc_name',
+        )
+
+class CheckedStudentEssaySerializer(serializers.ModelSerializer):
+    # essay_name = serializers.CharField(source='get_essay_name')
+    class Meta:
+        model = CheckedStudentEssay
+        fields = '__all__'
+
+class CheckStudentIdentitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CheckStudentIdentity
+        fields = (
+            'citizenship',
+            'passport',
+        )
+
+class CheckedStudentLorSerializer(serializers.ModelSerializer):
+    lor_name = serializers.CharField(source="get_lor_name")
+    class Meta:
+        model =CheckedStudentLor
+        fields = (
+            'lor',
+            'lor_name',
+        )
+
+class GetCheckedStudentSopSerializer(serializers.ModelSerializer):
+    class Meta:
+        model =CheckedStudentSop
+        fields = (
+            'sop',
+        )
+class GetMyApplicationDocumentSerializer(serializers.ModelSerializer):
+    apply_to = serializers.DictField(source="institute_data")
+    apply_from = serializers.DictField(source='consultancy_data')
+    course = GetApplyInstituteCourseDetail(read_only=True)
+    faculty= serializers.CharField(source='get_faculty_name')
+    checked_student_academic= CheckedAcademicDocumentSerializer(read_only=True,many=True)
+    # checked_student_essay = CheckedStudentEssaySerializer(read_only=True,many=False)
+    checked_student_identity = CheckStudentIdentitySerializer(read_only=True,many=False)
+    checked_student_lor = CheckedStudentLorSerializer(read_only=True,many=True)
+    # checked_student_sop = GetCheckedStudentSopSerializer(read_only=True,many=False)
+    class Meta:
+        model = InstituteApply
+        fields = (
+            'checked_student_identity',
+            'checked_student_essay',
+            'checked_student_sop',
+            'checked_student_academic',
+            'checked_student_lor',
+            'apply_to',
+            'institute',
+            'consultancy',
+            'course',
+            'faculty',
+            'apply_from',
+            'action',
+            'view_date',
+        )
