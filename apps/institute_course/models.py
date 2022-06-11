@@ -85,6 +85,12 @@ class InstituteCourse(BaseModel):
         return self.course.name
 
     @property
+    def get_course_data(self):
+        return {
+            "name":self.course.name,
+            "description":self.course.description
+        }
+    @property
     def get_faculty_name(self):
         return self.faculty.name
 
@@ -140,7 +146,7 @@ class InstituteApply(BaseModel):
     def institute_data(self):
         return {
             "name":self.institute.name,
-            "logo":self.institute.logo.path,
+            "logo":self.institute.logo.url,
             "email":self.institute.institute_email,
             "contact":self.institute.contact,
             "country":self.institute.country,
@@ -151,8 +157,8 @@ class InstituteApply(BaseModel):
         if self.consultancy is not None:
             return {
                 "name":self.consultancy.name,
-                "logo":self.consultancy.logo.path,
-                "email":self.consultancy.email,
+                "logo":self.consultancy.logo.url,
+                "email":self.consultancy.consultancy_email,
                 "contact":self.consultancy.contact,
             }
     @property
@@ -206,7 +212,9 @@ class CommentApplicationInstitute(BaseModel):
 
     @property
     def commentor_name(self):
-        return self.institute_user.user.fullname
+        return {"name":self.institute_user.user.fullname,
+                "image":self.institute_user.profile_photo.url
+                }
 
 
 
@@ -225,8 +233,18 @@ class CheckedAcademicDocument(BaseModel):
     @property
     def get_academic_doc_name(self):
         return self.academic.name
-    class Meta:
-        unique_together = ('application','academic')
+    @property
+    def get_academic_data(self):
+        return {
+            "institute_name":self.academic.institute_name,
+            "duration":self.academic.duration,
+            "level":self.academic.level,
+            "score":self.academic.score,
+            "percentage":float((self.academic.score/self.academic.full_score)*100),
+            "marksheet":self.academic.marksheet.url,
+            "certificate":self.academic.certificate.url
+        }
+
 
 class CheckStudentIdentity(BaseModel):
     application = models.ForeignKey(InstituteApply,on_delete=CASCADE, related_name='checked_student_identity')
@@ -243,18 +261,45 @@ class CheckedStudentLor(BaseModel):
     def get_lor_name(self):
         return self.lor.name
 
+    @property
+    def get_lor_data(self):
+        return {
+            "name":self.lor.name,
+            "lor":self.lor.document.url,
+            "doc_type":self.lor.doc_type
+        }
+
 
 class CheckedStudentEssay(BaseModel):
     application = models.ForeignKey(InstituteApply, on_delete=CASCADE, related_name='checked_student_essay')
     essay = models.ForeignKey(PersonalEssay, on_delete=models.CASCADE)
+    @property
+    def get_essay_name(self):
+        return self.essay.name
 
+    @property
+    def get_essay_data(self):
+        return {
+            "name":self.essay.name,
+            "content":self.essay.content,
+            "essay":self.essay.essay.url,
+            "type":self.essay.doc_type
+        }
 
 class CheckedStudentSop(BaseModel):
     application = models.ForeignKey(InstituteApply, on_delete=CASCADE, related_name='checked_student_sop')
     sop = models.ForeignKey(StudentSop,on_delete=models.CASCADE)
 
-    # @property
-    # def get_sop_name(self):
-    #     return self.sop.name
+    @property
+    def get_sop_name(self):
+        return self.sop.name
+
+    @property
+    def get_sop_data(self):
+        return {
+            "name":self.sop.name,
+            "document":self.sop.document.url,
+            "doc_type":self.sop.doc_type,
+        }
     class Meta:
         unique_together = ('application','sop')

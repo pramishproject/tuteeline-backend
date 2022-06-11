@@ -36,7 +36,8 @@ class StudentModel(BaseModel):
         )
     
     dob = models.DateField(blank=True, null=True)
-    
+
+
     def __str__(self):
         return self.fullname
 

@@ -3,7 +3,7 @@ from django.contrib import admin
 from apps.core.admin import BaseModelAdmin
 from apps.institute_course.models import  Faculty, \
     InstituteApply,CheckStudentIdentity,\
-    CheckedAcademicDocument,CheckedStudentEssay,CheckedStudentLor,CheckedStudentSop
+    CheckedAcademicDocument,CheckedStudentEssay,CheckedStudentLor,CheckedStudentSop,CommentApplicationInstitute
 from apps.institute_course.models import Course
 from apps.institute_course.models import InstituteCourse
 
@@ -64,5 +64,11 @@ class CheckedStudentEssayAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display + (
         'application',
         'sop',
+    )
+
+@admin.register(CommentApplicationInstitute)
+class ApplicationCommentsAdmin(BaseModelAdmin):
+    list_display = BaseModelAdmin.list_display + (
+        'application',
     )
 

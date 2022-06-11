@@ -54,9 +54,14 @@ urlpatterns = [
         name="application-detail"
     ),
     path(
-        '<apply_id>/application/cancle',
+        '<apply_id>/application/institute/detail',
+        views.GetStudentApplicationDetailForInstitute.as_view(),
+        name = "application-detail-for-institute"
+    ),
+    path(
+        '<apply_id>/application/cancel',
         views.CancleStudentApplication.as_view(),
-        name='cancle-application'
+        name='cancel-application'
     ),
     path(
         '<student_id>/student/application/list',
@@ -73,11 +78,7 @@ urlpatterns = [
         views.ApplicantDashboard.as_view(),
         name = 'applicant-count'
     ),
-    # path(
-    #     '<student_id>/<institute_course_id>/document_tracker',
-    #     views.StudentMarkToSendView.as_view(),
-    #     name="document_tracker"
-    # ),
+
     path(
         '<institute_course_id>/course/compare',
         views.CompareInstituteView.as_view(),

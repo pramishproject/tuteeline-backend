@@ -84,6 +84,8 @@ class PersonalEssay(BaseModel):
             name ,extension = os.path.splitext(str(self.essay))
             self.doc_type = extension
             super(PersonalEssay, self).save(*args, **kwargs)
+        else:
+            super(PersonalEssay, self).save(*args, **kwargs)
 
         
 pre_save.connect(check_score, sender=Academic)

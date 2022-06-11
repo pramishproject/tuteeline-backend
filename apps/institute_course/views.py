@@ -19,7 +19,7 @@ from apps.institute_course.serializers import (
     ListApplicationCommentSerializer,
     ListInstituteCourseSerializer,
     StudentApplySerializer, CompareInstituteSerializer, StudentAccessDetail, StudentMyApplicationListSerializer,
-    GetMyApplicationDocumentSerializer)
+    GetMyApplicationDocumentSerializer, GetMyApplicationDetailForInstituteSerializer)
 
 from apps.institute_course import usecases
 # from apps.institute_course.mixins import InstituteCourseMixin
@@ -141,7 +141,18 @@ class GetMyApplicationDetailView(generics.RetrieveAPIView,ApplyMixin):
     def get_object(self):
         return self.get_apply()
     def get_queryset(self):
-        usecases.GetMyApplicationDetailUsecase(
+        return usecases.GetMyApplicationDetailUsecase(
+            application=self.get_object()
+        ).execute()
+
+class GetStudentApplicationDetailForInstitute(generics.RetrieveAPIView,ApplyMixin):
+    serializer_class = GetMyApplicationDetailForInstituteSerializer
+
+    def get_object(self):
+        return self.get_apply()
+
+    def get_queryset(self):
+        return usecases.GetApplicationDetailForInstituteUsecase(
             application=self.get_object()
         ).execute()
 
@@ -233,28 +244,6 @@ class ApplicantDashboard(generics.ListAPIView,InstituteMixins):
         ).execute()
 
 
-    
-
-# @permission_classes((permissions.AllowAny,))
-# class StudentMarkToSendView(APIView,StudentMixin,CourseMixin):
-#     """
-#     {
-#         "courseId":"",
-#         "student_identity":{"citizenship":"","passport":""},
-#         "essay":[],
-#         "sop":[],
-#         "lor":[],
-#         "academic":[],
-#         }
-#     """
-#     def post(self, request,student_id,institute_course_id):
-#         usecases.SendedDocumentByStudent(data=request.data,student=self.get_student(),course=self.get_institutecourse()).execute()
-#         return Response({"message":"Create mark document successfully"})
-#
-#
-#     def get(self,request,student_id,institute_course_id):
-#         data =usecases.GetAccessDocument(student=student_id,course=institute_course_id).execute()
-#         return Response({"data":data})
 
 
 

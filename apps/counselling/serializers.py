@@ -26,6 +26,10 @@ class GetInstituteSerializer(serializers.ModelSerializer):
             'country',
             'city',
             'state',
+            'institute_email',
+            'contact',
+            'rating',
+
         )
 
 

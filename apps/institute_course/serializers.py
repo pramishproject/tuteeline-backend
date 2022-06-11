@@ -10,6 +10,7 @@ from rest_framework.validators import UniqueTogetherValidator
 from apps.institute_course.models import CommentApplicationInstitute, Course, Faculty, InstituteApply, InstituteCourse, \
     CheckedAcademicDocument, CheckStudentIdentity, CheckedStudentLor, CheckedStudentEssay, CheckedStudentSop
 from apps.core import fields
+from apps.studentIdentity.serializers import StudentCitizenshipSerializer, StudentPassportSerializer
 from apps.students.models import StudentModel,StudentAddress
 from apps.institute.models import Institute
 
@@ -132,14 +133,15 @@ class CommentApplicationSerializer(serializers.ModelSerializer):
         )
 
 class ListApplicationCommentSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(source="commentor_name")
+    commenter = serializers.DictField(source="commentor_name")
 
     class Meta:
         model = CommentApplicationInstitute
         fields = (
-            'name',
+            'commenter',
             'created_at',
-            'comment'
+            'comment',
+            'created_at',
         )
 class StudentApplySerializer(serializers.ModelSerializer):
     academic = serializers.ListSerializer(child=serializers.UUIDField(),write_only=True,
@@ -369,7 +371,7 @@ class StudentAccessDetail(serializers.Serializer):
 
 
 class GetApplyInstituteCourseDetail(serializers.ModelSerializer):
-    course_name = serializers.CharField(source='get_course_name')
+    course_name = serializers.DictField(source='get_course_data')
     faculty_name = serializers.CharField(source='get_faculty_name')
     class Meta:
         model = InstituteCourse
@@ -407,10 +409,13 @@ class CheckedAcademicDocumentSerializer(serializers.ModelSerializer):
         )
 
 class CheckedStudentEssaySerializer(serializers.ModelSerializer):
-    # essay_name = serializers.CharField(source='get_essay_name')
+    essay_name = serializers.CharField(source='get_essay_name')
     class Meta:
         model = CheckedStudentEssay
-        fields = '__all__'
+        fields = (
+            'essay',
+            'essay_name'
+        )
 
 class CheckStudentIdentitySerializer(serializers.ModelSerializer):
     class Meta:
@@ -430,10 +435,12 @@ class CheckedStudentLorSerializer(serializers.ModelSerializer):
         )
 
 class GetCheckedStudentSopSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='get_sop_name')
     class Meta:
-        model =CheckedStudentSop
+        model = CheckedStudentSop
         fields = (
             'sop',
+            'name',
         )
 class GetMyApplicationDocumentSerializer(serializers.ModelSerializer):
     apply_to = serializers.DictField(source="institute_data")
@@ -441,10 +448,10 @@ class GetMyApplicationDocumentSerializer(serializers.ModelSerializer):
     course = GetApplyInstituteCourseDetail(read_only=True)
     faculty= serializers.CharField(source='get_faculty_name')
     checked_student_academic= CheckedAcademicDocumentSerializer(read_only=True,many=True)
-    # checked_student_essay = CheckedStudentEssaySerializer(read_only=True,many=False)
+    checked_student_essay = CheckedStudentEssaySerializer(read_only=True,many=True)
     checked_student_identity = CheckStudentIdentitySerializer(read_only=True,many=False)
     checked_student_lor = CheckedStudentLorSerializer(read_only=True,many=True)
-    # checked_student_sop = GetCheckedStudentSopSerializer(read_only=True,many=False)
+    checked_student_sop = GetCheckedStudentSopSerializer(read_only=True,many=True)
     class Meta:
         model = InstituteApply
         fields = (
@@ -461,4 +468,94 @@ class GetMyApplicationDocumentSerializer(serializers.ModelSerializer):
             'apply_from',
             'action',
             'view_date',
+            'cancel'
+        )
+
+
+class CheckedAcademicDocumentInstituteSerializer(serializers.ModelSerializer):
+    academic_data = serializers.DictField(source="get_academic_data")
+    class Meta:
+        model = CheckedAcademicDocument
+        fields = (
+            "academic_data",
+        )
+
+class StudentProfileDetailSerializer(serializers.ModelSerializer):
+    address_relation = GetStudentAddressSerializer(many=False, read_only=True)
+    class Meta:
+        model = StudentModel
+        fields = (
+            'fullname',
+            'contact',
+            'image',
+            'gender',
+            'dob',
+            'address_relation',
+        )
+
+class CheckedStudentEssayForInstituteSerializer(serializers.ModelSerializer):
+    essay_data = serializers.DictField(source='get_essay_data')
+    class Meta:
+        model = CheckedStudentEssay
+        fields = (
+            'essay',
+            'essay_data'
+        )
+
+
+class  CheckStudentIdentityForInstituteSerializer(serializers.ModelSerializer):
+    citizenship = StudentCitizenshipSerializer(read_only=True,many=False)
+    passport = StudentPassportSerializer(read_only=True,many=False)
+    class Meta:
+        model = CheckStudentIdentity
+        fields = (
+            'citizenship',
+            'passport',
+        )
+
+
+
+class CheckedStudentLorForInstituteSerializer(serializers.ModelSerializer):
+    lor_data = serializers.DictField(source="get_lor_data")
+    class Meta:
+        model =CheckedStudentLor
+        fields = (
+            'lor',
+            'lor_data',
+        )
+
+class GetCheckedStudentSopForInstituteSerializer(serializers.ModelSerializer):
+    sop_data = serializers.DictField(source='get_sop_data')
+    class Meta:
+        model = CheckedStudentSop
+        fields = (
+            "sop_data",
+        )
+class GetMyApplicationDetailForInstituteSerializer(serializers.ModelSerializer):
+    apply_from = serializers.DictField(source='consultancy_data')
+    student = StudentProfileDetailSerializer(read_only=True,many=False)
+    faculty = serializers.CharField(source='get_faculty_name')
+    checked_student_academic = CheckedAcademicDocumentInstituteSerializer(read_only=True, many=True)
+    checked_student_essay = CheckedStudentEssayForInstituteSerializer(read_only=True, many=True)
+    checked_student_identity = CheckStudentIdentityForInstituteSerializer(read_only=True, many=False)
+    checked_student_lor = CheckedStudentLorForInstituteSerializer(read_only=True, many=True)
+    checked_student_sop = GetCheckedStudentSopForInstituteSerializer(read_only=True, many=True)
+    course_name = serializers.CharField(source="get_student_course")
+    class Meta:
+        model = InstituteApply
+        fields = (
+            'student',
+            'checked_student_identity',
+            'checked_student_essay',
+            'checked_student_sop',
+            'checked_student_academic',
+            'checked_student_lor',
+            'institute',
+            'consultancy',
+            'faculty',
+            'apply_from',
+            'action',
+            'view_date',
+            'cancel',
+            'course_name',
         )

@@ -78,3 +78,6 @@ class AddNotesView(generics.UpdateWithMessageAPIView,InstituteCounsellingMixin):
             counselling=self.get_object(),
             serializer=serializer
         ).execute()
+
+class AssignCouncilingListView(generics.ListAPIView): #todo this is use to list counciling for institute user
+    pass

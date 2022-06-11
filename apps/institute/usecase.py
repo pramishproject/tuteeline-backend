@@ -97,11 +97,8 @@ class ListInstituteUseCase(BaseUseCase):
         return self._institute
 
     def _factory(self):
-        # Institute.objects.distinct().filter(instituteCourse__program="Bachelor")
-        # ins = Institute.objects.distinct().filter(Q(course_related__course__name__isnull=False))
+        self._institute = Institute.objects.all().distinct()
 
-        self._institute = Institute.objects.all()
-        # self._institute = ins
 
 class GetInstituteUseCase(BaseUseCase):
     def __init__(self,institute_id:str):
