@@ -359,16 +359,6 @@ class CompareInstituteSerializer(serializers.ModelSerializer):
             'essay'
         )
 
-class StudentAccessDetail(serializers.Serializer):
-    academics = serializers.ListSerializer(child=serializers.CharField())
-
-
-
-
-
-
-
-
 
 class GetApplyInstituteCourseDetail(serializers.ModelSerializer):
     course_name = serializers.DictField(source='get_course_data')
@@ -376,7 +366,6 @@ class GetApplyInstituteCourseDetail(serializers.ModelSerializer):
     class Meta:
         model = InstituteCourse
         fields = (
-
             'eligibility',
             'score',
             'last_mini_academic_score',
@@ -559,3 +548,5 @@ class GetMyApplicationDetailForInstituteSerializer(serializers.ModelSerializer):
             'cancel',
             'course_name',
         )
+
+

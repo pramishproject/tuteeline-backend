@@ -3,7 +3,8 @@ from apps.institute_course.mixins import ApplyMixin, CourseMixin, FacultyMixin
 from apps.institute.mixins import InstituteMixins
 
 from django.utils.translation import gettext_lazy as _
-
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 from rest_framework.permissions import AllowAny
 
 
@@ -18,7 +19,7 @@ from apps.institute_course.serializers import (
     AddInstituteCourseSerializer,
     ListApplicationCommentSerializer,
     ListInstituteCourseSerializer,
-    StudentApplySerializer, CompareInstituteSerializer, StudentAccessDetail, StudentMyApplicationListSerializer,
+    StudentApplySerializer, CompareInstituteSerializer, StudentMyApplicationListSerializer,
     GetMyApplicationDocumentSerializer, GetMyApplicationDetailForInstituteSerializer)
 
 from apps.institute_course import usecases
@@ -204,7 +205,10 @@ class ListStudentApplicationView(generics.ListAPIView,InstituteMixins):
     """
     this api is use to list application
     """
+
     serializer_class = GetStudentApplicationInstituteSerializer
+    # filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    # search_fields = ['name', 'course_related__course__name', 'course_related__faculty__name']
     def get_object(self):
         return self.get_institute()
 
@@ -245,6 +249,7 @@ class ApplicantDashboard(generics.ListAPIView,InstituteMixins):
 
 
 
+# -------------------------------------Application end-----------------------------
 
 
 class CompareInstituteView(generics.RetrieveAPIView,CourseMixin): #TODO SPRINT1
@@ -261,10 +266,3 @@ class CompareInstituteView(generics.RetrieveAPIView,CourseMixin): #TODO SPRINT1
         ).execute()
 
 
-class StudentAccessDetail(generics.CreateAPIView): #TODO Test for select student doc to send institute
-    """
-    create api view
-    """
-    serializer_class = StudentAccessDetail
-    def perform_create(self, serializer):
-        pass

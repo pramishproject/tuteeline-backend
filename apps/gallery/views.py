@@ -1,67 +1,83 @@
 from django.shortcuts import render
 
 # Create your views here.
+from apps.consultancy.mixins import ConsultancyMixin
 from apps.core import generics
 from apps.gallery import serializers, usecases
-from apps.gallery.mixins import GalleryMixin, InstituteGalleryMixins
+from apps.gallery.mixins import  InstituteGalleryMixins
 from django.utils.translation import gettext_lazy as _
 
 from apps.institute.mixins import InstituteMixins
 
 
-class AddGalleryView(generics.CreateWithMessageAPIView):
+class AddConsultancyGalleryView(generics.CreateWithMessageAPIView):
     """
     Use this end-point to add gallery
     """
-    serializer_class = serializers.AddGallerySerializer
+    serializer_class = serializers.AddConsultancyGallerySerializer
     message = 'Created successfully'
 
     def perform_create(self, serializer):
-        return usecases.AddGalleryUseCase(serializer=serializer).execute()
+        return usecases.AddConsultancyGalleryUseCase(serializer=serializer).execute()
 
 
-class ListGalleryView(generics.ListAPIView):
+class ListConsultancyGalleryForStudentView(generics.ListAPIView,ConsultancyMixin):
     """
     Use this end-point to List  all  blogs
     """
-    serializer_class = serializers.ListGallerySerializer
+    serializer_class = serializers.ListConsultancyGalleryForStudentSerializer
     no_content_error_message = _('No gallery at the moment')
+    def get_object(self):
+        return self.get_consultancy()
 
     def get_queryset(self):
-        return usecases.ListGalleryUseCase().execute()
-
-
-class DeleteGalleryView(GalleryMixin, generics.DestroyAPIView):
-    """
-    Use this endpoint to delete gallery
-    """
-
-    def get_object(self):
-        return self.get_gallery()
-
-    def perform_destroy(self, instance):
-        return usecases.DeleteGalleryUseCase(
-            gallery=self.get_object(),
+        return usecases.ListConsultancyGalleryUseCase(
+            consultancy=self.get_object()
         ).execute()
 
 
-class UpdateGalleryView(generics.UpdateAPIView, GalleryMixin):
-    """
-    Use this end-point to Update   blogs.
-    """
-
-    serializer_class = serializers.UpdateGallerySerializer
-    queryset = ''
-
+class ListConsultancyGallery(generics.ListAPIView,ConsultancyMixin):
+    serializer_class = serializers.ListConsultancyGallerySerializer
+    no_content_error_message = _('No gallery at the moment')
 
     def get_object(self):
-        return self.get_gallery()
+        return self.get_consultancy()
 
-    def perform_update(self, serializer):
-        return usecases.UpdateGalleryUseCase(
-            serializer=serializer,
-            gallery=self.get_object()
+    def get_queryset(self):
+        return usecases.ListConsultancyGalleryUseCase(
+            consultancy=self.get_object()
         ).execute()
+# class DeleteGalleryView(GalleryMixin, generics.DestroyAPIView):
+#     """
+#     Use this endpoint to delete gallery
+#     """
+#
+#     def get_object(self):
+#         return self.get_gallery()
+#
+#     def perform_destroy(self, instance):
+#         return usecases.DeleteGalleryUseCase(
+#             gallery=self.get_object(),
+#         ).execute()
+
+
+# class UpdateGalleryView(generics.UpdateAPIView, GalleryMixin):
+#     """
+#     Use this end-point to Update   blogs.
+#     """
+#
+#     serializer_class = serializers.UpdateGallerySerializer
+#     queryset = ''
+#
+#
+#     def get_object(self):
+#         return self.get_gallery()
+#
+#     def perform_update(self, serializer):
+#         return usecases.UpdateGalleryUseCase(
+#             serializer=serializer,
+#             gallery=self.get_object()
+#         ).execute()
 
 class AddInstituteGalleryView(generics.CreateWithMessageAPIView,InstituteMixins):
     """

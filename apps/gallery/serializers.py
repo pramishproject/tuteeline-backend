@@ -1,25 +1,28 @@
 from rest_framework import serializers
 
-from apps.gallery.models import Gallery, InstituteGallery
+from apps.gallery.models import InstituteGallery, ConsultancyGallery
 
 
-class GallerySerializer(serializers.ModelSerializer):
+class ConsultancyGallerySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Gallery
+        model = ConsultancyGallery
         fields = '__all__'
 
 
-class AddGallerySerializer(GallerySerializer):
-    class Meta(GallerySerializer.Meta):
+class AddConsultancyGallerySerializer(ConsultancyGallerySerializer):
+    class Meta(ConsultancyGallerySerializer.Meta):
         fields = (
             'image',
-            'title'
-
+            'title',
+            'consultancy',
+            'uploaded_image'
         )
 
+class ListConsultancyGallerySerializer(ConsultancyGallerySerializer):
+    pass
 
-class ListGallerySerializer(GallerySerializer):
-    class Meta(GallerySerializer.Meta):
+class ListConsultancyGalleryForStudentSerializer(ConsultancyGallerySerializer):
+    class Meta(ConsultancyGallerySerializer.Meta):
         fields = (
             'id',
             'image',
@@ -29,8 +32,8 @@ class ListGallerySerializer(GallerySerializer):
         )
 
 
-class UpdateGallerySerializer(AddGallerySerializer):
-    pass
+# class UpdateGallerySerializer(AddGallerySerializer):
+#     pass
 
 
 class AddInstituteGallerySerializer(serializers.ModelSerializer):

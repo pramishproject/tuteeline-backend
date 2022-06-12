@@ -4,27 +4,32 @@ from apps.gallery import views
 
 urlpatterns = [
     path(
-        'add',
-        views.AddGalleryView.as_view(),
+        'consultancy/add',
+        views.AddConsultancyGalleryView.as_view(),
         name='add-gallery'
     ),
     path(
-        'list',
-        views.ListGalleryView.as_view(),
+        '<consultancy_id>/consultancy/student/list',
+        views.ListConsultancyGalleryForStudentView.as_view(),
         name='list-gallery'
     ),
     path(
-        '<str:gallery_id>/update',
-        views.UpdateGalleryView.as_view(),
-        name='update-gallery'
-
+        '<consultancy_id>/consultancy/list',
+        views.ListConsultancyGallery.as_view(),
+        name = "list-consultancy gallery"
     ),
-    path(
-        '<str:gallery_id>/delete',
-        views.DeleteGalleryView.as_view(),
-        name='delete-gallery'
-
-    ),
+    # path(
+    #     '<str:gallery_id>/update',
+    #     views.UpdateGalleryView.as_view(),
+    #     name='update-gallery'
+    #
+    # ),
+    # path(
+    #     '<str:gallery_id>/delete',
+    #     views.DeleteGalleryView.as_view(),
+    #     name='delete-gallery'
+    #
+    # ),
     path(
         '<str:institute_id>/institute/add',
         views.AddInstituteGalleryView.as_view(),

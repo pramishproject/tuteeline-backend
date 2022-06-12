@@ -2,10 +2,10 @@ from django.contrib import admin
 
 # Register your models here.
 from apps.core.admin import BaseModelAdmin
-from apps.gallery.models import Gallery,InstituteGallery
+from apps.gallery.models import InstituteGallery,ConsultancyGallery
 
-
-@admin.register(Gallery)
+#
+@admin.register(ConsultancyGallery)
 class RelationAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display+(
         'title',

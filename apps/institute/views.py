@@ -125,7 +125,6 @@ class ListInstituteView(generics.ListAPIView):
     # https://www.django-rest-framework.org/api-guide/filtering/
 
     def get_queryset(self):
-        print(self.request.GET.get('name', None))
         return usecase.ListInstituteUseCase().execute()
 
 

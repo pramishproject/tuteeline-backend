@@ -305,7 +305,7 @@ class GetApplyInstitute(BaseUseCase):
             raise InstituteApplyNotFound
 
 class CancleStudentApplicationUseCase(BaseUseCase):
-    def __init__(self,application,serializer):
+    def __init__(self,application:InstituteApply,serializer):
         self._application = application
         self._data = serializer.validated_data
 
@@ -315,7 +315,7 @@ class CancleStudentApplicationUseCase(BaseUseCase):
     def _factory(self):
         for key in self._data.keys():
             setattr(self._application,key,self._data.get(key))
-
+        # self._application.cancel = self._data.pop("cancel")
         self._application.updated_at = datetime.now()
         self._application.save()
 

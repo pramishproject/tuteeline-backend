@@ -1,11 +1,11 @@
-from apps.gallery.usecases import GetGalleryUseCase,GetInstituteGalleryUseCase
+from apps.gallery.usecases import GetInstituteGalleryUseCase
 
 
-class GalleryMixin:
-    def get_gallery(self):
-        return GetGalleryUseCase(
-            gallery_id=self.kwargs.get('gallery_id')
-        ).execute()
+# class GalleryMixin:
+#     def get_gallery(self):
+#         return GetGalleryUseCase(
+#             gallery_id=self.kwargs.get('gallery_id')
+#         ).execute()
 
 
 class InstituteGalleryMixins:
