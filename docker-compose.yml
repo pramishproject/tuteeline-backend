@@ -25,9 +25,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=postgres
+      - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root1234
-      - POSTGRES_DB=tuteeline
+      - POSTGRES_DB=student_master
       - POSTGRES_HOST=database
     networks:
       edu-network:
