@@ -102,8 +102,6 @@ THIRD_PARTY_APPS = [
     "django_filters",
     "rest_framework_tracking",
     "channels",
-    "django.contrib.gis",
-    "leaflet",
 ]
 
 LOCAL_APPS = [

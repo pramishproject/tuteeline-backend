@@ -29,11 +29,11 @@
 # #RUN python manage.py collectstatic
 # EXPOSE 8000
 FROM python:3
-# FROM python:3-alpine
+#FROM python:3-alpine
 ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 COPY requirements.txt .
-RUN apt install gdal-bin
+
 RUN pip install -r requirements.txt
 
 COPY . .
