@@ -41,7 +41,7 @@ jobs:
           script: |
             cd backend/tuteeline-backend
             echo cloning successful
-            git pull origin master
+            git pull origin main
             docker rm -f core_app || true
             echo previous container removed
             docker-compose up --build -d 
