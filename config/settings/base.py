@@ -132,7 +132,6 @@ LOCAL_APPS = [
     "apps.review.apps.ReviewConfig",
     "apps.counselling.apps.CounsellingConfig",
     "apps.linkage.apps.LinkageConfig"
-    # "apps.geo_location.apps.GeoLocationConfig"
 
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
