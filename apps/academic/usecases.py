@@ -20,10 +20,13 @@ class CreateStudentAcademicUseCase(usecases.CreateUseCase):
 
     def _factory(self):
         #1. create Academic
-        self._academic=Academic.objects.create(
-            student=self._student,
-            **self._data
-        )
+        try:
+            self._academic=Academic.objects.create(
+                student=self._student,
+                **self._data
+            )
+        except Academic.validate_unique:
+            raise
         try:
             complete_profile=CompleteProfileTracker.objects.get(student=self._student)
             complete_profile.complete_academic_detail=True

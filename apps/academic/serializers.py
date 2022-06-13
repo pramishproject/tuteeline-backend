@@ -24,13 +24,7 @@ class CreateAcademicSerializer(serializers.ModelSerializer):
             'marksheet',
             'certificate'
         )
-        validators = [
-            UniqueTogetherValidator(
-                queryset=Academic.objects.all(),
-                fields=['student','level'],
-                message="One student and level should be unique "
-            )
-        ]
+
 
 class GetAcademicListSerializer(serializers.ModelSerializer):
     class Meta:
