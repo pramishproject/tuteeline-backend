@@ -124,6 +124,7 @@ class InstituteApply(BaseModel):
         default='applied', 
         max_length=20
         )
+    action_field = models.ForeignKey('ApplyAction', blank=True, null=True,on_delete=models.DO_NOTHING)
     action_data = models.DateField(_('Date'), blank=True, null=True)
     institute = models.ForeignKey(Institute, on_delete=CASCADE)
     action_institute_user = models.ForeignKey(
@@ -200,8 +201,8 @@ class ApplyAction(BaseModel):
     action = models.CharField(choices=ACTION_OPTION,
         default='applied',
         max_length=20)
-    institute_use = models.ForeignKey(to=InstituteStaff,on_delete=models.DO_NOTHING)
-    consultancy_user = models.ForeignKey(to=ConsultancyStaff,on_delete=models.DO_NOTHING)
+    institute_use = models.ForeignKey(to=InstituteStaff,on_delete=models.DO_NOTHING,blank=True,null=True)
+    consultancy_user = models.ForeignKey(to=ConsultancyStaff,on_delete=models.DO_NOTHING,blank=True,null=True)
 
 class AddScholorshipInCourse(BaseModel):
     course = models.ForeignKey(

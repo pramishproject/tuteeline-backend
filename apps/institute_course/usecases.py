@@ -13,7 +13,8 @@ from apps.institute.models import Institute, InstituteStaff
 from apps.institute_course.exceptions import CourseNotFound, FacultyNotFound, InstituteApplyNotFound, InstituteNotFound, \
     InstituteStaffNotFound, UniqueStudentApply
 from apps.institute_course.models import CommentApplicationInstitute, InstituteApply, InstituteCourse, Course, Faculty, \
-    CheckedAcademicDocument, CheckStudentIdentity, CheckedStudentLor, CheckedStudentSop, CheckedStudentEssay
+    CheckedAcademicDocument, CheckStudentIdentity, CheckedStudentLor, CheckedStudentSop, CheckedStudentEssay, \
+    ApplyAction
 from apps.studentIdentity.exceptions import CitizenshipNotFound,PassportNotFound
 from apps.studentIdentity.models import Citizenship, Passport
 from apps.students.exceptions import StudentModelNotFound
@@ -136,6 +137,11 @@ class ApplyUseCase(BaseUseCase):
             self._apply = InstituteApply.objects.create(
                 **self._data
             )
+            self.status = ApplyAction.objects.create(
+                apply=self._apply,
+            )
+            self._apply.action_field = self.status
+            self._apply.save()
         except InstituteApply.validate_unique():
             raise UniqueStudentApply
 

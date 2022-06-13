@@ -522,6 +522,7 @@ class GetCheckedStudentSopForInstituteSerializer(serializers.ModelSerializer):
         fields = (
             "sop_data",
         )
+
 class GetMyApplicationDetailForInstituteSerializer(serializers.ModelSerializer):
     apply_from = serializers.DictField(source='consultancy_data')
     apply_to = serializers.DictField(source="institute_data")
