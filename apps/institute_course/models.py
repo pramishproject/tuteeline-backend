@@ -99,15 +99,15 @@ class InstituteCourse(BaseModel):
 
 
 
-
-class InstituteApply(BaseModel):
-    ACTION_OPTION=(
+ACTION_OPTION=(
         ('verify','verify'),
         ('accept','accept'),
         ('reject','reject'),
         ('pending','pending'),
         ('applied','applied')
     )
+class InstituteApply(BaseModel):
+
     student = models.ForeignKey(StudentModel, 
     on_delete=DO_NOTHING
     )
@@ -189,9 +189,19 @@ class InstituteApply(BaseModel):
             return self.consultancy.name
         else:
             return None
-
+    @property
+    def get_institute_name(self):
+        return self.institute.name
     class Meta:
         unique_together = ('student','course')
+
+class ApplyAction(BaseModel):
+    apply = models.ForeignKey(to=InstituteApply,on_delete=models.CASCADE)
+    action = models.CharField(choices=ACTION_OPTION,
+        default='applied',
+        max_length=20)
+    institute_use = models.ForeignKey(to=InstituteStaff,on_delete=models.DO_NOTHING)
+    consultancy_user = models.ForeignKey(to=ConsultancyStaff,on_delete=models.DO_NOTHING)
 
 class AddScholorshipInCourse(BaseModel):
     course = models.ForeignKey(

@@ -285,9 +285,20 @@ class ListStudentApplicationCourseUseCase(BaseUseCase):
         return self._apply
 
     def _factory(self):
-        self._apply = InstituteApply.objects.filter(institute=self._institute)
+        self._apply = InstituteApply.objects.filter(institute=self._institute).distinct()
 
-            
+
+class ListStudentApplicationCourseUseCase(BaseUseCase):
+    def __init__(self, consultancy):
+        self._consultancy = consultancy
+
+    def execute(self):
+        self._factory()
+        return self._apply
+
+    def _factory(self):
+        self._apply = InstituteApply.objects.filter(consultancy=self._consultancy).distinct()
+
 
 class GetApplyInstitute(BaseUseCase):
     def __init__(self,apply_id):

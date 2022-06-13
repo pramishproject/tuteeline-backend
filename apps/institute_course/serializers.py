@@ -249,10 +249,12 @@ class GetStudentApplicationInstituteSerializer(serializers.ModelSerializer):
     consultancy_name = serializers.CharField(source='get_consultancy_name')
     course_name = serializers.CharField(source='get_student_course') 
     address = serializers.CharField(source='student_address')
+    institute_name = serializers.CharField(source="get_institute_name")
     class Meta:
         model = InstituteApply
         fields = (
             'institute',
+            'institute_name',
             'id',
             'student',
             'student_name',
@@ -522,6 +524,7 @@ class GetCheckedStudentSopForInstituteSerializer(serializers.ModelSerializer):
         )
 class GetMyApplicationDetailForInstituteSerializer(serializers.ModelSerializer):
     apply_from = serializers.DictField(source='consultancy_data')
+    apply_to = serializers.DictField(source="institute_data")
     student = StudentProfileDetailSerializer(read_only=True,many=False)
     faculty = serializers.CharField(source='get_faculty_name')
     checked_student_academic = CheckedAcademicDocumentInstituteSerializer(read_only=True, many=True)
@@ -534,6 +537,7 @@ class GetMyApplicationDetailForInstituteSerializer(serializers.ModelSerializer):
         model = InstituteApply
         fields = (
             'student',
+            'apply_to',
             'checked_student_identity',
             'checked_student_essay',
             'checked_student_sop',

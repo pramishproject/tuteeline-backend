@@ -1,4 +1,4 @@
-
+from apps.consultancy.mixins import ConsultancyMixin
 from apps.institute_course.mixins import ApplyMixin, CourseMixin, FacultyMixin
 from apps.institute.mixins import InstituteMixins
 
@@ -205,16 +205,28 @@ class ListStudentApplicationView(generics.ListAPIView,InstituteMixins):
     """
     this api is use to list application
     """
-
     serializer_class = GetStudentApplicationInstituteSerializer
-    # filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    # search_fields = ['name', 'course_related__course__name', 'course_related__faculty__name']
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["institute__course_related__course__name","student__fullname"]
     def get_object(self):
         return self.get_institute()
 
     def get_queryset(self):
         return usecases.ListStudentApplicationCourseUseCase(
             institute=self.get_object()
+        ).execute()
+
+class ListStudentApplicationForCounsultancy(generics.ListAPIView,ConsultancyMixin):
+    serializer_class = GetStudentApplicationInstituteSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["institute__course_related__course__name", "student__fullname"]
+
+    def get_object(self):
+        return self.get_consultancy()
+
+    def get_queryset(self):
+        return usecases.ListStudentApplicationCourseUseCase(
+            consultancy=self.get_object()
         ).execute()
 
 
