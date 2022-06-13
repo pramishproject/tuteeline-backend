@@ -20,7 +20,7 @@ from apps.institute_course.serializers import (
     ListApplicationCommentSerializer,
     ListInstituteCourseSerializer,
     StudentApplySerializer, CompareInstituteSerializer, StudentMyApplicationListSerializer,
-    GetMyApplicationDocumentSerializer, GetMyApplicationDetailForInstituteSerializer)
+    GetMyApplicationDocumentSerializer, GetMyApplicationDetailForInstituteSerializer, InstituteActionSerializer)
 
 from apps.institute_course import usecases
 # from apps.institute_course.mixins import InstituteCourseMixin
@@ -169,6 +169,20 @@ class ApplyInstituteCourseView(generics.CreateAPIView):
 
         return usecases.ApplyUseCase(
             serializer = serializer
+        ).execute()
+
+class ActionByInstitute(generics.CreateWithMessageAPIView,ApplyMixin):
+    """
+    this endpoint is use to
+    """
+    serializer_class = InstituteActionSerializer
+    message =_("action successfully")
+    def get_object(self):
+        return self.get_apply()
+    def perform_create(self, serializer):
+        return usecases.InstituteActionUseCase(
+            serializer=serializer,
+            apply=self.get_object()
         ).execute()
 
 class AddCommentApplicationView(generics.CreateWithMessageAPIView,ApplyMixin):

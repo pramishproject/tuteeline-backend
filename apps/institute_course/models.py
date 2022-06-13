@@ -124,21 +124,12 @@ class InstituteApply(BaseModel):
         default='applied', 
         max_length=20
         )
-    action_field = models.ForeignKey('ApplyAction', blank=True, null=True,on_delete=models.DO_NOTHING)
-    action_data = models.DateField(_('Date'), blank=True, null=True)
+    action_field = models.ForeignKey('ApplyAction', blank=True, null=True,on_delete=models.DO_NOTHING,
+                                     related_name="action_institute")
+    consultancy_action = models.ForeignKey('ActionApplyByConsultancy',blank=True, null=True,on_delete=models.DO_NOTHING
+                                           ,related_name="action_consultancy")
     institute = models.ForeignKey(Institute, on_delete=CASCADE)
-    action_institute_user = models.ForeignKey(
-        InstituteStaff, 
-        blank=True, 
-        null=True,
-        on_delete=DO_NOTHING
-        )
-    action_consultancy_user = models.ForeignKey(
-        ConsultancyStaff, 
-        blank=True, 
-        null=True, 
-        on_delete=DO_NOTHING
-        )
+
     view_date = models.DateField(blank=True, null=True)
     forward = models.BooleanField(default=False)
     cancel = models.BooleanField(default=False)
@@ -162,9 +153,7 @@ class InstituteApply(BaseModel):
                 "email":self.consultancy.consultancy_email,
                 "contact":self.consultancy.contact,
             }
-    @property
-    def institute_user_action(self):
-        return self.action_institute_user.user.fullname
+
     @property
     def get_student_user_name(self):
         return self.student.fullname
@@ -201,8 +190,16 @@ class ApplyAction(BaseModel):
     action = models.CharField(choices=ACTION_OPTION,
         default='applied',
         max_length=20)
-    institute_use = models.ForeignKey(to=InstituteStaff,on_delete=models.DO_NOTHING,blank=True,null=True)
-    consultancy_user = models.ForeignKey(to=ConsultancyStaff,on_delete=models.DO_NOTHING,blank=True,null=True)
+    institute_user = models.ForeignKey(to=InstituteStaff,on_delete=models.DO_NOTHING,blank=True,null=True)
+
+class ActionApplyByConsultancy(BaseModel):
+    apply = models.ForeignKey(to=InstituteApply, on_delete=models.CASCADE)
+    action = models.CharField(choices=ACTION_OPTION,
+                              default='applied',
+                              max_length=20)
+    consultancy_user = models.ForeignKey(to=ConsultancyStaff, on_delete=models.DO_NOTHING, blank=True, null=True)
+    class Meta:
+        db_table="consultancy_action"
 
 class AddScholorshipInCourse(BaseModel):
     course = models.ForeignKey(

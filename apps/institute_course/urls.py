@@ -79,6 +79,11 @@ urlpatterns = [
         name="list-comment"
     ),
     path(
+        '<apply_id>/institute/application/action',
+        views.ActionByInstitute.as_view(),
+        name="institute-action"
+    ),
+    path(
         '<institute_id>/applicant/dashboard/count',
         views.ApplicantDashboard.as_view(),
         name = 'applicant-count'

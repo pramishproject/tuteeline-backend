@@ -14,7 +14,7 @@ from apps.institute_course.exceptions import CourseNotFound, FacultyNotFound, In
     InstituteStaffNotFound, UniqueStudentApply
 from apps.institute_course.models import CommentApplicationInstitute, InstituteApply, InstituteCourse, Course, Faculty, \
     CheckedAcademicDocument, CheckStudentIdentity, CheckedStudentLor, CheckedStudentSop, CheckedStudentEssay, \
-    ApplyAction
+    ApplyAction, ActionApplyByConsultancy
 from apps.studentIdentity.exceptions import CitizenshipNotFound,PassportNotFound
 from apps.studentIdentity.models import Citizenship, Passport
 from apps.students.exceptions import StudentModelNotFound
@@ -140,8 +140,13 @@ class ApplyUseCase(BaseUseCase):
             self.status = ApplyAction.objects.create(
                 apply=self._apply,
             )
+            self.consultancy_status = ActionApplyByConsultancy.objects.create(
+                apply=self._apply
+            )
             self._apply.action_field = self.status
+            self._apply.consultancy_action = self.consultancy_status
             self._apply.save()
+
         except InstituteApply.validate_unique():
             raise UniqueStudentApply
 
@@ -225,6 +230,24 @@ class ApplyUseCase(BaseUseCase):
                     )
                 except PersonalEssay.DoesNotExist:
                     raise EssayNotFound
+
+class InstituteActionUseCase(BaseUseCase):
+    def __init__(self,apply,serializer):
+        self._apply = apply
+        self._serializer = serializer.validated_data
+
+    def execute(self):
+        self._factory()
+
+    def _factory(self):
+
+        self.status = ApplyAction.objects.create(
+            **self._serializer,
+            apply=self._apply
+            )
+        self._apply.action_field = self.status
+        self._apply.save()
+
 
 
 class ListStudentMyApplication(BaseUseCase):

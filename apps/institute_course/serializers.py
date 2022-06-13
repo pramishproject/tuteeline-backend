@@ -8,7 +8,8 @@ from apps.institute_course import models
 from rest_framework.validators import UniqueTogetherValidator
 
 from apps.institute_course.models import CommentApplicationInstitute, Course, Faculty, InstituteApply, InstituteCourse, \
-    CheckedAcademicDocument, CheckStudentIdentity, CheckedStudentLor, CheckedStudentEssay, CheckedStudentSop
+    CheckedAcademicDocument, CheckStudentIdentity, CheckedStudentLor, CheckedStudentEssay, CheckedStudentSop, \
+    ApplyAction
 from apps.core import fields
 from apps.studentIdentity.serializers import StudentCitizenshipSerializer, StudentPassportSerializer
 from apps.students.models import StudentModel,StudentAddress
@@ -184,7 +185,6 @@ class StudentMyApplicationListSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
             'action',
-            'action_data',
             'view_date',
             'forward',
             'cancel',
@@ -308,7 +308,6 @@ class StudentAdmissionApplicationSerializer(serializers.ModelSerializer):
             'course',
             "consultancy",
             'action',
-            'action_data',
             'institute',
             'action_institute_user',
             'action_consultancy_user',
@@ -555,3 +554,10 @@ class GetMyApplicationDetailForInstituteSerializer(serializers.ModelSerializer):
         )
 
 
+class InstituteActionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model =ApplyAction
+        fields = (
+            'institute_user',
+            'action',
+        )
