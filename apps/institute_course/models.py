@@ -106,6 +106,11 @@ ACTION_OPTION=(
         ('pending','pending'),
         ('applied','applied')
     )
+
+ACTION_OPTION_CONSULTANCY = (
+    ('verify','verify'),
+    ('not_verify','not_verify')
+)
 class InstituteApply(BaseModel):
 
     student = models.ForeignKey(StudentModel, 
@@ -202,7 +207,7 @@ class ApplyAction(BaseModel):
 
 class ActionApplyByConsultancy(BaseModel):
     apply = models.ForeignKey(to=InstituteApply, on_delete=models.CASCADE)
-    action = models.CharField(choices=ACTION_OPTION,
+    action = models.CharField(choices=ACTION_OPTION_CONSULTANCY,
                               default='applied',
                               max_length=20)
     consultancy_user = models.ForeignKey(to=ConsultancyStaff, on_delete=models.DO_NOTHING, blank=True, null=True)
