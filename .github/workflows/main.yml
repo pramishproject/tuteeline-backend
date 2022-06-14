@@ -39,7 +39,7 @@ jobs:
           username: ${{secrets.SSH_USERNAME}} #user of the server
 
           script: |
-            cd backend/tuteeline-backend
+            cd backend/api/tuteeline-backend
             echo cloning successful
             git pull origin main
             docker rm -f core_app || true
