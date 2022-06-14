@@ -88,7 +88,14 @@ class FacultySerializer(serializers.ModelSerializer):
             'name',
             'id'
         )
-
+class InstituteApplicationStatus(serializers.ModelSerializer):
+    staff_detail = serializers.DictField(source="institute_user_detail")
+    class Meta:
+        model = ApplyAction
+        fields = (
+            'action',
+            'staff_detail',
+            )
 
 class ListInstituteCourseSerializer(InstituteCourseSerializer):
 
@@ -250,6 +257,7 @@ class GetStudentApplicationInstituteSerializer(serializers.ModelSerializer):
     course_name = serializers.CharField(source='get_student_course') 
     address = serializers.CharField(source='student_address')
     institute_name = serializers.CharField(source="get_institute_name")
+    action_field = InstituteApplicationStatus(read_only=True, many=False)
     class Meta:
         model = InstituteApply
         fields = (
@@ -266,6 +274,7 @@ class GetStudentApplicationInstituteSerializer(serializers.ModelSerializer):
             'cancel',
             'created_at',
             'address',
+            'action_field',
         )
 
 class GetStudentApplicationStudentSerializer(serializers.ModelSerializer):
@@ -434,14 +443,7 @@ class GetCheckedStudentSopSerializer(serializers.ModelSerializer):
         )
 
 
-class InstituteApplicationStatus(serializers.ModelSerializer):
-    staff_detail = serializers.DictField(source="institute_user_detail")
-    class Meta:
-        model = ApplyAction
-        fields = (
-            'action',
-            'staff_detail',
-            )
+
 
 class GetMyApplicationDocumentSerializer(serializers.ModelSerializer):
     apply_to = serializers.DictField(source="institute_data")
