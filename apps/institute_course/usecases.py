@@ -246,9 +246,25 @@ class InstituteActionUseCase(BaseUseCase):
             apply=self._apply
             )
         self._apply.action_field = self.status
+        self._apply.updated_at = datetime.now()
         self._apply.save()
 
+class ConsultancyActionUseCase(BaseUseCase):
+    def __init__(self,apply,serializer):
+        self._apply = apply
+        self._serializer = serializer.validated_data
 
+    def execute(self):
+        self._factory()
+
+    def _factory(self):
+        self.consultancy_status = ActionApplyByConsultancy.objects.create(
+            **self._serializer,
+            apply=self._apply,
+        )
+        self._apply.consultancy_action = self.consultancy_status
+        self._apply.updated_at = datetime.now()
+        self._apply.save()
 
 class ListStudentMyApplication(BaseUseCase):
     def __init__(self,student):

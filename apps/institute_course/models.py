@@ -192,6 +192,14 @@ class ApplyAction(BaseModel):
         max_length=20)
     institute_user = models.ForeignKey(to=InstituteStaff,on_delete=models.DO_NOTHING,blank=True,null=True)
 
+    @property
+    def institute_user_detail(self):
+        return {
+            "name":self.institute_user.user.fullname,
+            "profile_image" : self.institute_user.profile_photo.url,
+            "role":self.institute_user.role.name
+        }
+
 class ActionApplyByConsultancy(BaseModel):
     apply = models.ForeignKey(to=InstituteApply, on_delete=models.CASCADE)
     action = models.CharField(choices=ACTION_OPTION,
