@@ -289,6 +289,7 @@ class FacilityListSerializer(serializers.ModelSerializer):
     class Meta:
         model =Facility
         fields = (
+            'id',
             'name',
             'icon',
         )
