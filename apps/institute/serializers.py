@@ -227,10 +227,22 @@ class GetScholorshipSerializer(AddScholorshipSerializer):
             'description'
         )
 
+
 class InstituteStaffSerializer(serializers.ModelSerializer):
+    email = serializers.CharField(source="get_institute_user_email")
+    user_name= serializers.CharField(source="get_institute_full_name")
+    user_role = serializers.CharField(source="get_user_role")
     class Meta:
         model = InstituteStaff
-        fields = '__all__'
+        fields = (
+            'id',
+            'created_at',
+            'updated_at',
+            'email',
+            'user_name',
+            'user_role',
+            'profile_photo',
+        )
 
 
 class CreateInstituteStaffSerializer(InstituteStaffSerializer):
