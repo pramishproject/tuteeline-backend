@@ -47,6 +47,8 @@ class ListConsultancyGallery(generics.ListAPIView,ConsultancyMixin):
         return usecases.ListConsultancyGalleryUseCase(
             consultancy=self.get_object()
         ).execute()
+
+
 # class DeleteGalleryView(GalleryMixin, generics.DestroyAPIView):
 #     """
 #     Use this endpoint to delete gallery

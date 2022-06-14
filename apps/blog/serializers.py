@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import fields
 from rest_framework import serializers
 
-from apps.blog.models import Blogs, InstituteBlog, Relation,PortalBlog
+from apps.blog.models import Blogs, InstituteBlog, Relation, PortalBlog, ConsultancyBlog
 
 
 class BlogSerializer(serializers.ModelSerializer):
@@ -104,3 +104,54 @@ class CreatePortalUserBlogSerializer(serializers.ModelSerializer):
             'content',
             'image',
         )
+
+# --------------------------Consultancy Serializer------------------
+class CreateConsultancyBlogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ConsultancyBlog
+        fields = (
+            'title',
+            'relation',
+            'content',
+            'consultancy',
+            'image',
+            'author_name',
+        )
+
+class UpdateConsultancyBlogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ConsultancyBlog
+        fields = (
+            'title',
+            'relation',
+            'content',
+            'image',
+            'author_name',
+        )
+
+class ApproveConsultancyBlogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ConsultancyBlog
+        fields = (
+            'verified',
+        )
+class ListConsultancyBlogForStudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ConsultancyBlog
+        fields = (
+            'title',
+            'relation',
+            'content',
+            'consultancy',
+            'image',
+            'author_name',
+            'created_at'
+        )
+
+class ListConsultancyBlog(serializers.ModelSerializer):
+    class Meta:
+        model = ConsultancyBlog
+        fields = "__all__"
+
+
+# ---------------------------END Consultancy Serializer-------------

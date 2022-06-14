@@ -1,9 +1,11 @@
+from apps.blog.serializers import ListConsultancyBlog
+from apps.consultancy.mixins import ConsultancyMixin, ConsultancyStaffMixin
 from apps.institute.mixins import InstituteMixins
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from rest_framework.permissions import AllowAny
 from apps.blog import serializers, usecases
-from apps.blog.mixins import BlogsMixin, InstituteBlogMixin, RelationMixin
+from apps.blog.mixins import BlogsMixin, InstituteBlogMixin, RelationMixin, ConsultancyBlogMixin
 from apps.core import generics
 from apps.portal.mixins import PortalStaffUserMixin
 from apps.utils.currency import RealTimeCurrencyConverter
@@ -195,3 +197,87 @@ class CreatePortalBlogView(generics.CreateWithMessageAPIView,PortalStaffUserMixi
             user=self.get_object(),
             serializer=serializer,
         ).execute()
+
+
+# ----------------------------------Start Consultancy---------------------------
+
+class CreateConsultancyBlog(generics.CreateWithMessageAPIView,ConsultancyStaffMixin):
+    """
+    This api is use to create consultancy blog
+    """
+    serializer_class = serializers.CreateConsultancyBlogSerializer
+    message = _("Consultancy Blog Create Successfully")
+    def get_object(self):
+        return self.get_consultancy_staff()
+
+    def perform_create(self, serializer):
+        usecases.CreateConsultancyBlogUseCase(
+            staff=self.get_object(),
+            serializer=serializer,
+        ).execute()
+
+class ListConsultancyBlog(generics.ListAPIView,ConsultancyMixin):
+    """
+    This api is list blog
+    """
+    serializer_class = ListConsultancyBlog
+    def get_object(self):
+        return self.get_consultancy()
+
+    def get_queryset(self):
+        return usecases.ListConsultancyBlog(
+            consultancy=self.get_object(),
+        ).execute()
+
+class ListConsultancyBlogForStudent(generics.ListAPIView,ConsultancyMixin):
+    """
+    list consultancy blog for student
+    """
+    serializer_class = serializers.ListConsultancyBlogForStudentSerializer
+
+    def get_object(self):
+        return self.get_consultancy()
+
+    def get_queryset(self):
+        return usecases.ListConsultancyBlog(
+            consultancy=self.get_object(),
+        ).execute()
+
+class UpdateConsultancyBlog(generics.UpdateWithMessageAPIView,ConsultancyBlogMixin):
+    """
+    update consultancy blog
+    """
+    serializer_class = serializers.UpdateConsultancyBlogSerializer
+    def get_object(self):
+        return self.get_consultancy_blog()
+
+    def perform_update(self, serializer):
+        usecases.UpdateConsultancyBlogUseCase(
+            blogs=self.get_object(),
+            serializer = serializer,
+        ).execute()
+
+class ApproveConsultancyBlog(generics.UpdateWithMessageAPIView,ConsultancyBlogMixin):
+    serializer_class = serializers.ApproveConsultancyBlogSerializer
+    def get_object(self):
+        return self.get_consultancy_blog()
+
+    def perform_update(self, serializer):
+        usecases.UpdateConsultancyBlogUseCase(
+            blogs=self.get_object(),
+            serializer = serializer,
+        ).execute()
+
+
+class DeleteConsultancyBlog(generics.DestroyWithMessageAPIView,ConsultancyBlogMixin):
+    """
+    delete
+    """
+    def get_object(self):
+        return self.get_consultancy_blog()
+
+    def perform_destroy(self, instance):
+        usecases.DeleteConsultancyBlogUseCase(
+            blogs=self.get_object()
+        ).execute()
+# ----------------------------------end Consultancy---------------------------

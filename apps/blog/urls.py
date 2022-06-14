@@ -75,5 +75,35 @@ urlpatterns = [
         'portal/<str:staff_id>/addblog',
         views.CreatePortalBlogView.as_view(),
         name='addblog'
+    ),
+    path(
+        '<str:consultancy_staff_id>/consultancy/add',
+        views.CreateConsultancyBlog.as_view(),
+        name='add-consultancy-blog'
+    ),
+    path(
+        '<str:consultancy_id>/student/list',
+        views.ListConsultancyBlogForStudent.as_view(),
+        name="list-consultancy-student"
+    ),
+    path(
+        '<str:consultancy_id>/consultancy/list',
+        views.ListConsultancyBlog.as_view(),
+        name="list-consultancy-blog"
+    ),
+    path(
+        '<str:consultancy_blog_id>/consultancy/update',
+        views.UpdateConsultancyBlog.as_view(),
+        name = "update-blog-consultancy"
+    ),
+    path(
+        '<str:consultancy_blog_id>/consultancy/delete',
+        views.DeleteConsultancyBlog.as_view(),
+        name="delete-consultancy-blog"
+    ),
+    path(
+        '<str:consultancy_blog_id>/consultancy/approve',
+        views.ApproveConsultancyBlog.as_view(),
+        name="approve-consultancy-blog"
     )
 ]

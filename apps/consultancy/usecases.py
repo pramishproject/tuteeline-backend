@@ -5,7 +5,7 @@ from rest_framework.exceptions import ValidationError
 
 from apps.consultancy import tasks
 from apps.consultancy.emails import SendEmailToConsultanySTaff
-from apps.consultancy.exceptions import ConsultancyNotFound
+from apps.consultancy.exceptions import ConsultancyNotFound, ConsultancyStaffNotFound
 from apps.consultancy.models import Consultancy, ConsultancyStaff
 from apps.core import usecases
 from apps.core.usecases import BaseUseCase
@@ -78,9 +78,10 @@ class GetConsultancyStaffUseCase(BaseUseCase):
 
     def _factory(self):
         try:
+            print(self._consultancy_staff_id)
             self.consultancy_staff = ConsultancyStaff.objects.get(pk=self._consultancy_staff_id)
         except ConsultancyStaff.DoesNotExist:
-            raise ConsultancyNotFound
+            raise ConsultancyStaffNotFound
 
 
 class CreateConsultancyStaffUseCase(usecases.CreateUseCase):

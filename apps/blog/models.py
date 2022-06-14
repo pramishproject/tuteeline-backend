@@ -1,4 +1,6 @@
 from django.db.models.deletion import CASCADE, DO_NOTHING
+
+from apps.consultancy.models import Consultancy, ConsultancyStaff
 from apps.institute.models import Institute
 from django.db import models
 
@@ -46,7 +48,23 @@ class InstituteBlog(BaseModel):
     def __str__(self):
         return self.title
 
+# ------------------------------Start Consultancy Model -------------------------
 
+class ConsultancyBlog(BaseModel):
+    consultancy = models.ForeignKey(to=Consultancy,on_delete=models.CASCADE)
+    staff = models.ForeignKey(to=ConsultancyStaff,on_delete=models.DO_NOTHING)
+    author_name = models.CharField(max_length=100)
+    content = models.TextField()
+    relation = models.ForeignKey(to=Relation, on_delete=CASCADE)
+    title = models.CharField(max_length=100)
+    image = models.ImageField(upload_to=upload_blog_image_to,
+                              default='portel/blog/default_logo.png',
+                              validators=[validate_image]
+                              )
+    verified = models.BooleanField(default=False)
+
+
+#--------------------------------End Consultancy Model----------------------------
 class PortalBlog(BaseModel):
     user= models.ForeignKey(to=PortalStaff, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)

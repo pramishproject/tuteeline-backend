@@ -1,7 +1,7 @@
 from django.utils.datetime_safe import datetime
 from rest_framework.exceptions import ValidationError
 
-from apps.blog.models import Blogs, InstituteBlog, PortalBlog, Relation
+from apps.blog.models import Blogs, InstituteBlog, PortalBlog, Relation, ConsultancyBlog
 from apps.core.usecases import BaseUseCase
 
 from django.utils.translation import gettext_lazy as _
@@ -128,6 +128,20 @@ class GetRelationUseCase(BaseUseCase):
             raise ValidationError({'error': _('Relation  does not exist for following id.')})
 
 
+class GetConsultancyUseCase(BaseUseCase):
+    def __init__(self,consultancy_blog_id):
+        self._blog_id = consultancy_blog_id
+
+    def execute(self):
+        self._factory()
+        return self._blog
+
+    def _factory(self):
+        try:
+            self._blog = ConsultancyBlog.objects.get(pk=self._blog_id)
+        except ConsultancyBlog.DoesNotExist:
+            raise ValidationError({'error': _('Blog  does not exist for following id.')})
+
 class UpdateRelationUseCase(BaseUseCase):
     def __init__(self, serializer, relation: Relation):
         self.serializer = serializer
@@ -231,3 +245,57 @@ class AddBlogPortalUseCase(BaseUseCase):
             user=self._user,
             **self._data,
         )
+
+
+# ------------------------- start consultancy blog--------------
+
+class CreateConsultancyBlogUseCase(BaseUseCase):
+    def __init__(self,serializer,staff):
+        self._staff = staff
+        self._serializer = serializer.validated_data
+
+    def execute(self):
+        self._factory()
+
+    def _factory(self):
+        ConsultancyBlog.objects.create(
+            staff=self._staff,
+            **self._serializer
+        )
+
+class ListConsultancyBlog(BaseUseCase):
+    def __init__(self,consultancy):
+        self._consultancy = consultancy
+
+    def execute(self):
+        self._factory()
+        return self._blog
+
+    def _factory(self):
+        self._blog=ConsultancyBlog.objects.filter(consultancy=self._consultancy)
+
+class UpdateConsultancyBlogUseCase(BaseUseCase):
+    def __init__(self,blogs,serializer):
+        self._blogs = blogs
+        self.serializer = serializer
+        self._data = serializer.validated_data
+
+    def execute(self):
+        self._factory()
+
+    def _factory(self):
+        for key in self._data.keys():
+            setattr(self._blogs, key, self._data.get(key))
+        self._blogs.updated_at = datetime.now()
+        self._blogs.save()
+
+class DeleteConsultancyBlogUseCase(BaseUseCase):
+    def __init__(self, blogs):
+        self._blogs = blogs
+
+    def execute(self):
+        self._factory()
+
+    def _factory(self):
+        self._blogs.delete()
+# ------------------------- end consultancy blog ---------------
