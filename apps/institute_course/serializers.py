@@ -432,6 +432,17 @@ class GetCheckedStudentSopSerializer(serializers.ModelSerializer):
             'sop',
             'name',
         )
+
+
+class InstituteApplicationStatus(serializers.ModelSerializer):
+    staff_detail = serializers.DictField(source="institute_user_detail")
+    class Meta:
+        model = ApplyAction
+        fields = (
+            'action',
+            'staff_detail',
+            )
+
 class GetMyApplicationDocumentSerializer(serializers.ModelSerializer):
     apply_to = serializers.DictField(source="institute_data")
     apply_from = serializers.DictField(source='consultancy_data')
@@ -442,6 +453,7 @@ class GetMyApplicationDocumentSerializer(serializers.ModelSerializer):
     checked_student_identity = CheckStudentIdentitySerializer(read_only=True,many=False)
     checked_student_lor = CheckedStudentLorSerializer(read_only=True,many=True)
     checked_student_sop = GetCheckedStudentSopSerializer(read_only=True,many=True)
+    action_field = InstituteApplicationStatus(read_only=True, many=False)
     class Meta:
         model = InstituteApply
         fields = (
@@ -457,6 +469,7 @@ class GetMyApplicationDocumentSerializer(serializers.ModelSerializer):
             'faculty',
             'apply_from',
             'action',
+            'action_field',
             'view_date',
             'cancel'
         )
@@ -522,14 +535,6 @@ class GetCheckedStudentSopForInstituteSerializer(serializers.ModelSerializer):
             "sop_data",
         )
 
-class InstituteApplicationStatus(serializers.ModelSerializer):
-    staff_detail = serializers.DictField(source="institute_user_detail")
-    class Meta:
-        model = ApplyAction
-        fields = (
-            'action',
-            'staff_detail',
-            )
 
 class GetMyApplicationDetailForInstituteSerializer(serializers.ModelSerializer):
     apply_from = serializers.DictField(source='consultancy_data')
