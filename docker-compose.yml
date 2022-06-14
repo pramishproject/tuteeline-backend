@@ -85,4 +85,3 @@ volumes:
   postgres_data:
 networks:
   edu-network:
-    driver: bridge
