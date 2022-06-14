@@ -12,7 +12,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from apps.institute import serializers
 from apps.core import generics
-
+from apps.institute.models import Facility
 from apps.institute import usecase
 # Create your views here.
 
@@ -264,6 +264,11 @@ class AddFacilityView(generics.CreateWithMessageAPIView,InstituteMixins):
             institute=self.get_object()
         ).execute()
 
+class FacilityList(generics.ListAPIView):
+    serializer_class = serializers.FacilityListSerializer
+
+    def get_queryset(self):
+        return Facility.objects.all()
 
 class GetFacilityView(generics.ListAPIView,InstituteMixins):
     """

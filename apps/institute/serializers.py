@@ -6,7 +6,8 @@ from rest_framework import  serializers
 from rest_framework.exceptions import ValidationError
 from apps.institute import models
 
-from apps.institute.models import AddInstituteFacility, Institute, InstituteScholorship,InstituteStaff, SocialMediaLink
+from apps.institute.models import AddInstituteFacility, Institute, InstituteScholorship,InstituteStaff, SocialMediaLink\
+    ,Facility
 from apps.core import fields
 
 User = get_user_model()
@@ -282,4 +283,12 @@ class AddInstituteFacilitySerializer(serializers.ModelSerializer):
         model = AddInstituteFacility
         fields = (
             'facility',
+        )
+
+class FacilityListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model =Facility
+        fields = (
+            'name',
+            'icon',
         )
