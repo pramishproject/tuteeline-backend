@@ -17,3 +17,9 @@ class SocialMediaMixins:
         return usecase.GetSocialMedia(
             socialmedia_id = self.kwargs.get('socialmedia_id')
         ).execute()
+
+class FacilityMixin:
+    def get_facility(self):
+        return usecase.FacilityUseCase(
+            facility_id = self.kwargs.get("facility_id")
+        ).execute()

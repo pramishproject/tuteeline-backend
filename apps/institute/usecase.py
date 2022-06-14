@@ -213,6 +213,15 @@ class DeleteScholorshipUseCase(BaseUseCase):
     def _factory(self):
         self._scholorship.delete()
 
+class DeleteFacilityUseCase(BaseUseCase):
+    def __init__(self,facility):
+        self._facility = facility
+
+    def execute(self):
+        return self._factory()
+
+    def _factory(self):
+        self._facility.delete()
 
 class CreateInstituteStaffUseCase(BaseUseCase):
     def __init__(self,serializer,institute):
@@ -314,6 +323,20 @@ class GetSocialMedia(BaseUseCase):
         except SocialMediaLink.DoesNotExist:
             raise SocialMediaLinkDoesntExist
 
+
+class FacilityUseCase(BaseUseCase):
+    def __init__(self,facility_id):
+        self._facility_id = facility_id
+
+    def execute(self):
+        self._factory()
+        return self._facility
+
+    def _factory(self):
+        try:
+            self._facility=AddInstituteFacility.objects.get(pk=self._facility_id)
+        except AddInstituteFacility.DoesNotExist:
+            raise FacilityDoesntExist
 
 class GetSocialMediaLinkListUseCase(BaseUseCase):
     def __init__(self,institute):

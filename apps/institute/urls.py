@@ -16,6 +16,11 @@ urlpatterns = [
         name="list-facality"
     ),
     path(
+        '<facility_id>/facility/delete',
+        views.DeleteFacility.as_view(),
+        name="delete-facilty"
+    ),
+    path(
         'inistitutelist',
         views.ListInstituteView.as_view(),
         name = 'institute-list'

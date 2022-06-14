@@ -3,7 +3,7 @@ from django.http.response import JsonResponse
 from apps.institute.filter import  InstituteFilter
 from apps.institute.models import Institute
 from apps import institute
-from apps.institute.mixins import InstituteMixins, ScholorshipMixins, SocialMediaMixins
+from apps.institute.mixins import InstituteMixins, ScholorshipMixins, SocialMediaMixins, FacilityMixin
 from apps.studentIdentity import usecases
 from django.utils.translation import gettext_lazy as _
 from rest_framework.parsers import MultiPartParser, FileUploadParser
@@ -269,6 +269,18 @@ class FacilityList(generics.ListAPIView):
 
     def get_queryset(self):
         return Facility.objects.all()
+
+class DeleteFacility(generics.DestroyWithMessageAPIView,FacilityMixin):
+    """
+    this endpoint is use to delete
+    """
+    def get_object(self):
+        return self.get_facility()
+
+    def perform_destroy(self, instance):
+        usecase.DeleteFacilityUseCase(
+            facility=self.get_object()
+        ).execute()
 
 class GetFacilityView(generics.ListAPIView,InstituteMixins):
     """
