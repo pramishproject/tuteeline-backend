@@ -333,7 +333,7 @@ class ListStudentApplicationCourseUseCase(BaseUseCase):
         self._apply = InstituteApply.objects.filter(institute=self._institute).distinct()
 
 
-class ListStudentApplicationCourseUseCase(BaseUseCase):
+class ListStudentApplicationConsultancyCourseUseCase(BaseUseCase):
     def __init__(self, consultancy):
         self._consultancy = consultancy
 

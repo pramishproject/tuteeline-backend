@@ -256,7 +256,7 @@ class ListStudentApplicationForCounsultancy(generics.ListAPIView,ConsultancyMixi
         return self.get_consultancy()
 
     def get_queryset(self):
-        return usecases.ListStudentApplicationCourseUseCase(
+        return usecases.ListStudentApplicationConsultancyCourseUseCase(
             consultancy=self.get_object()
         ).execute()
 
