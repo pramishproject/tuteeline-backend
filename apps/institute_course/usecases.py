@@ -347,7 +347,7 @@ class ListStudentApplicationConsultancyCourseUseCase(BaseUseCase):
 
 class GetApplyInstitute(BaseUseCase):
     def __init__(self,apply_id):
-        self.apply_id =apply_id
+        self._apply_id =apply_id
 
     def execute(self):
         self._factory()
@@ -355,7 +355,7 @@ class GetApplyInstitute(BaseUseCase):
 
     def _factory(self):
         try:
-            self._apply = InstituteApply.objects.get(pk = "368a2abe-e56e-4793-b43a-c679d32cfbf7")
+            self._apply = InstituteApply.objects.get(pk = self._apply_id)
 
         except InstituteApply.DoesNotExist:
             raise InstituteApplyNotFound
