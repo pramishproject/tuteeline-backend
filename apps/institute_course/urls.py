@@ -98,6 +98,11 @@ urlpatterns = [
         '<institute_course_id>/course/compare',
         views.CompareInstituteView.as_view(),
         name="compare-coure"
+    ),
+    path(
+        '<apply_id>/action/history',
+        views.ListInstituteActionHistoryView.as_view(),
+        name="history-action"
     )
 
 ]

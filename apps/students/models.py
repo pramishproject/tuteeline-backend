@@ -48,6 +48,17 @@ errors = {
     'unique':'address of the user already exist'
 }
 
+BLOOD_GROUP = (
+    ("A RhD positive (A+)","A+"),
+    ("A RhD negative (A-)","A-"),
+    ("B RhD positive (B+)","B+"),
+    ("B RhD negative (B-)","B-"),
+    ("O RhD positive (O+)","O+"),
+    ("O RhD negative (O-)","O-"),
+    ("AB RhD positive (AB+)","AB+"),
+    ("AB RhD negative (AB-)","AB-"),
+)
+
 class StudentAddress(BaseModel):
     NATIONALITY_CHOOSE = (
         ('afghan','Afghan'),
@@ -79,7 +90,7 @@ class StudentAddress(BaseModel):
     street = models.CharField(max_length=200)
     postal_code = models.IntegerField()
     country = models.CharField(max_length=200)
-
+    blood_group = models.CharField(choices=BLOOD_GROUP, max_length=50, blank=True, null=True)
     def __str__(self):
         return self.country
 

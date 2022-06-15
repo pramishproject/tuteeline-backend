@@ -199,11 +199,14 @@ class ApplyAction(BaseModel):
 
     @property
     def institute_user_detail(self):
-        return {
-            "name":self.institute_user.user.fullname,
-            "profile_image" : self.institute_user.profile_photo.url,
-            "role":self.institute_user.role.name
-        }
+        if self.institute_user != None:
+            return {
+                "name":self.institute_user.user.fullname,
+                "profile_image" : self.institute_user.profile_photo.url,
+                "role":self.institute_user.role.name
+            }
+        else:
+            return {}
 
 class ActionApplyByConsultancy(BaseModel):
     apply = models.ForeignKey(to=InstituteApply, on_delete=models.CASCADE)
@@ -263,7 +266,8 @@ class CheckedAcademicDocument(BaseModel):
             "score":self.academic.score,
             "percentage":float((self.academic.score/self.academic.full_score)*100),
             "marksheet":self.academic.marksheet.url,
-            "certificate":self.academic.certificate.url
+            "certificate":self.academic.certificate.url,
+
         }
 
 

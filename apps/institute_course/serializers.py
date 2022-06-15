@@ -591,3 +591,4 @@ class ConsultancyActionSerializer(serializers.ModelSerializer):
             'consultancy_user',
             'action',
         )
+

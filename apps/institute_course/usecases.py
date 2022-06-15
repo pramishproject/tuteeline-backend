@@ -439,6 +439,15 @@ class CompareInstituteCourseUseCase(BaseUseCase):
         self._institute_course = InstituteCourse.objects.filter(pk=self._course).prefetch_related("institute")
 
 
+class ListInstituteActionHistoryUseCase(BaseUseCase):
+    def __init__(self,apply):
+        self._apply = apply
+
+    def execute(self):
+        self._factory()
+        return self._history
+    def _factory(self):
+        self._history = ApplyAction.objects.filter(apply = self._apply)
 
 
 

@@ -21,7 +21,7 @@ from apps.institute_course.serializers import (
     ListInstituteCourseSerializer,
     StudentApplySerializer, CompareInstituteSerializer, StudentMyApplicationListSerializer,
     GetMyApplicationDocumentSerializer, GetMyApplicationDetailForInstituteSerializer, InstituteActionSerializer,
-    ConsultancyActionSerializer)
+    ConsultancyActionSerializer, InstituteApplicationStatus)
 
 from apps.institute_course import usecases
 # from apps.institute_course.mixins import InstituteCourseMixin
@@ -290,7 +290,19 @@ class ApplicantDashboard(generics.ListAPIView,InstituteMixins):
             institute=self.get_object()
         ).execute()
 
+class ListInstituteActionHistoryView(generics.ListAPIView,ApplyMixin):
+    """
+    action history list
+    """
+    serializer_class = InstituteApplicationStatus
 
+    def get_object(self):
+        return self.get_apply()
+
+    def get_queryset(self):
+        return usecases.ListInstituteActionHistoryUseCase(
+            apply=self.get_object(),
+        ).execute()
 
 # -------------------------------------Application end-----------------------------
 

@@ -15,6 +15,7 @@ from apps.user.models import StudentUser
 User = get_user_model()
 
 
+
 class Student(models.Model):
     id = models.OneToOneField(
         StudentUser,
