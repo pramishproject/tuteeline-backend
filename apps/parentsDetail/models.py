@@ -16,7 +16,7 @@ class StudentParents(BaseModel):
         ('mother','mother'),
         ('limited_information','limited_information')
     )
-    student = models.ForeignKey(StudentModel , on_delete=CASCADE)
+    student = models.ForeignKey(StudentModel , on_delete=CASCADE,related_name="parents")
     relation = models.CharField(choices=RELATION_CHOICE,max_length=20)
     fullname = models.CharField(max_length=200)
     email = models.EmailField(blank=True,null=True)

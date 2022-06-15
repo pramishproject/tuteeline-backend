@@ -11,6 +11,7 @@ from apps.institute_course.models import CommentApplicationInstitute, Course, Fa
     CheckedAcademicDocument, CheckStudentIdentity, CheckedStudentLor, CheckedStudentEssay, CheckedStudentSop, \
     ApplyAction, ActionApplyByConsultancy
 from apps.core import fields
+from apps.parentsDetail.serializers import ParentsDetailSerializer
 from apps.studentIdentity.serializers import StudentCitizenshipSerializer, StudentPassportSerializer
 from apps.students.models import StudentModel,StudentAddress
 from apps.institute.models import Institute
@@ -487,6 +488,7 @@ class CheckedAcademicDocumentInstituteSerializer(serializers.ModelSerializer):
 
 class StudentProfileDetailSerializer(serializers.ModelSerializer):
     address_relation = GetStudentAddressSerializer(many=False, read_only=True)
+    parents = ParentsDetailSerializer(many=True,read_only=True)
     class Meta:
         model = StudentModel
         fields = (
@@ -496,6 +498,7 @@ class StudentProfileDetailSerializer(serializers.ModelSerializer):
             'gender',
             'dob',
             'address_relation',
+            'parents',
         )
 
 class CheckedStudentEssayForInstituteSerializer(serializers.ModelSerializer):
