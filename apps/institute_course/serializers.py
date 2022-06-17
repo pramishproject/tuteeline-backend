@@ -522,7 +522,6 @@ class  CheckStudentIdentityForInstituteSerializer(serializers.ModelSerializer):
         )
 
 
-
 class CheckedStudentLorForInstituteSerializer(serializers.ModelSerializer):
     lor_data = serializers.DictField(source="get_lor_data")
     class Meta:

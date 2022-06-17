@@ -202,7 +202,7 @@ class ApplyAction(BaseModel):
         if self.institute_user != None:
             return {
                 "name":self.institute_user.user.fullname,
-                "profile_image" : self.institute_user.profile_photo.url,
+                "profile_image" : self.institute_user.profile_photo,
                 "role":self.institute_user.role.name
             }
         else:
