@@ -8,6 +8,7 @@ from rest_framework.exceptions import ValidationError
 
 from apps.consultancy.models import Consultancy, ConsultancyStaff, ConsultancySocialMediaLink
 from apps.core import fields
+from apps.linkage.serializers import LinkageInstituteListSerializer
 
 User = get_user_model()
 
@@ -78,6 +79,7 @@ class ConsultancySocialMediaSerializer(serializers.ModelSerializer):
 
 class ConsultancyDetailSerializer(serializers.ModelSerializer):
     consultancy_social_media = ConsultancySocialMediaSerializer(many=True,read_only=True)
+    linkage_consultancy = LinkageInstituteListSerializer(many=True,read_only=True)
     class Meta:
         model = Consultancy
         fields = (
@@ -96,7 +98,8 @@ class ConsultancyDetailSerializer(serializers.ModelSerializer):
             'cover_image',
             'about',
             "rating",
-            "consultancy_social_media"
+            "consultancy_social_media",
+            "linkage_consultancy"
         )
 class ConsultancyStaffSerializer(serializers.ModelSerializer):
     class Meta:

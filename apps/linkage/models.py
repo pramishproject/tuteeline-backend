@@ -11,8 +11,8 @@ STATUS=(
     ('REJECT','reject'),
 )
 class Linkage(BaseModel):
-    institute = models.ForeignKey(to=Institute,on_delete=models.CASCADE)
-    consultancy = models.ForeignKey(to=Consultancy,on_delete=models.CASCADE)
+    institute = models.ForeignKey(to=Institute,on_delete=models.CASCADE,related_name="linkage_institute")
+    consultancy = models.ForeignKey(to=Consultancy,on_delete=models.CASCADE,related_name="linkage_consultancy")
     status = models.CharField(choices=STATUS,max_length=10)
 
     @property
