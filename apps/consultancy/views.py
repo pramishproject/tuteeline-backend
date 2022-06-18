@@ -7,7 +7,7 @@ from apps.consultancy.mixins import ConsultancyMixin, ConsultancyStaffMixin
 from apps.consultancy.serializers import ConsultancyDetailSerializer
 from apps.core import generics
 from apps.user.mixins import ConsultancyUserMixin
-
+from rest_framework import filters
 
 class RegisterConsultancyView(generics.CreateWithMessageAPIView):
     """
@@ -72,7 +72,8 @@ class ConsultancyDetail(generics.RetrieveAPIView,ConsultancyMixin):
 
 class ListConsultancyView(generics.ListAPIView):
     serializer_class = serializers.ListConsultancySerializer
-
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name']
     def get_queryset(self):
         return usecases.ListConsultancyUseCase().execute()
 
