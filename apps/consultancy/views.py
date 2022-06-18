@@ -4,6 +4,7 @@ from rest_framework.permissions import AllowAny
 
 from apps.consultancy import serializers, usecases, filtersets
 from apps.consultancy.mixins import ConsultancyMixin, ConsultancyStaffMixin
+from apps.consultancy.serializers import ConsultancyDetailSerializer
 from apps.core import generics
 from apps.user.mixins import ConsultancyUserMixin
 
@@ -56,6 +57,18 @@ class ListConsultancyStaffView(generics.ListAPIView, ConsultancyMixin):
         return usecases.ListConsultancyStaffUseCase(consultancy=self.get_object()).execute()
 
     no_content_error_message = _("No Consultancy staff at the moment.")
+
+class ConsultancyDetail(generics.RetrieveAPIView,ConsultancyMixin):
+    """"""
+
+    serializer_class = ConsultancyDetailSerializer
+    def get_object(self):
+        return self.get_consultancy()
+
+    def get_queryset(self):
+        return usecases.GetConsultancyUseCase(
+            consultancy_id=self.get_object()
+        ).execute()
 
 class ListConsultancyView(generics.ListAPIView):
     serializer_class = serializers.ListConsultancySerializer

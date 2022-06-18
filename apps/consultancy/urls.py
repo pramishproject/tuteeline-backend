@@ -48,5 +48,10 @@ urlpatterns = [
         views.ActivateConsultancyUserView.as_view(),
         name='activate-consultancy-user'
     ),
+    path(
+        '<consultancy_id>/consultancy/detail',
+        views.ConsultancyDetail.as_view(),
+        name = ""
+    )
 
 ]

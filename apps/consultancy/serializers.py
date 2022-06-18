@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from apps.consultancy.models import Consultancy, ConsultancyStaff
+from apps.consultancy.models import Consultancy, ConsultancyStaff, ConsultancySocialMediaLink
 from apps.core import fields
 
 User = get_user_model()
@@ -68,7 +68,36 @@ class RegisterConsultancySerializer(ConsultancySerializer):
             )
         return value
 
+class ConsultancySocialMediaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ConsultancySocialMediaLink
+        fields = (
+            'name',
+            'link',
+        )
 
+class ConsultancyDetailSerializer(serializers.ModelSerializer):
+    consultancy_social_media = ConsultancySocialMediaSerializer(many=True,read_only=True)
+    class Meta:
+        model = Consultancy
+        fields = (
+            "id",
+            'name',
+            'contact',
+            'country',
+            'city',
+            'state',
+            'street_address',
+            'consultancy_email',
+            'latitude',
+            'longitude',
+            'website',
+            'logo',
+            'cover_image',
+            'about',
+            "rating",
+            "consultancy_social_media"
+        )
 class ConsultancyStaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = ConsultancyStaff
@@ -146,6 +175,8 @@ class ListConsultancySerializer(ConsultancySerializer):
             'logo',
             'cover_image',
             'about',
+            'rating',
+            'consultancy_email',
         )
 
 

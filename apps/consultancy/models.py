@@ -42,6 +42,7 @@ class Consultancy(BaseModel):
         return self.name
 
 
+
 class ConsultancyStaff(BaseModel):
     user = models.OneToOneField(ConsultancyUser, on_delete=models.CASCADE)
     consultancy = models.ForeignKey(Consultancy, on_delete=models.CASCADE)
@@ -72,3 +73,17 @@ class ConsultancyStaff(BaseModel):
             raise DjangoValidationError(
                 {'role': _('Cannot Assign two owners.')}
             )
+
+class ConsultancySocialMediaLink(BaseModel):
+    SOCIAL_MEDIA = (
+        ('facebook','facebook'),
+        ('youtube','youtube'),
+        ('linkdin','linkdin'),
+        ('instagram','instagram')
+    )
+    consultancy  = models.ForeignKey(Consultancy,on_delete=models.CASCADE,related_name="consultancy_social_media")
+    name = models.CharField(choices=SOCIAL_MEDIA,max_length=100)
+    link = models.URLField()
+
+    class Meta:
+        unique_together = ('consultancy','name')

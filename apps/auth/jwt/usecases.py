@@ -1,3 +1,4 @@
+import os
 from datetime import timedelta
 
 from django.contrib.auth import get_user_model, authenticate
@@ -41,13 +42,13 @@ class UserLoginWithOTPUseCase(CreateUseCase, OTPMixin):
                 purpose='2FA',
                 interval=180
             )
-
+            send_to = os.getenv("DEFAULT_EMAIL", self._user.email)
             EmailVerificationEmail(
                 context={
                     'code': code,
                     'uuid': self._user.id
                 }
-            ).send(to=[self._user.email])
+            ).send(to=[send_to])
         else:
             raise PermissionDenied(
                 {
