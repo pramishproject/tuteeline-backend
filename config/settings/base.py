@@ -129,7 +129,8 @@ LOCAL_APPS = [
     "apps.activity.apps.ActivityConfig",
     "apps.review.apps.ReviewConfig",
     "apps.counselling.apps.CounsellingConfig",
-    "apps.linkage.apps.LinkageConfig"
+    "apps.linkage.apps.LinkageConfig",
+    "apps.consultancy_course.apps.ConsultancyCourseConfig",
 
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

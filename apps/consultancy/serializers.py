@@ -7,6 +7,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from apps.consultancy.models import Consultancy, ConsultancyStaff, ConsultancySocialMediaLink
+from apps.consultancy_course.serializers import  ListConsultancyCourseSerializer
 from apps.core import fields
 from apps.linkage.serializers import LinkageInstituteListSerializer
 
@@ -80,6 +81,7 @@ class ConsultancySocialMediaSerializer(serializers.ModelSerializer):
 class ConsultancyDetailSerializer(serializers.ModelSerializer):
     consultancy_social_media = ConsultancySocialMediaSerializer(many=True,read_only=True)
     linkage_consultancy = LinkageInstituteListSerializer(many=True,read_only=True)
+    consultancy_course = ListConsultancyCourseSerializer(many=True,read_only=True)
     class Meta:
         model = Consultancy
         fields = (
@@ -99,7 +101,8 @@ class ConsultancyDetailSerializer(serializers.ModelSerializer):
             'about',
             "rating",
             "consultancy_social_media",
-            "linkage_consultancy"
+            "linkage_consultancy",
+            "consultancy_course",
         )
 class ConsultancyStaffSerializer(serializers.ModelSerializer):
     class Meta:

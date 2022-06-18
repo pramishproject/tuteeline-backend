@@ -95,5 +95,9 @@ urlpatterns = [
     path(
         'linkage/',
         include('apps.linkage.urls')
+    ),
+    path(
+        'consultancy_course/',
+        include('apps.consultancy_course.urls')
     )
 ]
