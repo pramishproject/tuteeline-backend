@@ -2,8 +2,9 @@ from datetime import datetime
 import time
 
 from apps.core.usecases import BaseUseCase
-from apps.counselling.exception import AlreadyBooked, TimeError
+from apps.counselling.exception import AlreadyBooked, TimeError, CourseDoesntExist
 from apps.counselling.models import InstituteCounselling,InterestedCourse
+from apps.institute_course.models import InstituteCourse
 from apps.utils.string_to_json import StringToJson
 from apps.students.models import StudentModel
 from apps.utils.uuid_validation import is_valid_uuid
@@ -33,10 +34,15 @@ class CreateInstituteCounsellingUseCase(BaseUseCase):
                 bulk_interested_course = []
                 for courseId  in interested_courses_list:
                     if is_valid_uuid(courseId):
-                        bulk_interested_course.append({
-                            "counselling":counciling,
-                            "course":courseId
-                        })
+                        try:
+                            course = InstituteCourse.objects.get(pk=courseId) #todo add institute to filter course
+                            bulk_interested_course.append(InterestedCourse(
+                                counselling= counciling,
+                                course = course
+                            ))
+                        except InstituteCourse.DoesNotExist:
+                            raise CourseDoesntExist
+
                 if len(bulk_interested_course)>0:
                     InterestedCourse.objects.bulk_create(bulk_interested_course)
             #

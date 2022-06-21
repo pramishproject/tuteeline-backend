@@ -6,4 +6,7 @@ class AlreadyBooked(APIException):
     default_detail = _('already booked for this time')
 
 class TimeError(APIException):
-    default_detail = _("counselling time is grater then today time")
+    default_detail = _("counselling time is less then today time")
+
+class CourseDoesntExist(NotFound):
+    default_detail = _("institute course doesnt exist")

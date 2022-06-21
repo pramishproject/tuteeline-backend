@@ -156,10 +156,16 @@ class CreateInstituteVisiterSerializer(serializers.ModelSerializer):
             'institute', 
             )
 
-class ListVisitorHistrySerializer(serializers.ModelSerializer): 
+class ListVisitorHistrySerializer(serializers.ModelSerializer):
+    institute = ListInstituteSerializer(many=False, read_only=True)
     class Meta:
         model = InstituteViewers
-        fields = '__all__'
+        fields = (
+            'student',
+            'institute',
+            'created_at',
+            'id',
+        )
     # validators = [UniqueTogetherValidator(
     #         queryset=InstituteViewers.objects.all(),
     #         fields=['institute','student'],
