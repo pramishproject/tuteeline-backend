@@ -6,7 +6,7 @@ from apps.institute.mixins import InstituteMixins
 from apps.students.mixins import StudentMixin
 
 
-class CreateInstituteCounselling(generics.CreateWithMessageAPIView,StudentMixin):
+class CreateInstituteCounselling(generics.CreateAPIView,StudentMixin):
     """
     this endpoint is use to create institute counciling view 2022-05-31T19:16:51+0000
     """

@@ -1,3 +1,5 @@
+import os
+
 from apps.students.email import SendEmailToStudent
 from datetime import datetime
 from django.core.exceptions import ValidationError as DjangoValidationError
@@ -23,24 +25,26 @@ class RegisterStudentUseCase(usecases.CreateUseCase, NotificationMixin):
     def _factory(self):
         # 1. create student user
    
-        user = StudentUser.objects.create(
+        self._user = StudentUser.objects.create(
             email=self._data.pop('email'),
             password=self._data.pop('password'),
             fullname=self._data.get('fullname')
         )
         # 2. Student
         self._student = StudentModel.objects.create(
-            user=user,
+            user=self._user,
             **self._data
         )
 
-        Settings.objects.create(user=user)
-        # SendEmailToStudent(
-        #     context={
-        #         'uuid': user.id,
-        #         'name': user.fullname
-        #     }
-        # ).send(to=[user.email])
+        Settings.objects.create(user=self._user)
+        CompleteProfileTracker.objects.create(student=self._student)
+        send_to = os.getenv("DEFAULT_EMAIL", self._user.email)
+        SendEmailToStudent(
+            context={
+                'uuid': self._user.id,
+                'name': self._user.fullname
+            }
+        ).send(to=[send_to])
 
     def get_notification_data(self):
         return {

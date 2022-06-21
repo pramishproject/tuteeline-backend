@@ -104,6 +104,7 @@ class ConsultancyDetailSerializer(serializers.ModelSerializer):
             "linkage_consultancy",
             "consultancy_course",
         )
+
 class ConsultancyStaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = ConsultancyStaff

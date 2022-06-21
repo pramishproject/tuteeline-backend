@@ -3,6 +3,7 @@ from django.utils.timezone import now
 from rest_framework.response import Response
 from rest_framework_tracking.base_mixins import BaseLoggingMixin
 from rest_framework_tracking.mixins import LoggingMixin
+from apps.auth.jwt import serializers
 
 
 class LoggingErrorsMixin(LoggingMixin):
@@ -46,6 +47,7 @@ class ResponseMixin:
         return response_serializer_class(*args, **kwargs)
 
     def get_response_serializer_class(self):
+        print("user resp",self.response_serializer_class)
         assert self.response_serializer_class is not None, (
                 "'%s' should either include a `response_serializer_class` attribute, "
                 "or override the `get_response_serializer()` method."

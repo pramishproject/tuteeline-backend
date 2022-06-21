@@ -334,6 +334,8 @@ class CustomTokenRefreshSerializer(TokenRefreshSerializer):
 class UserIdResponseSerializer(serializers.Serializer):
     id = serializers.CharField()
 
+class UserLoginSerializer(serializers.Serializer):
+    id = serializers.CharField()
 
 class NormalUserLoginDetailSerializer(serializers.Serializer):
     fullname = serializers.CharField()

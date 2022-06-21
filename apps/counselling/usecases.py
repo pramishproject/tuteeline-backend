@@ -1,6 +1,8 @@
 from datetime import datetime
+import time
 
 from apps.core.usecases import BaseUseCase
+from apps.counselling.exception import AlreadyBooked, TimeError
 from apps.counselling.models import InstituteCounselling,InterestedCourse
 from apps.utils.string_to_json import StringToJson
 from apps.students.models import StudentModel
@@ -17,20 +19,31 @@ class CreateInstituteCounsellingUseCase(BaseUseCase):
         self._factory()
 
     def _factory(self):
-        counciling =InstituteCounselling.objects.create(
-            student=self._student,
-            **self._data
-        )
-        bulk_interested_course = []
-        course_id_list = StringToJson(data=self._data.pop('interested_courses')).execute()
-        for courseId  in course_id_list:
-            if is_valid_uuid(courseId):
-                bulk_interested_course.append({
-                    "counselling":counciling,
-                    "course":courseId
-                })
-        if len(bulk_interested_course)>0:
-            InterestedCourse.objects.bulk_create(bulk_interested_course)
+        interested_courses_list = self._data.pop('interested_courses')
+        counselling_time = self._data.get("which_time")
+        now = datetime.now()
+        if time.mktime(now.timetuple())<time.mktime(counselling_time.timetuple()):
+            councilinglist =InstituteCounselling.objects.filter(student=self._student,institute=self._data.get("institute")
+                                                                ,which_time__range=[now,counselling_time]).first()
+            if councilinglist is None:
+                counciling =InstituteCounselling.objects.create(
+                    student=self._student,
+                    **self._data
+                )
+                bulk_interested_course = []
+                for courseId  in interested_courses_list:
+                    if is_valid_uuid(courseId):
+                        bulk_interested_course.append({
+                            "counselling":counciling,
+                            "course":courseId
+                        })
+                if len(bulk_interested_course)>0:
+                    InterestedCourse.objects.bulk_create(bulk_interested_course)
+            #
+            else:
+                raise AlreadyBooked
+        else:
+            raise TimeError
 
 
 

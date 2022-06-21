@@ -40,7 +40,9 @@ class StudentModel(BaseModel):
 
     def __str__(self):
         return self.fullname
-
+    @property
+    def get_email(self):
+        return self.user.email
 
 
 

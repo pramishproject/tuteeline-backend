@@ -12,6 +12,7 @@ from apps.core.usecases import CreateUseCase, BaseUseCase
 from apps.pyotp.mixins import OTPMixin
 from apps.pyotp.models import PyOTP
 from apps.user.models import ConsultancyUser, PortalUser
+from apps.settings.models import Settings
 
 User = get_user_model()
 
@@ -20,11 +21,10 @@ class UserLoginWithOTPUseCase(CreateUseCase, OTPMixin):
     def __init__(self, request, serializer):
         self._request = request
         super().__init__(serializer)
-
     def execute(self):
         self._factory()
         # print(self._user.id)
-        return {'id': self._user.id}
+        return {'id': self._user.id,"tokemn":"1"}
 
     def _factory(self):
         credentials = {
@@ -37,18 +37,29 @@ class UserLoginWithOTPUseCase(CreateUseCase, OTPMixin):
             Sends email confirmation mail to the user's email
             :return: None
             """
-            code = self._generate_totp(
-                user=self._user,
-                purpose='2FA',
-                interval=180
-            )
-            send_to = os.getenv("DEFAULT_EMAIL", self._user.email)
-            EmailVerificationEmail(
-                context={
-                    'code': code,
-                    'uuid': self._user.id
-                }
-            ).send(to=[send_to])
+            setting = Settings.objects.get(user=self._user)
+            # test
+            # code = self._generate_totp(
+            #     user=self._user,
+            #     purpose='2FA',
+            #     interval=1800
+            # )
+            # print("code",code)
+            if setting.two_fa:
+                code = self._generate_totp(
+                    user=self._user,
+                    purpose='2FA',
+                    interval=180
+                )
+                send_to = os.getenv("DEFAULT_EMAIL", self._user.email)
+                EmailVerificationEmail(
+                    context={
+                        'code': code,
+                        'uuid': self._user.id
+                    }
+                ).send(to=[send_to])
+
+
         else:
             raise PermissionDenied(
                 {

@@ -5,7 +5,7 @@ from apps.students.models import StudentModel
 
 
 class CreateInstituteCounsellingSerializer(serializers.ModelSerializer):
-    interested_courses = serializers.CharField(allow_blank=True,required=False)
+    interested_courses = serializers.ListSerializer(child=serializers.UUIDField(),required=False)
     class Meta:
         model =  models.InstituteCounselling
         fields = (

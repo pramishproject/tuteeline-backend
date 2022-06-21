@@ -8,6 +8,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueTogetherValidator
 
+from apps.institute.serializers import ListInstituteSerializer
 from apps.students.models import CompleteProfileTracker, FavouriteInstitute, InstituteViewers, StudentAddress, StudentModel
 from apps.core import fields
 User = get_user_model()
@@ -95,7 +96,7 @@ class CompleteProfileTrackerSerializer(serializers.ModelSerializer):
 
 class StudentDetailSerializer(StudentSerializer):
     # user = serializers.CharField()
-
+    email = serializers.CharField(source="get_email")
     application_tracker= CompleteProfileTrackerSerializer( read_only=True)
     class Meta(StudentSerializer.Meta):
         fields = (
@@ -105,6 +106,7 @@ class StudentDetailSerializer(StudentSerializer):
             'latitude',
             'longitude',
             'image',
+            'email',
             'application_tracker'
         )
 
@@ -120,14 +122,12 @@ class StudentAddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentAddress
         fields = (
-
             'nationality',
             'state_provision',
             'country',
             'city',
             'street',
             'postal_code',
-           
         )
         
 class AddFavouriteInstituteSerializer(serializers.ModelSerializer):
@@ -139,9 +139,15 @@ class AddFavouriteInstituteSerializer(serializers.ModelSerializer):
         )
 
 class GetFavouriteInstituteSerializer(serializers.ModelSerializer):
+    institute = ListInstituteSerializer(many=False,read_only=True)
     class Meta:
         model = FavouriteInstitute
-        fields = '__all__'
+        fields = (
+            'student',
+            'institute',
+            'created_at',
+            'id',
+        )
 
 class CreateInstituteVisiterSerializer(serializers.ModelSerializer):
     class Meta:

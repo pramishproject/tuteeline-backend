@@ -20,8 +20,6 @@ class InstituteCounselling(BaseModel):
     assign_to = models.ForeignKey(to=InstituteStaff,on_delete=models.DO_NOTHING,blank=True,null=True)
     status = models.CharField(max_length=100,choices=COUNCELLING_STATUS,default="not_start")
     notes = models.TextField(default="",blank=True,null=True)
-    class Meta:
-        unique_together= ("student","institute")
 
 
     @property
