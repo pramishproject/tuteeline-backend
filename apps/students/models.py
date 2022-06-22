@@ -16,14 +16,14 @@ from apps.institute.models import Institute
 
 
 BLOOD_GROUP = (
-    ("A RhD positive (A+)","A+"),
-    ("A RhD negative (A-)","A-"),
-    ("B RhD positive (B+)","B+"),
-    ("B RhD negative (B-)","B-"),
-    ("O RhD positive (O+)","O+"),
-    ("O RhD negative (O-)","O-"),
-    ("AB RhD positive (AB+)","AB+"),
-    ("AB RhD negative (AB-)","AB-"),
+    ("A+","A+"),
+    ("A-","A-"),
+    ("B+","B+"),
+    ("B-","B-"),
+    ("O+","O+"),
+    ("O-","O-"),
+    ("AB+","AB+"),
+    ("AB-","AB-"),
 )
 
 NATIONALITY_CHOOSE = (
