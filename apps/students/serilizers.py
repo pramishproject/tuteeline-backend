@@ -124,6 +124,7 @@ class StudentDetailSerializer(StudentSerializer):
             'image',
             'email',
             'blood_group',
+            'nationality',
             'application_tracker',
             'address_relation',
         )

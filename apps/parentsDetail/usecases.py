@@ -69,6 +69,17 @@ class UpdateParentsUseCase(BaseUseCase):
         self._parents.updated_at = datetime.now()
         self._parents.save()
 
+class DeleteParentsUseCase(BaseUseCase):
+    def __init__(self,parents:StudentParents):
+        self._parents = parents
+
+    def execute(self):
+        self._factory()
+
+    def _factory(self):
+        self._parents.delete()
+
+
 class GetStudentParentsUseCase(BaseUseCase):
     def __init__(self,student):
         self._student = student

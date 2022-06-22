@@ -17,5 +17,10 @@ urlpatterns = [
         '<parents_id>/parents/update',
         views.UpdateParentsView.as_view(),
         name= "update-parents-view"
+    ),
+    path(
+        '<parents_id>/delete',
+        views.DeleteParentsView.as_view(),
+        name="delete parents"
     )
 ]

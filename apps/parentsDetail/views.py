@@ -44,6 +44,16 @@ class UpdateParentsView(generics.UpdateWithMessageAPIView,ParentsMixin):
             parents = self.get_object()
         ).execute()
 
+class DeleteParentsView(generics.DestroyWithMessageAPIView,ParentsMixin):
+    """Delete parents api"""
+    def get_object(self):
+        return self.get_parents()
+
+    def perform_destroy(self, instance):
+        return usecases.DeleteParentsUseCase(
+            parents=self.get_object(),
+        ).execute()
+
 
 class GetParentsView(generics.ListAPIView,StudentMixin):
     """

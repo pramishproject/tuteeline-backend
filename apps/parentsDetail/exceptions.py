@@ -3,4 +3,4 @@ from rest_framework.exceptions import NotFound, APIException
 
 
 class ParentsNotFound(NotFound):
-    default_detail = _('Consultancy not  found for following Id.')
+    default_detail = _('Parents not  found for following Id.')
