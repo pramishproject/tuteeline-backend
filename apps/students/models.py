@@ -26,6 +26,22 @@ BLOOD_GROUP = (
     ("AB RhD negative (AB-)","AB-"),
 )
 
+NATIONALITY_CHOOSE = (
+    ('afghan', 'Afghan'),
+    ('albanian', 'Albanian'),
+    ('Algerian', 'Algerian'),
+    ('Argentinian', 'Argentinian'),
+    ('Australian', 'Australian'),
+    ('Austrian', 'Austrian'),
+    ('Bangladeshi', 'Bangladeshi'),
+    ('Belgian', 'Belgian'),
+    ('Bolivian', 'Bolivian'),
+    ('Batswana', 'Batswana'),
+    ('nepales', 'nepalies'),
+    ('indian', 'indian'),
+
+)
+
 class StudentModel(BaseModel):
     GENDER_CHOOSE=(
         ('male','male'),
@@ -49,7 +65,10 @@ class StudentModel(BaseModel):
         )
     blood_group = models.CharField(choices=BLOOD_GROUP, max_length=50, blank=True, null=True)
     dob = models.DateField(blank=True, null=True)
-
+    nationality = models.CharField(
+        choices=NATIONALITY_CHOOSE,
+        default="",
+        max_length=20)
 
     def __str__(self):
         return self.fullname
@@ -62,39 +81,25 @@ class StudentModel(BaseModel):
 errors = {
     'unique':'address of the user already exist'
 }
-
+ADDRESS_TYPE=(
+    ('permanent','PERMANENT'),
+    ('temporary','TEMPORARY'),
+)
 
 class StudentAddress(BaseModel):
-    NATIONALITY_CHOOSE = (
-        ('afghan','Afghan'),
-        ('albanian','Albanian'),
-        ('Algerian','Algerian'),
-        ('Argentinian','Argentinian'),
-        ('Australian','Australian'),
-        ('Austrian','Austrian'),
-        ('Bangladeshi','Bangladeshi'),
-        ('Belgian','Belgian'),
-        ('Bolivian','Bolivian'),
-        ('Batswana','Batswana'),
-        ('nepales','nepalies'),
-        ('indian','indian'),
-        
-    )
+
     student = models.OneToOneField(
         StudentModel, 
         on_delete=models.CASCADE,
         error_messages=errors,
         related_name='address_relation'
         )
-    nationality =models.CharField(
-        choices=NATIONALITY_CHOOSE,
-        default="nepales",
-        max_length=20)
     state_provision = models.CharField(max_length=200)
     city = models.CharField(max_length=200)
     street = models.CharField(max_length=200)
     postal_code = models.IntegerField()
     country = models.CharField(max_length=200)
+    type = models.CharField(choices=ADDRESS_TYPE,default='PERMANENT',blank=True,null=True,max_length=50)
     def __str__(self):
         return self.country
 

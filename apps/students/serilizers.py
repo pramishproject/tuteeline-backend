@@ -100,12 +100,12 @@ class StudentAddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentAddress
         fields = (
-            'nationality',
             'state_provision',
             'country',
             'city',
             'street',
             'postal_code',
+            'type',
         )
 
 class StudentDetailSerializer(StudentSerializer):
