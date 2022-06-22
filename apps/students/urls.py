@@ -30,7 +30,7 @@ urlpatterns = [
         name = 'student-profile-update'
     ),
     path(
-        '<student_id>/update/address',
+        '<address_id>/update/address',
         views.StudentAddressUpdateView.as_view(),
         name = 'student-profile-update'
     ),

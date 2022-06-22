@@ -107,7 +107,7 @@ class StudentAddressUpdateView(generics.UpdateWithMessageAPIView,AddressMixin):
 
     def perform_update(self, serializer):
         return usecases.StudentAddressUpdateUseCase(
-            student_id= self.get_object(),
+            address= self.get_object(),
             serializer = serializer
         ).execute()
 

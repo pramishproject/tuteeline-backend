@@ -185,6 +185,7 @@ class StudentAddressUpdateUseCase(BaseUseCase):
             setattr(self._address,key,self._data.get(key))
         self._address.updated_at = datetime.now()
         self._address.save()
+
 class StudentLatitudeLongitudeUpdateUseCase(BaseUseCase):
     def __init__(self,serializer,student:StudentModel):
         self._student = student
@@ -201,8 +202,8 @@ class StudentLatitudeLongitudeUpdateUseCase(BaseUseCase):
         self._student.save()
 
 class GetAddressUseCase(BaseUseCase):
-    def __init__(self,student_id:str):
-        self._student_id =student_id
+    def __init__(self,address_id:str):
+        self._address_id =address_id
         # self._address_id = address_id
 
     def execute(self):
@@ -211,7 +212,7 @@ class GetAddressUseCase(BaseUseCase):
 
     def _factory(self):
         try:
-            self._student = StudentAddress.objects.get(student=self._student_id)
+            self._student = StudentAddress.objects.get(pk=self._address_id)
 
         except StudentModel.DoesNotExist:
             raise StudentModelNotFound

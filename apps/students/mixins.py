@@ -4,11 +4,11 @@ from apps.students.usecases import GetFavouriteByIdUseCase, GetStudentUseCase,Ge
 class StudentMixin:
     def get_student(self):
 
-        return GetStudentUseCase(student_id=self.kwargs.get('student_id')).execute()
+        return GetStudentUseCase(student_id=self.kwargs.get('address_id')).execute()
 
 class AddressMixin:
     def get_address(self):
-        return GetAddressUseCase(student_id=self.kwargs.get('student_id')).execute()
+        return GetAddressUseCase(address_id=self.kwargs.get('address_id')).execute()
 
 class FavouriteMixin:
     def get_favourite(self):
