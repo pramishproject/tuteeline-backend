@@ -152,8 +152,8 @@ class GetSopUseCase(BaseUseCase):
 
 
 class GetLorUseCase(BaseUseCase):
-    def __init__(self,student):
-        self._student_id = student
+    def __init__(self,lor):
+        self._lor_id = lor
 
     def execute(self):
         
@@ -162,7 +162,7 @@ class GetLorUseCase(BaseUseCase):
 
     def _factory(self):
         try:
-            self._lor=StudentLor.objects.get(student=self._student_id)
+            self._lor=StudentLor.objects.get(pk=self._lor_id)
         except StudentLor.DoesNotExist:
             raise LorNotFound
 
@@ -215,7 +215,14 @@ class CreateStudentLorUseCase(usecases.CreateUseCase):
                 student=self._student,
                 complete_lor_field=True) 
 
+class DeleteLorUseCase(usecases.BaseUseCase):
+    def __init__(self,lor:StudentLor):
+        self._lor = lor
+    def execute(self):
+        self._factory()
 
+    def _factory(self):
+        self._lor.delete()
 
 class CreateStudentEssayUseCase(usecases.CreateUseCase):
     def __init__(self, serializer ,student):

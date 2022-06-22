@@ -122,6 +122,8 @@ class StudentDetailSerializer(StudentSerializer):
             'latitude',
             'longitude',
             'image',
+            'dob',
+            'gender',
             'email',
             'blood_group',
             'nationality',

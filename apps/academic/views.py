@@ -1,4 +1,4 @@
-from apps.academic.mixins import AcademicMixins, EssayMixins, SopMixins,GetSopMixin,GetEssayMixins
+from apps.academic.mixins import AcademicMixins, GetSopMixin, GetEssayMixins, LorMixins
 from rest_framework.serializers import Serializer
 from apps.academic.serializers import (CreateAcademicSerializer, CreateLorSerializer, CreateSopSerializer,
 CreateEssaySerializer, GetAcademicListSerializer, GetLorSerializer, GetPersonalEssay, GetSopSerializer, UpdateCertificateSerializer, UpdateMarksheetSerializer, UpdateSopSerializer,
@@ -135,6 +135,17 @@ class CreateLorView(generics.CreateWithMessageAPIView,StudentMixin):
             student = self.get_object(),
             serializer =serializer
         ).execute()
+
+class DeleteLorView(generics.DestroyWithMessageAPIView,LorMixins):
+    def get_object(self):
+        return self.get_lor()
+    def perform_destroy(self, instance):
+        return usecases.DeleteLorUseCase(
+            lor=self.get_lor()
+        ).execute()
+
+class UpdateLorView(generics.UpdateWithMessageAPIView,LorMixins): #todo
+    pass
 
 class CreatePersonalEssayView(generics.CreateWithMessageAPIView,StudentMixin):
     """

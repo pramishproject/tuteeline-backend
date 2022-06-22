@@ -39,6 +39,11 @@ urlpatterns = [
         name="list-lor"
     ),
     path(
+        '<lor_id>/lor/delete',
+        views.DeleteLorView.as_view(),
+        name="delete-lor"
+    ),
+    path(
         '<student_id>/personal-essay/add',
         views.CreatePersonalEssayView.as_view(),
         name = 'add-essay'

@@ -19,7 +19,7 @@ class SopMixins:
 class LorMixins:
     def get_lor(self):
         return usecases.GetLorUseCase(
-            student=self.kwargs.get("lor_id")
+            lor=self.kwargs.get("lor_id")
         ).execute()
 
 class EssayMixins:
