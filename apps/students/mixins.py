@@ -4,7 +4,7 @@ from apps.students.usecases import GetFavouriteByIdUseCase, GetStudentUseCase,Ge
 class StudentMixin:
     def get_student(self):
 
-        return GetStudentUseCase(student_id=self.kwargs.get('address_id')).execute()
+        return GetStudentUseCase(student_id=self.kwargs.get('student_id')).execute()
 
 class AddressMixin:
     def get_address(self):
