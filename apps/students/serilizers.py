@@ -72,7 +72,8 @@ class UpdateStudentSerializer(StudentSerializer):
             'longitude',
             'fullname',
             'dob',
-            'gender'
+            'gender',
+            'blood_group',
         )
 class UpdateProfilePictureSerializer(StudentSerializer):
     class Meta(StudentSerializer.Meta):
@@ -94,31 +95,8 @@ class CompleteProfileTrackerSerializer(serializers.ModelSerializer):
             'complete_lor_field'
         )
 
-class StudentDetailSerializer(StudentSerializer):
-    # user = serializers.CharField()
-    email = serializers.CharField(source="get_email")
-    application_tracker= CompleteProfileTrackerSerializer( read_only=True)
-    class Meta(StudentSerializer.Meta):
-        fields = (
-            'id',
-            'fullname',
-            'contact',
-            'latitude',
-            'longitude',
-            'image',
-            'email',
-            'application_tracker'
-        )
-
-class StudentLatitudeLongitudeUpdate(StudentSerializer):
-    class Meta(StudentSerializer.Meta):
-        fields = (
-            'latitude',
-            'longitude',
-        )
 
 class StudentAddressSerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = StudentAddress
         fields = (
@@ -129,6 +107,35 @@ class StudentAddressSerializer(serializers.ModelSerializer):
             'street',
             'postal_code',
         )
+
+class StudentDetailSerializer(StudentSerializer):
+    # user = serializers.CharField()
+    address_relation = StudentAddressSerializer(many=False,read_only=True)
+    email = serializers.CharField(source="get_email")
+    application_tracker= CompleteProfileTrackerSerializer( read_only=True)
+
+    class Meta(StudentSerializer.Meta):
+        fields = (
+            'id',
+            'fullname',
+            'contact',
+            'latitude',
+            'longitude',
+            'image',
+            'email',
+            'blood_group',
+            'application_tracker',
+            'address_relation',
+        )
+
+class StudentLatitudeLongitudeUpdate(StudentSerializer):
+    class Meta(StudentSerializer.Meta):
+        fields = (
+            'latitude',
+            'longitude',
+        )
+
+
         
 class AddFavouriteInstituteSerializer(serializers.ModelSerializer):
 
