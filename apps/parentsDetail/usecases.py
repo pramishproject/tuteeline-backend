@@ -1,11 +1,11 @@
-from apps.parentsDetail.exceptions import ParentsNotFound
+from apps.parentsDetail.exceptions import ParentsNotFound, UniqueKeyError
 from datetime import datetime
 from rest_framework import parsers
 from apps.students.models import CompleteProfileTracker
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from rest_framework.exceptions import ValidationError
+from django.db import IntegrityError
 
 from apps.core import usecases
 from apps.core.usecases import BaseUseCase
@@ -63,11 +63,14 @@ class UpdateParentsUseCase(BaseUseCase):
         self._factory()
 
     def _factory(self):
-        for key in self._data.keys():
-            setattr(self._parents,key,self._data.get(key))
+        try:
+            for key in self._data.keys():
+                setattr(self._parents,key,self._data.get(key))
 
-        self._parents.updated_at = datetime.now()
-        self._parents.save()
+            self._parents.updated_at = datetime.now()
+            self._parents.save()
+        except IntegrityError:
+            raise UniqueKeyError
 
 class DeleteParentsUseCase(BaseUseCase):
     def __init__(self,parents:StudentParents):

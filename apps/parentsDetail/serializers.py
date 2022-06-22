@@ -27,8 +27,9 @@ class ParentsDetailSerializer(serializers.ModelSerializer):
             'contact',
         )
 
-class UpdateParentsDetailSerializer(ParentsDetailSerializer):
-    class Meta(ParentsDetailSerializer.Meta):
+class UpdateParentsDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentParents
         fields = (
             'relation',
             'fullname',
@@ -41,6 +42,8 @@ class UpdateParentsDetailSerializer(ParentsDetailSerializer):
             'country_code',
             'contact',
         )
+
+
 
 class GetParentsListSerializer(ParentsDetailSerializer):
     class Meta(ParentsDetailSerializer.Meta):
