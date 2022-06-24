@@ -218,8 +218,8 @@ class GetAddressUseCase(BaseUseCase):
             raise StudentModelNotFound
 
 class GetStudentAddressUseCase(BaseUseCase):
-    def __init__(self,student:StudentModel):
-        self._student=student
+    def __init__(self,address:StudentAddress):
+        self._address =address
 
     def execute(self):
         self._factory()
@@ -227,7 +227,7 @@ class GetStudentAddressUseCase(BaseUseCase):
 
     def _factory(self):
         try:
-            self._student_address = StudentAddress.objects.filter(student=self._student)
+            self._student_address = StudentAddress.objects.get(pk=self._address)
 
         except StudentModel.DoesNotExist:
             raise StudentModelNotFound

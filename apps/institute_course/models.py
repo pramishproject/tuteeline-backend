@@ -129,7 +129,6 @@ class InstituteApply(BaseModel):
         default='applied', 
         max_length=20
         )
-
     action_field = models.ForeignKey('ApplyAction', blank=True, null=True,on_delete=models.DO_NOTHING,
                                      related_name="action_institute")
     consultancy_action = models.ForeignKey('ActionApplyByConsultancy',blank=True, null=True,on_delete=models.DO_NOTHING

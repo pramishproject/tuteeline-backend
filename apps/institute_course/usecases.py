@@ -1,7 +1,6 @@
 
 from django.db import connection
 from django.db.models import Count
-from django.db.models.functions import TruncDay
 from django.utils.datetime_safe import datetime
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
@@ -247,10 +246,8 @@ class InstituteActionUseCase(BaseUseCase):
             apply=self._apply
             )
         self._apply.action_field = self.status
-        self._apply.action = self.status.action
         self._apply.updated_at = datetime.now()
         self._apply.save()
-
 
 class ConsultancyActionUseCase(BaseUseCase):
     def __init__(self,apply,serializer):
@@ -422,15 +419,12 @@ class ApplicationDashboardUsecase(BaseUseCase):
         return self.applicant
 
     def _factory(self):
-        self.applicant1=InstituteApply.objects.filter(
+        self.applicant=InstituteApply.objects.filter(
             institute=self._institute,
             # created_at__range=["2021-12-01", "2022-01-31"]
-            ).values('action').annotate(created_count=Count('action'))
+            ).values('action').annotate(Count('action'))
 
-        self.applicant = InstituteApply.objects.filter(institute=self._institute).\
-            annotate(date=TruncDay('created_at')).values("date","action").annotate(action_count=Count('action')).order_by("-date")
 
-        print(self.applicant1)
 
 
 class CompareInstituteCourseUseCase(BaseUseCase):

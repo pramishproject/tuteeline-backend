@@ -212,7 +212,7 @@ class GetStudentAddressSerializer(serializers.ModelSerializer):
         fields = ['state_provision','country']
 
 class GetStudentApplicantSerializer(serializers.ModelSerializer):
-    address_relation=GetStudentAddressSerializer(many=True,read_only =True)
+    address_relation=GetStudentAddressSerializer(many=False,read_only =True)
     class Meta:
         model = StudentModel
         fields = (
@@ -303,8 +303,8 @@ class GetStudentApplicationStudentSerializer(serializers.ModelSerializer):
 
 class ApplicationSerializerDashboard(serializers.Serializer):
     action = serializers.CharField()
-    action_count = serializers.IntegerField()
-    date = serializers.DateTimeField()
+    action__count = serializers.IntegerField()
+
 # <BaseModelQuerySet [{'action': 'applied', 'action__count': 1}, {'action': 'verify', 'action__count': 1}]>
 
 class StudentAdmissionApplicationSerializer(serializers.ModelSerializer):
@@ -487,7 +487,7 @@ class CheckedAcademicDocumentInstituteSerializer(serializers.ModelSerializer):
         )
 
 class StudentProfileDetailSerializer(serializers.ModelSerializer):
-    address_relation = GetStudentAddressSerializer(many=True, read_only=True)
+    address_relation = GetStudentAddressSerializer(many=False, read_only=True)
     parents = ParentsDetailSerializer(many=True,read_only=True)
     class Meta:
         model = StudentModel
