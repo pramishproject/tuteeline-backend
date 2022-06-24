@@ -112,18 +112,18 @@ class StudentAddressUpdateView(generics.UpdateWithMessageAPIView,AddressMixin):
         ).execute()
 
 
-class GetStudentAddressView(generics.RetrieveAPIView,AddressMixin):
+class GetStudentAddressView(generics.ListAPIView,StudentMixin):
     """
     This endpoint is use to get student address
     """
     permission_classes = (AllowAny,)
     serializer_class = serilizers.StudentAddressSerializer
     def get_object(self):
-        return self.get_address()
+        return self.get_student()
     def get_queryset(self):
         return usecases.GetStudentAddressUseCase(
-            address=self.get_queryset()
-        )
+            student=self.get_queryset()
+        ).execute()
 
 class StudentLatitudeAndLongitudeUpdate(generics.UpdateWithMessageAPIView,StudentMixin):
     """
