@@ -1,6 +1,7 @@
 
 from django.db import connection
 from django.db.models import Count
+from django.db.models.functions import TruncDay
 from django.utils.datetime_safe import datetime
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
@@ -422,7 +423,8 @@ class ApplicationDashboardUsecase(BaseUseCase):
         self.applicant=InstituteApply.objects.filter(
             institute=self._institute,
             # created_at__range=["2021-12-01", "2022-01-31"]
-            ).values('action').annotate(Count('action'))
+            ).annotate(date=TruncDay('created_at')).values("date","action").\
+            annotate(action_count=Count('action'))
 
 
 
