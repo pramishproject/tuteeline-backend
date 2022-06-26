@@ -88,7 +88,7 @@ ADDRESS_TYPE=(
 
 class StudentAddress(BaseModel):
 
-    student = models.OneToOneField(
+    student = models.ForeignKey(
         StudentModel, 
         on_delete=models.CASCADE,
         error_messages=errors,
