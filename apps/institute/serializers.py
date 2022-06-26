@@ -148,6 +148,7 @@ class UpdateInstituteCoverImageSerializer(serializers.ModelSerializer):
             'cover_image',
         )
 class ListInstituteSerializer(InstituteSerializer):
+
     class Meta(InstituteSerializer.Meta):
         fields = (
             'id',
@@ -162,6 +163,10 @@ class ListInstituteSerializer(InstituteSerializer):
             'logo',
             'cover_image',
         )
+
+
+
+
 class InstituteDetailCourseSerializer(serializers.ModelSerializer):
     name = serializers.CharField(source='get_course_name')
     class Meta:

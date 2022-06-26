@@ -17,5 +17,10 @@ urlpatterns = [
     path('<institute_id>/institute/list',
         views.ListInstituteReviewView.as_view(),
         name="list institute"
+    ),
+    path(
+        '<institute_id>/institute/aggregate',
+        views.GetInstituteAggregateReviewView.as_view(),
+        name = "institute-aggregate-review"
     )
 ]

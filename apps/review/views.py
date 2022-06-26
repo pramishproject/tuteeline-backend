@@ -3,7 +3,8 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework.permissions import AllowAny
 from apps.institute.mixins import InstituteMixins
 from apps.review.mixins import InstituteReviewMixins
-from apps.review.serializers import CreateInstituteReviewSerializer, ListInstituteReviewSerializer, UpdateInstituteReviewSerializer
+from apps.review.serializers import CreateInstituteReviewSerializer, ListInstituteReviewSerializer, \
+    UpdateInstituteReviewSerializer, InstituteAggregateReviewSerializer
 from apps.students.mixins import StudentMixin
 from apps.review import usecases
 # Create your views here.
@@ -45,3 +46,16 @@ class ListInstituteReviewView(generics.ListAPIView,InstituteMixins):
         return usecases.ListInstituteReviewUseCase(
             institute=self.get_object()
         ).execute()
+
+    def get_serializer_context(self):
+        context = super(ListInstituteReviewView, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
+class GetInstituteAggregateReviewView(generics.ListAPIView,InstituteMixins):
+    serializer_class = InstituteAggregateReviewSerializer
+    def get_object(self):
+        return self.get_institute()
+
+    def get_queryset(self):
+        return usecases.GetAggregateInstituteReviewUseCase(institute=self.get_object()).execute()

@@ -47,7 +47,10 @@ class GetInstituteCourseUseCase(BaseUseCase):
         return self._course
 
     def _factory(self):
-        self._course = InstituteCourse.objects.filter(institute=self._institute).prefetch_related('course','faculty')
+        # self._course = InstituteCourse.objects.filter(institute=self._institute).prefetch_related('course','faculty').\
+        #     select_related("")
+        self._course = InstituteCourse.objects.filter(institute=self._institute).\
+            select_related('course','faculty')
     
 
 

@@ -1,16 +1,11 @@
 
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
-
-from apps.academic.models import Academic
-from apps.institute_course import models
-from rest_framework.validators import UniqueTogetherValidator
+from django.core.cache import cache
 
 from apps.institute_course.models import CommentApplicationInstitute, Course, Faculty, InstituteApply, InstituteCourse, \
     CheckedAcademicDocument, CheckStudentIdentity, CheckedStudentLor, CheckedStudentEssay, CheckedStudentSop, \
     ApplyAction, ActionApplyByConsultancy
-from apps.core import fields
 from apps.parentsDetail.serializers import ParentsDetailSerializer
 from apps.studentIdentity.serializers import StudentCitizenshipSerializer, StudentPassportSerializer
 from apps.students.models import StudentModel,StudentAddress
@@ -102,11 +97,21 @@ class ListInstituteCourseSerializer(InstituteCourseSerializer):
 
     course = CourseSerializer(read_only =True)
     faculty =FacultySerializer(read_only = True)
-    # related_student_is_apply = serializers.SerializerMethodField()
+    is_applied = serializers.SerializerMethodField()
 
-    # @classmethod
-    # def get_related_student_is_apply(self,obj ): #TODO implement
-    #     pass
+    def get_is_applied(self, obj):
+        application = cache.get("application")
+        course_id = obj.id
+        student_id =self.context['request'].GET.get('student_id', None)
+        if student_id != None:
+            if application is None:
+                application = InstituteApply.objects.filter(institute=obj.institute,student=student_id). \
+                    values("id", "course")
+                cache.set('application', application)
+            app = application.filter(course=course_id)
+            if len(app) > 0:
+                return True
+        return False
 
     class Meta(InstituteCourseSerializer.Meta):
             fields = (
@@ -130,6 +135,7 @@ class ListInstituteCourseSerializer(InstituteCourseSerializer):
                 'essay',
                 'lor',
                 'sop',
+                'is_applied',
             )
 
     
@@ -212,7 +218,7 @@ class GetStudentAddressSerializer(serializers.ModelSerializer):
         fields = ['state_provision','country']
 
 class GetStudentApplicantSerializer(serializers.ModelSerializer):
-    address_relation=GetStudentAddressSerializer(many=False,read_only =True)
+    address_relation=GetStudentAddressSerializer(many=True,read_only =True)
     class Meta:
         model = StudentModel
         fields = (
@@ -488,7 +494,7 @@ class CheckedAcademicDocumentInstituteSerializer(serializers.ModelSerializer):
         )
 
 class StudentProfileDetailSerializer(serializers.ModelSerializer):
-    address_relation = GetStudentAddressSerializer(many=False, read_only=True)
+    address_relation = GetStudentAddressSerializer(many=True, read_only=True)
     parents = ParentsDetailSerializer(many=True,read_only=True)
     class Meta:
         model = StudentModel

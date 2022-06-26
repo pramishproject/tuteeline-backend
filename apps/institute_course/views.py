@@ -1,3 +1,5 @@
+from drf_yasg.utils import swagger_auto_schema
+
 from apps.consultancy.mixins import ConsultancyMixin
 from apps.institute_course.filter import ApplicationFilter
 from apps.institute_course.mixins import ApplyMixin, CourseMixin, FacultyMixin
@@ -8,6 +10,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.permissions import AllowAny
 
+from django.core.cache import cache
 
 from apps.core import generics
 from apps.institute_course.serializers import (
@@ -52,7 +55,7 @@ class ListInstituteCourse(generics.ListAPIView,InstituteMixins):
     """
     serializer_class = ListInstituteCourseSerializer
     permission_classes = (AllowAny,)
-    no_content_error_message = _("No Consultancy staff at the moment.")
+    no_content_error_message = _("No institute  course at the moment.")
     queryset = ''
     def get_object(self):
         return self.get_institute()
@@ -62,7 +65,11 @@ class ListInstituteCourse(generics.ListAPIView,InstituteMixins):
             inst=self.get_object()
         ).execute()
 
-
+    def get_serializer_context(self):
+        context = super(ListInstituteCourse, self).get_serializer_context()
+        context.update({"request": self.request})
+        cache.delete('application')
+        return context
 
 
 class UpdateInstituteCourse(generics.UpdateWithMessageAPIView,CourseMixin):

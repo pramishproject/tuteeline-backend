@@ -128,6 +128,7 @@ class ListInstituteView(generics.ListAPIView):
         return usecase.ListInstituteUseCase().execute()
 
 
+
 class DetailInstituteView(generics.RetrieveAPIView,Institute,InstituteMixins):
     """
     this endpoint is use to get institute detail

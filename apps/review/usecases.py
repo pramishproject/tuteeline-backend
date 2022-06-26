@@ -1,3 +1,5 @@
+from django.db.models import Count
+
 from apps.core.usecases import BaseUseCase
 from apps.institute.exceptions import InstituteNotFound
 from apps.institute.models import Institute
@@ -61,3 +63,18 @@ class ListInstituteReviewUseCase(BaseUseCase):
 
     def _factory(self):
         self._review = InstituteReview.objects.filter(institute= self._institute)
+
+
+class GetAggregateInstituteReviewUseCase(BaseUseCase):
+    def __init__(self,institute):
+        self._institute = institute
+
+    def execute(self):
+        self._factory()
+        return self.review
+
+    def _factory(self):
+        # pass
+        self.review = list(InstituteReview.objects.filter(institute=self._institute).values("rating").\
+            annotate(rating_count=Count("rating")))
+        print(self.review)
