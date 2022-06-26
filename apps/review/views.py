@@ -1,10 +1,13 @@
+from apps.consultancy.mixins import ConsultancyMixin
 from apps.core import generics
 from django.utils.translation import gettext_lazy as _
 from rest_framework.permissions import AllowAny
 from apps.institute.mixins import InstituteMixins
-from apps.review.mixins import InstituteReviewMixins
+from apps.review.mixins import InstituteReviewMixins, ConsultancyReviewMixins
 from apps.review.serializers import CreateInstituteReviewSerializer, ListInstituteReviewSerializer, \
-    UpdateInstituteReviewSerializer, InstituteAggregateReviewSerializer
+    UpdateInstituteReviewSerializer, InstituteAggregateReviewSerializer, CreateConsultancyReviewSerializer, \
+    ListConsultancyReviewSerializer, UpdateConsultancyReviewSerializer
+from apps.review.usecases import GetConsultancyReviewByIdUseCase
 from apps.students.mixins import StudentMixin
 from apps.review import usecases
 # Create your views here.
@@ -59,3 +62,48 @@ class GetInstituteAggregateReviewView(generics.ListAPIView,InstituteMixins):
 
     def get_queryset(self):
         return usecases.GetAggregateInstituteReviewUseCase(institute=self.get_object()).execute()
+
+
+
+# --------------------------------consultancy review ------------
+
+class CreateConsultancyReviewView(generics.CreateAPIView,StudentMixin):
+    serializer_class = CreateConsultancyReviewSerializer
+
+    def get_object(self):
+        return self.get_student()
+
+    def perform_create(self, serializer):
+        return usecases.CreateConsultancyReviewUseCase(
+            student=self.get_object(),
+            serializer =serializer
+        ).execute()
+
+class ListConsultancyReview(generics.ListAPIView,ConsultancyMixin):
+    serializer_class = ListConsultancyReviewSerializer
+
+    def get_object(self):
+        return self.get_consultancy()
+
+    def get_queryset(self):
+        return usecases.ListConsultancyReviewUseCase(
+            consultancy=self.get_object(),
+        ).execute()
+
+    def get_serializer_context(self):
+        context = super(ListConsultancyReview, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
+class UpdateConsultancyReview(generics.UpdateAPIView,ConsultancyReviewMixins):
+
+    serializer_class = UpdateConsultancyReviewSerializer
+
+    def get_object(self):
+        return self.get_consultancy_review()
+
+    def perform_update(self, serializer):
+        return usecases.UpdateConsultancyReviewUseCase(
+            review=self.get_object(),
+            serializer = serializer
+        ).execute()
