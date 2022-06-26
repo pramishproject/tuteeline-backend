@@ -15,4 +15,5 @@ class Migration(migrations.Migration):
             name='type',
             field=models.CharField(blank=True, choices=[('permanent', 'PERMANENT'), ('temporary', 'TEMPORARY')], default='PERMANENT', max_length=50, null=True),
         ),
+
     ]

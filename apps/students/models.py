@@ -48,7 +48,7 @@ class StudentModel(BaseModel):
         ('female','female'),
         ('others','others')
     )
-    user = models.ForeignKey(StudentUser, on_delete=models.CASCADE)
+    user = models.OneToOneField(StudentUser, on_delete=models.CASCADE)
     fullname = models.CharField(max_length=250)
     contact = fields.PhoneNumberField()
     latitude = models.FloatField(blank=True)
