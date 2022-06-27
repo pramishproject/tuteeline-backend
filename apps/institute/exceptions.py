@@ -7,6 +7,9 @@ class InstituteUserEmailNotFound(NotFound):
 class InstituteNotFound(NotFound):
     default_detail = _('Institute   not  found for following id.')
 
+class StaffNotFound(NotFound):
+    default_detail = _('Institute  staff not  found for following id.')
+
 class InstituteScholorshipDoesntExist(NotFound):
     default_detail = _("scholorship doesnt exist")
 

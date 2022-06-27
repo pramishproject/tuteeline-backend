@@ -6,6 +6,12 @@ class InstituteMixins:
             institute_id=self.kwargs.get('institute_id')
         ).execute()
 
+class InstituteStaffMixins:
+    def get_institute_staff(self):
+        return usecase.GetInstituteStaffUseCase(
+            institute_staff_id=self.kwargs.get('institute_staff_id')
+        ).execute()
+
 class ScholorshipMixins:
     def get_scholorship(self):
         return usecase.GetScholorshipUseCase(

@@ -3,7 +3,8 @@ from django.db.models import Q
 from apps.institute.email import SendEmailToInstituteStaff
 from apps.auth.jwt import serializers
 from datetime import datetime
-from apps.institute.exceptions import FacilityDoesntExist, InstituteNotFound, InstituteScholorshipDoesntExist, SocialMediaLinkDoesntExist
+from apps.institute.exceptions import FacilityDoesntExist, InstituteNotFound,\
+    InstituteScholorshipDoesntExist, SocialMediaLinkDoesntExist,StaffNotFound
 from apps import institute
 from apps.staff.models import StaffPosition
 from django.core.exceptions import ValidationError as DjangoValidationError
@@ -114,6 +115,20 @@ class GetInstituteUseCase(BaseUseCase):
 
         except Institute.DoesNotExist:
             raise InstituteNotFound
+
+class GetInstituteStaffUseCase(BaseUseCase):
+    def __init__(self,institute_staff_id):
+        self._staff_id = institute_staff_id
+
+    def execute(self):
+        self._factory()
+        return self._staff
+
+    def _factory(self):
+        try:
+            self._staff = InstituteStaff.objects.get(pk=self._staff_id)
+        except InstituteStaff.DoesNotExist:
+            raise StaffNotFound
 
 class GetInstituteDetailUseCase(BaseUseCase):
     def __init__(self,institute_id:str):

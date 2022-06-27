@@ -16,6 +16,8 @@ class CreateInstituteCounsellingSerializer(serializers.ModelSerializer):
             'interested_courses',
         )
 
+
+
 class GetInstituteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Institute
@@ -87,6 +89,24 @@ class ListInstituteCounsellingSerializer(serializers.ModelSerializer):
             'assign_to',
         )
 
+class ListInstituteStaffCounsellingSerializer(serializers.ModelSerializer):
+    student = GetStudentSerializer(read_only=True)
+    interested_Course = serializers.ListSerializer(child=serializers.CharField(), source='get_interested_course')
+
+    class Meta:
+        model = models.InstituteCounselling
+        fields = (
+            'id',
+            'student',
+            'interested_Course',
+            'status',
+            'which_time',
+            'physical_counselling',
+            'notes',
+            'education_level',
+            'assign_to',
+        )
+
 class AssignCounselorUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.InstituteCounselling
@@ -99,4 +119,14 @@ class AddNotesSerializer(serializers.ModelSerializer):
         model = models.InstituteCounselling
         fields = (
             'notes',
+        )
+
+class CreateConsultancyCounsellingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ConsultancyCounselling
+        fields = (
+            'consultancy',
+            'education_level',
+            'which_time',
+            'physical_counselling',
         )

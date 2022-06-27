@@ -2,7 +2,7 @@ from apps.core import generics
 from apps.counselling import serializers, usecases
 # Create your views here.
 from apps.counselling.mixins import InstituteCounsellingMixin
-from apps.institute.mixins import InstituteMixins
+from apps.institute.mixins import InstituteMixins, InstituteStaffMixins
 from apps.students.mixins import StudentMixin
 
 
@@ -79,5 +79,33 @@ class AddNotesView(generics.UpdateWithMessageAPIView,InstituteCounsellingMixin):
             serializer=serializer
         ).execute()
 
-class AssignCouncilingListView(generics.ListAPIView): #todo this is use to list counciling for institute user
-    pass
+class AssignCouncilingListView(generics.ListAPIView,InstituteStaffMixins): #todo this is use to list counciling for institute user
+    serializer_class = serializers.ListInstituteStaffCounsellingSerializer
+
+    def get_object(self):
+        return self.get_institute_staff()
+
+    def get_queryset(self):
+        return usecases.ListCounselingInstituteStaffUseCase(
+            staff=self.get_object()
+        ).execute()
+
+
+# consultancy counciling mixin---------------
+
+class CreateConsultancyCounselling(generics.CreateAPIView,StudentMixin):
+    """
+    This endpoint is use to crate consultancy counselling 2022-05-31T19:16:51+0000
+    """
+    serializer_class = serializers.CreateConsultancyCounsellingSerializer
+
+    def get_object(self):
+        return self.get_student()
+
+    def perform_create(self, serializer):
+        return usecases.CreateConsultancyCounsellingUseCase(
+            student=self.get_object(),
+            serializer=serializer
+        ).execute()
+
+

@@ -39,6 +39,7 @@ class InstituteBlog(BaseModel):
     relation = models.ForeignKey(to=Relation, on_delete=CASCADE)
     title = models.CharField(max_length=100)
     author_name = models.CharField(max_length=100)
+    summary = models.CharField(max_length=200, default="")
     content = models.TextField()
     image = models.ImageField(upload_to=upload_blog_image_to,
                               default='institute/blog/default_logo.png',
@@ -54,6 +55,7 @@ class ConsultancyBlog(BaseModel):
     consultancy = models.ForeignKey(to=Consultancy,on_delete=models.CASCADE)
     staff = models.ForeignKey(to=ConsultancyStaff,on_delete=models.DO_NOTHING)
     author_name = models.CharField(max_length=100)
+    summary = models.CharField(max_length=200,default="")
     content = models.TextField()
     relation = models.ForeignKey(to=Relation, on_delete=CASCADE)
     title = models.CharField(max_length=100)
@@ -70,6 +72,7 @@ class PortalBlog(BaseModel):
     title = models.CharField(max_length=100)
     author_name = models.CharField(max_length=100)
     content = models.TextField()
+    summary = models.CharField(max_length=200, default="")
     image = models.ImageField(upload_to=upload_blog_image_to,
                               default='portel/blog/default_logo.png',
                               validators=[validate_image]

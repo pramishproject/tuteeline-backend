@@ -27,6 +27,16 @@ urlpatterns =[
         "<str:counselling_id>/institute/notes",
         views.AddNotesView.as_view(),
         name="add-notes"
+    ),
+    path(
+        "<str:institute_staff_id>/institute/staff/list",
+        views.AssignCouncilingListView.as_view(),
+        name="list-assign-counselling"
+    ),
+    path(
+        "<str:student_id>/consultancy/add",
+        views.CreateConsultancyCounselling.as_view(),
+        name = "add-counseling"
     )
 
 ]
