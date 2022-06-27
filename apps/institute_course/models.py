@@ -1,5 +1,5 @@
 from apps import consultancy
-from apps.academic.models import Academic, PersonalEssay, StudentLor, StudentSop
+from apps.academic.models import Academic, PersonalEssay, StudentLor, StudentSop, LEVEL_CHOICE
 from apps.studentIdentity.models import Citizenship, Passport
 from apps.user.models import InstituteUser
 from apps.consultancy.models import Consultancy, ConsultancyStaff
@@ -59,7 +59,7 @@ class InstituteCourse(BaseModel):
     total_fee = models.DecimalField(max_digits=10, decimal_places=3)
     reg_fee = models.DecimalField(max_digits=10, decimal_places=3,blank=True,null=True)
     fee_currency = models.CharField(choices=CURRENCY,max_length=20)
-
+    qualification = models.CharField(choices=LEVEL_CHOICE,default="",max_length=100)
     #this all are form open and close field
 
     reg_status = models.BooleanField(default=True)

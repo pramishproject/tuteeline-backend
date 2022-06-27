@@ -9,6 +9,7 @@ from apps.institute import models
 from apps.institute.models import AddInstituteFacility, Institute, InstituteScholorship,InstituteStaff, SocialMediaLink\
     ,Facility
 from apps.core import fields
+from apps.students.models import FavouriteInstitute
 
 User = get_user_model()
 
@@ -192,6 +193,16 @@ class InstituteDetailSerilaizer(serializers.ModelSerializer):
     course_related = InstituteDetailCourseSerializer(many=True,read_only =True)
     facility_related = FacilitySerializer(many=True,read_only =True)
     social_media_data = serializers.ListSerializer(child=serializers.DictField(),source="social_media")
+
+    is_favourite = serializers.SerializerMethodField()
+
+    def get_is_favourite(self, obj):
+        institute_id = obj.id
+        student_id = self.context['request'].GET.get('student_id', None)
+        if student_id != None:
+            fav = FavouriteInstitute.objects.filter(institute=institute_id,student=student_id).exists()
+            return fav
+        return False
     class Meta:
         model = Institute
         fields = (
@@ -214,6 +225,7 @@ class InstituteDetailSerilaizer(serializers.ModelSerializer):
             'facility_related',
             'course_related',
             'social_media_data',
+            'is_favourite',
         )
 
 

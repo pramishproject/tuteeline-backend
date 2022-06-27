@@ -144,6 +144,10 @@ class DetailInstituteView(generics.RetrieveAPIView,Institute,InstituteMixins):
             institute_id=self.get_object()
         ).execute()
 
+    def get_serializer_context(self):
+        context = super(DetailInstituteView, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context
  
 class AddScholorshipView(generics.CreateWithMessageAPIView,InstituteMixins):
     """
