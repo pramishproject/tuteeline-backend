@@ -110,7 +110,7 @@ class ListInstituteCourseSerializer(InstituteCourseSerializer):
                 cache.set('application', application)
             app = application.filter(course=course_id).exists()
             if app:
-                return app.id
+                return True
         return False
 
     class Meta(InstituteCourseSerializer.Meta):
