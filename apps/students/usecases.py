@@ -103,7 +103,10 @@ class AddStudentAddressUseCase(usecases.CreateUseCase,GetStudentUseCase):
 
         # get complete profile indicator
         try:
-            complete_profile_indicator=CompleteProfileTracker.objects.get(student=self._student_id).update(complete_address = True)
+            profile_tracker=CompleteProfileTracker.objects.get(student=self._student_id)
+            profile_tracker.complete_address = True
+            profile_tracker.updated_at = timezone.now()
+            profile_tracker.save()
 
         except CompleteProfileTracker.DoesNotExist:
              CompleteProfileTracker.objects.create(
