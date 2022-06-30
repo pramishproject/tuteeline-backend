@@ -2,7 +2,7 @@ from apps.consultancy.mixins import ConsultancyMixin, ConsultancyStaffMixin
 from apps.core import generics
 from apps.counselling import serializers, usecases
 # Create your views here.
-from apps.counselling.mixins import InstituteCounsellingMixin
+from apps.counselling.mixins import InstituteCounsellingMixin, ConsultancyCounsellingMixin
 from apps.institute.mixins import InstituteMixins, InstituteStaffMixins
 from apps.students.mixins import StudentMixin
 
@@ -60,7 +60,7 @@ class AssignCounsellingStudent(generics.UpdateWithMessageAPIView,InstituteCounse
         return self.get_counselling()
 
     def get_queryset(self,serializer):
-        return usecases.AssignCounselorUseCase(
+        return usecases.UpdateCounsellingUseCase(
             counselling=self.get_object(),
             serializer=serializer
         ).execute()
@@ -109,14 +109,31 @@ class CreateConsultancyCounselling(generics.CreateAPIView,StudentMixin):
             serializer=serializer
         ).execute()
 
-class ListConsultancyForStudentCounselling(generics.ListAPIView,StudentMixin): #Todo
+class ListConsultancyCounsellingForStudent(generics.ListAPIView,StudentMixin):
     """
     This api is use to list counseltancy counselling
     """
-    pass
+    serializer_class = serializers.ListStudentCounsellingOfConsultancySerializer
 
-class AddConsultancyNotes(generics.CreateAPIView): #todo
-    pass
+    def get_object(self):
+        return self.get_student()
+
+    def get_queryset(self):
+        return usecases.ListConsultancyCounsellingForStudentUseCase(
+            student=self.get_object()
+        ).execute()
+
+class AddConsultancyNotes(generics.UpdateAPIView,ConsultancyCounsellingMixin): #todo
+    serializer_class = serializers.UpdateConsultancyUser
+
+    def get_object(self):
+        return self.get_consultancy_staff()
+
+    def perform_update(self, serializer):
+        return usecases.UpdateCounsellingUseCase(
+            counselling=self.get_object(),
+            serializer=serializer
+        ).execute()
 
 class ListConsultancyCounselling(generics.ListAPIView,ConsultancyMixin): #todo
     pass

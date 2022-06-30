@@ -2,10 +2,9 @@ import os
 
 from apps.students.email import SendEmailToStudent
 from datetime import datetime
-from django.core.exceptions import ValidationError as DjangoValidationError
+
 from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
-from rest_framework.exceptions import ValidationError
+
 
 from apps.notification.mixins import NotificationMixin
 from apps.students.models import FavouriteInstitute, InstituteViewers, StudentAddress, StudentUser, StudentModel, CompleteProfileTracker

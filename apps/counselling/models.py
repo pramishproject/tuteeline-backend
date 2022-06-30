@@ -48,3 +48,5 @@ class ConsultancyCounselling(BaseModel):
     notes = models.TextField(default="", blank=True, null=True)
 
 
+# class TestJson(BaseModel):
+#     jsonData = models.JSONField()

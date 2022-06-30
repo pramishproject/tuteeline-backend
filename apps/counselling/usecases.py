@@ -64,6 +64,19 @@ class GetCounselling(BaseUseCase):
     def _factory(self):
         self._counselling = InstituteCounselling.objects.get(pk=self._counselling_id)
 
+
+class GetConsultancyCounselling(BaseUseCase):
+    def __init__(self,consultancy_counselling_id):
+        self._counselling_id = consultancy_counselling_id
+
+    def execute(self):
+        self._factory()
+        return self._counselling
+
+    def _factory(self):
+        self._counselling = InstituteCounselling.objects.get(pk=self._counselling_id)
+
+
 class ListStudentCounsellingUseCase(BaseUseCase):
     def __init__(self,student:StudentModel):
         self._student = student
@@ -88,7 +101,7 @@ class ListStudentCounsellingForInstituteUseCase(BaseUseCase):
         self._counselling =InstituteCounselling.objects.filter(institute=self._institute).prefetch_related("student","assign_to")
 
 
-class AssignCounselorUseCase(BaseUseCase):
+class UpdateCounsellingUseCase(BaseUseCase):
     def __init__(self,counselling,serializer):
         self._counselling = counselling
         self._data = serializer.validated_data
@@ -141,4 +154,17 @@ class CreateConsultancyCounsellingUseCase(BaseUseCase):
                 )
         else:
             raise TimeError
+
+
+
+class ListConsultancyCounsellingForStudentUseCase(BaseUseCase):
+    def __init__(self,student):
+        self._student = student
+
+    def execute(self):
+        self._factory()
+        return self._counselling
+
+    def _factory(self):
+        self._counselling = ConsultancyCounselling.objects.filter(student=self._student)
 

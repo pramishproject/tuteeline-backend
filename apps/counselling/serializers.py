@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from apps.consultancy.serializers import ListConsultancySerializer
 from apps.counselling import models
 from apps.institute.models import Institute, InstituteStaff
 from apps.students.models import StudentModel
@@ -130,4 +132,28 @@ class CreateConsultancyCounsellingSerializer(serializers.ModelSerializer):
             'education_level',
             'which_time',
             'physical_counselling',
+        )
+
+
+class ListStudentCounsellingOfConsultancySerializer(serializers.ModelSerializer):
+    consultancy = ListConsultancySerializer(read_only=True)
+    class Meta:
+        model = models.ConsultancyCounselling
+        fields = (
+            'id',
+            'consultancy',
+            'status',
+            'which_time',
+            'physical_counselling',
+            'education_level',
+            'status',
+            'notes',
+        )
+
+class UpdateConsultancyUser(serializers.ModelSerializer):
+    class Meta:
+        model = models.ConsultancyCounselling
+        fields = (
+            'status',
+            'notes',
         )

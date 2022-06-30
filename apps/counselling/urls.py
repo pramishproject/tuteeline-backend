@@ -38,6 +38,10 @@ urlpatterns =[
         views.CreateConsultancyCounselling.as_view(),
         name = "add-counseling"
     ),
-    # path()
+    path(
+        '<str:student_id>/consultancy/student/list',
+         views.ListConsultancyCounsellingForStudent.as_view(),
+         name = "list-counselling"
+    )
 
 ]
