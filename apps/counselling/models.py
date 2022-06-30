@@ -23,6 +23,7 @@ class InstituteCounselling(BaseModel):
     status = models.CharField(max_length=100,choices=COUNCELLING_STATUS,default="not_start")
     notes = models.TextField(default="",blank=True,null=True)
 
+
     @property
     def get_interested_course(self):
         return [i.course.course.name for i in InterestedCourse.objects.filter(counselling=self.pk)]

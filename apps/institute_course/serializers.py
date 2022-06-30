@@ -97,7 +97,7 @@ class ListInstituteCourseSerializer(InstituteCourseSerializer):
 
     course = CourseSerializer(read_only =True)
     faculty =FacultySerializer(read_only = True)
-    is_applied = serializers.SerializerMethodField()
+    is_applied = serializers.SerializerMethodField(method_name="get_is_applied",)
 
     def get_is_applied(self, obj):
         application = cache.get("application")
@@ -108,9 +108,9 @@ class ListInstituteCourseSerializer(InstituteCourseSerializer):
                 application = InstituteApply.objects.filter(institute=obj.institute,student=student_id). \
                     values("id", "course")
                 cache.set('application', application)
-            app = application.filter(course=course_id)
-            if len(app) > 0:
-                return True
+            app = application.filter(course=course_id).exists()
+            if app:
+                return app.id
         return False
 
     class Meta(InstituteCourseSerializer.Meta):

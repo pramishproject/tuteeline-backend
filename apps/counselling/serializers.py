@@ -121,6 +121,7 @@ class AddNotesSerializer(serializers.ModelSerializer):
             'notes',
         )
 
+# consultancy --------------
 class CreateConsultancyCounsellingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ConsultancyCounselling

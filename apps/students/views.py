@@ -206,3 +206,11 @@ class ListVisitorHistryView(generics.ListAPIView,StudentMixin):
         return usecases.GetStudentHistryUseCase(
             student=self.get_object(),
         ).execute()
+
+
+# portal
+class ListStudentsForPortal(generics.ListAPIView):
+    serializer_class = serilizers.StudentDetailSerializer
+
+    def get_queryset(self):
+        return StudentModel.objects.all()

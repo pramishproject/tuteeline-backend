@@ -21,6 +21,11 @@ from apps.utils.currency import RealTimeCurrencyConverter
 
 # Create your models here.
 
+COURSE_MODE = (
+    ('full_time','full_time'),
+    ('part_time','part_time'),
+    ('both','both'),
+)
 class Faculty(BaseModel):
     name = models.CharField(max_length=200)
     def __str__(self):
@@ -61,7 +66,9 @@ class InstituteCourse(BaseModel):
     fee_currency = models.CharField(choices=CURRENCY,max_length=20)
     qualification = models.CharField(choices=LEVEL_CHOICE,default="",max_length=100)
     #this all are form open and close field
+    # curriculum = models.TextField(default='')
 
+    mode = models.CharField(choices=COURSE_MODE,default="",max_length=100)
     reg_status = models.BooleanField(default=True)
     reg_open = models.DateField(
         _("Date"),

@@ -38,4 +38,7 @@ class InstituteLinkageList(generics.ListAPIView):
         return usecases.ListInstituteLinkageConsultancyUseCase().execute()
 
 
+class LinkageInstitute(generics.ListAPIView,ConsultancyMixin): #todo
+    pass
+
 

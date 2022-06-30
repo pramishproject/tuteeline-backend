@@ -8,7 +8,8 @@ from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import models
 from django.core.validators import validate_email
 
-from apps.institute.utils import past_date,upload_institute_staff_image_to,upload_institute_logo_to,upload_institute_cover_image_to
+from apps.institute.utils import past_date,upload_institute_staff_image_to,\
+    upload_institute_logo_to,upload_institute_cover_image_to,upload_brochure
 from apps.core import fields
 from apps.core.models import BaseModel
 from apps.core.validators import validate_image
@@ -57,6 +58,7 @@ class Institute(BaseModel):
     )
     about = models.TextField(null=True, blank=True)
     type = models.TextField(max_length=200,choices=TYPE_CHOICE,blank=True,null=True)
+
     def __str__(self):
         return self.name
     @property

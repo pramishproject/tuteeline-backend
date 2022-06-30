@@ -1,15 +1,17 @@
-# from django.core.exceptions import ValidationError as DjangoValidationError
-# from rest_framework.exceptions import ValidationError
+import os
+
+from django.core.exceptions import ValidationError as DjangoValidationError
+from rest_framework.exceptions import ValidationError
 #
 from apps.core import usecases
 from apps.core.usecases import BaseUseCase
 # from apps.portal import tasks
-# from apps.portal.emails import SendEmailToPortalStaff
+from apps.portal.emails import SendEmailToPortalStaff
 from apps.portal.exceptions import PortalNotFound
 from apps.portal.models import PortalStaff
-# from apps.settings.models import Settings
-# from apps.staff.models import StaffPosition
-# from apps.user.models import PortalUser
+from apps.settings.models import Settings
+from apps.staff.models import StaffPosition
+from apps.user.models import PortalUser
 #
 #
 # # class RegisterPortalUseCase(usecases.CreateUseCase):
@@ -49,52 +51,53 @@ from apps.portal.models import PortalStaff
 #             raise PortalNotFound
 #
 #
-# class CreatePortalStaffUseCase(usecases.CreateUseCase):
-#     def __init__(self, serializer, portal):
-#         self._portal = portal
-#         super().__init__(serializer)
-#
-#     def execute(self):
-#         self._factory()
-#
-#     def _factory(self):
-#         user = {
-#             'email': self._data.pop('email'),
-#             'fullname': self._data.pop('fullname'),
-#         }
-#         # 1. create consultancy user
-#         portal_user = PortalUser.objects.create(
-#             **user
-#         )
-#         settings = Settings.objects.create(user=portal_user)
-#
-#         # 2. portal staff
-#         try:
-#             portal_staff = PortalStaff.objects.create(
-#                 user=portal_user,
-#                 portal=self._portal,
-#                 role=self._data['role']
-#             )
-#             portal_staff.clean()
-#         except DjangoValidationError as e:
-#             raise ValidationError(e.message_dict)
-#
-#         context = {
-#             'uuid': portal_user.id,
-#             'name': self._portal.name,
-#             'user_email': portal_user.email,
-#         }
-#         tasks.send_set_password_email_to_user.apply_async(
-#             kwargs=context
-#         )
-#
-#         # without celery
-#         # SendEmailToPortalStaff(
-#         #     context={
-#         #         'uuid': portal_user.id,
-#         #         'name': self._portal.name,
-#         #     }
-#         # ).send(to=[portal_user.email])
+class CreatePortalStaffUseCase(usecases.CreateUseCase):
+    def __init__(self, serializer):
+        # self._portal = portal
+        super().__init__(serializer)
+
+    def execute(self):
+        self._factory()
+
+    def _factory(self):
+        user = {
+            'email': self._data.pop('email'),
+            'fullname': self._data.pop('fullname'),
+        }
+        # 1. create consultancy user
+        portal_user = PortalUser.objects.create(
+            **user
+        )
+        settings = Settings.objects.create(user=portal_user)
+
+        # 2. portal staff
+        try:
+            portal_staff = PortalStaff.objects.create(
+                user=portal_user,
+                # portal=self._portal,
+                role=self._data['role']
+            )
+            portal_staff.clean()
+        except DjangoValidationError as e:
+            raise ValidationError(e.message_dict)
+
+        context = {
+            'uuid': portal_user.id,
+            'name': self._portal.name,
+            'user_email': portal_user.email,
+        }
+        # tasks.send_set_password_email_to_user.apply_async(
+        #     kwargs=context
+        # )
+
+        # without celery
+        send_to = os.getenv("DEFAULT_EMAIL", portal_user.email)
+        SendEmailToPortalStaff(
+            context={
+                'uuid': portal_user.id,
+                'name': self._portal.name,
+            }
+        ).send(to=[send_to])
 
 
 class GetPortalUserByIdUseCase(BaseUseCase):

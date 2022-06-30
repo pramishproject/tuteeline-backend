@@ -1,3 +1,4 @@
+from apps.consultancy.mixins import ConsultancyMixin, ConsultancyStaffMixin
 from apps.core import generics
 from apps.counselling import serializers, usecases
 # Create your views here.
@@ -108,4 +109,18 @@ class CreateConsultancyCounselling(generics.CreateAPIView,StudentMixin):
             serializer=serializer
         ).execute()
 
+class ListConsultancyForStudentCounselling(generics.ListAPIView,StudentMixin): #Todo
+    """
+    This api is use to list counseltancy counselling
+    """
+    pass
+
+class AddConsultancyNotes(generics.CreateAPIView): #todo
+    pass
+
+class ListConsultancyCounselling(generics.ListAPIView,ConsultancyMixin): #todo
+    pass
+
+class ListAssignConsultancyStaffCounselling(generics.ListAPIView,ConsultancyStaffMixin): #todo
+    pass
 

@@ -200,9 +200,13 @@ class InstituteDetailSerilaizer(serializers.ModelSerializer):
         institute_id = obj.id
         student_id = self.context['request'].GET.get('student_id', None)
         if student_id != None:
-            fav = FavouriteInstitute.objects.filter(institute=institute_id,student=student_id).exists()
-            return fav
-        return False
+            try:
+                fav = FavouriteInstitute.objects.get(institute=institute_id,student=student_id)
+                return str(fav.id)
+            except FavouriteInstitute.DoesNotExist:
+                return ""
+        return ""
+
     class Meta:
         model = Institute
         fields = (

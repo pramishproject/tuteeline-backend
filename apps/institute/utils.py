@@ -28,7 +28,13 @@ def upload_institute_cover_image_to(instance, filename):
         new_filename
     )
 
+def upload_brochure(instance,filename):
+    ext = filename.split('.')[-1]
+    new_filename = "%s.%s" % (slugify(instance.name), ext)
 
+    return 'institute/cover_image/{}'.format(
+        new_filename
+    )
 
 def past_date(value):
     if value > date.today():
