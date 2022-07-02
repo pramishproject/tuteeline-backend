@@ -5,13 +5,14 @@ from datetime import datetime
 
 from django.utils import timezone
 
-
+from apps.user.models import StudentUser
 from apps.notification.mixins import NotificationMixin
 from apps.students.models import FavouriteInstitute, InstituteViewers, StudentAddress, StudentUser, StudentModel, CompleteProfileTracker
 from apps.core import usecases
 from apps.settings.models import Settings
 from apps.core.usecases import BaseUseCase
-from apps.students.exceptions import FavouriteInstituteNotFound, StudentAddressUnique, StudentModelNotFound
+from apps.students.exceptions import FavouriteInstituteNotFound, StudentAddressUnique, StudentModelNotFound, \
+    StudentUserNotFound
 
 
 class RegisterStudentUseCase(usecases.CreateUseCase, NotificationMixin):
@@ -67,6 +68,22 @@ class GetStudentUseCase(BaseUseCase):
 
         except StudentModel.DoesNotExist:
             raise StudentModelNotFound
+
+class GetStudentUserDataUseCase(BaseUseCase):
+    def __init__(self,user_id):
+        self._user_id = user_id
+
+    def execute(self):
+        self._factory()
+        return self._user
+
+    def _factory(self):
+        try:
+            self._user =StudentUser.objects.get(pk=self._user_id)
+
+        except StudentUser.DoesNotExist:
+            raise StudentUserNotFound
+
 
 class GetFavouriteByIdUseCase(BaseUseCase):
     def __init__(self,favourite_id):

@@ -111,6 +111,7 @@ class StudentAddressSerializer(serializers.ModelSerializer):
 
 class StudentDetailSerializer(StudentSerializer):
     # user = serializers.CharField()
+    # application_Status = serializers.DictField(source="application_status")
     address_relation = StudentAddressSerializer(many=True,read_only=True)
     email = serializers.CharField(source="get_email")
     application_tracker= CompleteProfileTrackerSerializer( read_only=True)

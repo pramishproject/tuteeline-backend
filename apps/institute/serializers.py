@@ -230,6 +230,7 @@ class InstituteDetailSerilaizer(serializers.ModelSerializer):
             'course_related',
             'social_media_data',
             'is_favourite',
+            'brochure',
         )
 
 

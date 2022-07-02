@@ -7,6 +7,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from apps.auth.jwt import serializers, usecases
 from apps.core import generics
 from apps.core.mixins import LoggingErrorsMixin, ResponseMixin
+from apps.students.mixins import StudentUserMixin
 from apps.user.mixins import ConsultancyUserMixin, PortalUserMixin,InstituteUserMixin
 
 
@@ -175,3 +176,19 @@ class ChangeConsultancyUserPasswordView(generics.CreateWithMessageAPIView, Consu
             consultancy_user=self.get_object()
         ).execute()
         
+
+class ChangeStudentPasswordView(generics.CreateAPIView,StudentUserMixin):
+    """
+    this endpoint is use to change student passwort
+    """
+    permission_classes = (AllowAny,)  # -> to be change
+    message = _("Password changed successfully")
+    serializer_class = serializers.ConsultancyUserChangePasswordSerializer
+    def get_object(self):
+        return self.get_student_user()
+
+    def perform_create(self, serializer):
+        return usecases.UpdatePassportUseCase(
+            serializer=serializer,
+            user=self.get_object()
+        ).execute()

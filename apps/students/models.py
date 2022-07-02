@@ -76,6 +76,10 @@ class StudentModel(BaseModel):
     def get_email(self):
         return self.user.email
 
+    @property
+    def application_status(self):
+        # get_student_application_status(self.pk)
+        return {}
 
 
 errors = {

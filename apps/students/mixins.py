@@ -1,10 +1,14 @@
-from apps.students.usecases import GetFavouriteByIdUseCase, GetStudentUseCase,GetAddressUseCase
+from apps.students.usecases import GetFavouriteByIdUseCase, GetStudentUseCase, GetAddressUseCase, GetStudentUserDataUseCase
 
 
 class StudentMixin:
     def get_student(self):
 
         return GetStudentUseCase(student_id=self.kwargs.get('student_id')).execute()
+
+class StudentUserMixin:
+    def get_student_user(self):
+        return GetStudentUserDataUseCase(user_id=self.kwargs.get('user_id')).execute()
 
 class AddressMixin:
     def get_address(self):

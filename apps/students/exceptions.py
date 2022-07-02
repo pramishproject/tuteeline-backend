@@ -7,6 +7,8 @@ from django.db import IntegrityError
 class StudentModelNotFound(NotFound):
     default_detail = _('Student Not Found for following Id')
 
+class StudentUserNotFound(NotFound):
+    default_detail = _("User not found following id")
 
 class StudentAddressUnique(IntegrityError):
     default_detail = _('address already exist')

@@ -56,6 +56,11 @@ class Institute(BaseModel):
         default='institute/cover_image/default_cover_image.png',
         validators=[validate_image]
     )
+    brochure = models.FileField(
+        null=True,
+        blank=True,
+        upload_to=upload_brochure,
+    )
     about = models.TextField(null=True, blank=True)
     type = models.TextField(max_length=200,choices=TYPE_CHOICE,blank=True,null=True)
 

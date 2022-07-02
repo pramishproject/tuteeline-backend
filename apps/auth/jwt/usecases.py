@@ -132,6 +132,19 @@ class ChangeConsultancyUserPasswordUseCase(BaseUseCase):
         self._consultancy_user.save()
 
 
+class UpdatePassportUseCase(BaseUseCase):
+    def __init__(self, serializer, user):
+        self._serializer = serializer
+        self._data = serializer.validated_data
+        self._user = user
+
+    def execute(self):
+        self._factory()
+
+    def _factory(self):
+        password = self._data.pop('confirm_new_password')
+        self._user.set_password(password)
+        self._user.save()
 
 
 class CreatePasswordForConsultancyUserUseCase(usecases.CreateUseCase):

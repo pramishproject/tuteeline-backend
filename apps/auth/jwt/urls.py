@@ -71,6 +71,11 @@ urlpatterns = [
         views.CreatePasswordForPortalStaffUserView.as_view(),
         name='create-portal-user-staff-password'
     ),
+    path(
+        'student/<str:user_id>/change-password',
+        views.ChangeStudentPasswordView.as_view(),
+        name="change-student-passport"
+    )
 
 ]
 # urlpatterns = format_suffix_patterns (urlpatterns)
