@@ -110,6 +110,7 @@ class ListInstituteCourseSerializer(InstituteCourseSerializer):
                 cache.set('application', application)
             app = application.filter(course=course_id).exists()
             if app:
+                print(application.filter(course=course_id))
                 return True
         return False
 

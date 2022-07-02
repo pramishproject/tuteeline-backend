@@ -22,6 +22,7 @@ class InstituteCounselling(BaseModel):
     assign_to = models.ForeignKey(to=InstituteStaff,on_delete=models.DO_NOTHING,blank=True,null=True)
     status = models.CharField(max_length=100,choices=COUNCELLING_STATUS,default="not_start")
     notes = models.TextField(default="",blank=True,null=True)
+    comment = models.JSONField(blank=True,null=True)
 
 
     @property
@@ -48,5 +49,5 @@ class ConsultancyCounselling(BaseModel):
     notes = models.TextField(default="", blank=True, null=True)
 
 
-# class TestJson(BaseModel):
-#     jsonData = models.JSONField()
+class TestJson(BaseModel):
+    jsonData = models.JSONField()

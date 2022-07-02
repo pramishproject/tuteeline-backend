@@ -2,9 +2,10 @@ from rest_framework import serializers
 
 from apps.consultancy.serializers import ListConsultancySerializer
 from apps.counselling import models
+from apps.counselling.models import TestJson
 from apps.institute.models import Institute, InstituteStaff
 from apps.students.models import StudentModel
-
+import uuid
 
 class CreateInstituteCounsellingSerializer(serializers.ModelSerializer):
     interested_courses = serializers.ListSerializer(child=serializers.UUIDField(),required=False)
@@ -157,3 +158,33 @@ class UpdateConsultancyUser(serializers.ModelSerializer):
             'status',
             'notes',
         )
+
+class ConfigVarsSerializer(serializers.Serializer):
+    id = serializers.UUIDField(default=uuid.uuid4)
+    name = serializers.CharField(required=True)
+    # user_id = serializers.IntegerField(required=True)
+
+
+class ConfigFieldsSerializer(serializers.Serializer):
+    data_list = serializers.ListField(child=ConfigVarsSerializer(), required=True)
+
+class TestJsonSerializer(serializers.ModelSerializer):
+    jsonData = serializers.JSONField(required=False)
+    class Meta:
+        model = TestJson
+        fields = ('jsonData',)
+
+    def validate_jsonData(self, value):
+        serializer = ConfigFieldsSerializer(data=value)
+        serializer.is_valid(raise_exception=True)
+        return value
+    # type
+    # id
+    # user_id
+    # name
+    # image_url
+    # time stamp
+    # message
+
+
+

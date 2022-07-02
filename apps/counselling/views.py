@@ -3,6 +3,7 @@ from apps.core import generics
 from apps.counselling import serializers, usecases
 # Create your views here.
 from apps.counselling.mixins import InstituteCounsellingMixin, ConsultancyCounsellingMixin
+from apps.counselling.models import TestJson
 from apps.institute.mixins import InstituteMixins, InstituteStaffMixins
 from apps.students.mixins import StudentMixin
 
@@ -141,3 +142,11 @@ class ListConsultancyCounselling(generics.ListAPIView,ConsultancyMixin): #todo
 class ListAssignConsultancyStaffCounselling(generics.ListAPIView,ConsultancyStaffMixin): #todo
     pass
 
+
+class TestJsonView(generics.CreateAPIView):
+    serializer_class = serializers.TestJsonSerializer
+    def perform_create(self, serializer):
+        self._serializer = serializer.validated_data
+        print("alldate",TestJson.objects.all())
+        print("data***********",self._serializer)
+        TestJson.objects.create(**self._serializer)

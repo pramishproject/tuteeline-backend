@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from apps.review.models import InstituteReview, ConsultancyReview
+from apps.students.models import StudentModel
 
 
 class CreateInstituteReviewSerializer(serializers.ModelSerializer):
@@ -19,9 +20,19 @@ class UpdateInstituteReviewSerializer(serializers.ModelSerializer):
             "review",
             "rating",
         )
+class GetStudentDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentModel
+        fields = (
+            'id',
+            'fullname',
+            'image',
+            'gender',
+        )
 
 class ListInstituteReviewSerializer(serializers.ModelSerializer):
     is_review = serializers.SerializerMethodField()
+    student = GetStudentDataSerializer(many=False)
     def get_is_review(self, obj):
         student_id = self.context['request'].GET.get('student_id', None)
         if student_id != None:
