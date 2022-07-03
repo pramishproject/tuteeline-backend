@@ -430,3 +430,19 @@ class InstituteStaffUpdate(BaseUseCase):
         self.user.fullname = fullname
         self.user.updated_at = datetime.now()
         self.user.save()
+
+class CustomInstituteUpdate(BaseUseCase):
+    def __init__(self, instance, serializer):
+        self._instance = instance
+        self._data = serializer.validated_data
+
+    def execute(self):
+        self._factory()
+
+    def _factory(self):
+        for key in self._data.keys():
+            setattr(self._instance, key, self._data.get(key))
+
+        self._instance.updated_at = datetime.now()
+        self._instance.save()
+

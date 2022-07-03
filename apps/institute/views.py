@@ -88,6 +88,17 @@ class UpdateInstituteStaffDetail(generics.UpdateWithMessageAPIView,InstituteStaf
             serializer=serializer
         ).execute()
 
+class UpdateInstituteStaffRoleView(generics.UpdateWithMessageAPIView,InstituteStaffMixins):
+    serializer_class = serializers.UpdateInstituteStaffRoleSerializer
+    def get_object(self):
+        return self.get_institute_staff()
+
+    def perform_update(self, serializer):
+        return usecase.CustomInstituteUpdate(
+            instance=self.get_object(),
+            serializer=serializer
+        ).execute()
+
 class UpdateInstituteView(generics.UpdateWithMessageAPIView,InstituteMixins):
     """
     This endpoint is use to update institute
@@ -344,3 +355,14 @@ class GetFacilityView(generics.ListAPIView,InstituteMixins):
 class InstituteDetailView(generics.RetrieveAPIView):#todo institute detail view
     pass
 
+class VerifiedInstituteView(generics.UpdateWithMessageAPIView,InstituteMixins):
+    serializer_class = serializers.VerifyInstituteSerializer
+
+    def get_object(self):
+        return self.get_institute()
+
+    def perform_update(self, serializer):
+        return usecase.CustomInstituteUpdate(
+            instance=self.get_object(),
+            serializer=serializer,
+        ).execute()

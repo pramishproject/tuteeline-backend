@@ -89,6 +89,14 @@ class UpdateInstituteStaffSerializer(serializers.ModelSerializer):
             'address',
         )
 
+class UpdateInstituteStaffRoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InstituteStaff
+        fields = (
+            'role',
+        )
+
+
 class CreateInstituteStaffSerializer(InstituteStaffSerializer):
     email = serializers.EmailField()
     fullname = serializers.CharField()
@@ -143,7 +151,12 @@ class UpdateInstituteSerializer(InstituteSerializer):
                 )
             return value
 
-
+class VerifyInstituteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Institute
+        fields = (
+            'verification_status',
+        )
 class UpdateInstituteLogoSerializer(serializers.ModelSerializer):
     class Meta:
         model =Institute

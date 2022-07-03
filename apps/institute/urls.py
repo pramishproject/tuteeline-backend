@@ -119,11 +119,17 @@ urlpatterns = [
         'staff/<institute_staff_id>/update',
         views.UpdateInstituteStaffDetail.as_view(),
         name="update-staff"
+    ),
+    path(
+        '<institute_id>/verified',
+        views.VerifiedInstituteView.as_view(),
+        name="verified-institute"
+    ),
+    path(
+        '<staff_id>/staff/role/update',
+        views.UpdateInstituteStaffRoleView.as_view(),
+        name="update-institute-staff-role"
     )
-    # path( #todo
-    #     '<staff_id>/staff/role/update',
-    #
-    # )
 
 
 ]

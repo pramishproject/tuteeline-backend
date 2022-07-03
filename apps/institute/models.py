@@ -63,7 +63,7 @@ class Institute(BaseModel):
     )
     about = models.TextField(null=True, blank=True)
     type = models.TextField(max_length=200,choices=TYPE_CHOICE,blank=True,null=True)
-    # verification_status = models.BooleanField(default=False)
+    verification_status = models.BooleanField(default=False)
     def __str__(self):
         return self.name
     @property
