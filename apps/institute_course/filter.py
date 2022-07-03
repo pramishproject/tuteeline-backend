@@ -1,6 +1,6 @@
 import django_filters
 
-from apps.institute_course.models import InstituteApply
+from apps.institute_course.models import InstituteApply, InstituteCourse
 
 
 class ApplicationFilter(django_filters.FilterSet):
@@ -22,3 +22,11 @@ class ApplicationAggregateFilter(django_filters.FilterSet):
     class Meta:
         model = InstituteApply
         fields = ["min_date", "max_date"]
+
+
+class FilterInstituteCourse(django_filters.FilterSet):
+    course = django_filters.CharFilter(field_name='course__name')
+    faculty = django_filters.CharFilter(field_name="faculty__name")
+    class Meta:
+        model = InstituteCourse
+        fields = ["course","faculty"]

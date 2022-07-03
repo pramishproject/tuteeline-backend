@@ -1,7 +1,7 @@
 from drf_yasg.utils import swagger_auto_schema
 
 from apps.consultancy.mixins import ConsultancyMixin
-from apps.institute_course.filter import ApplicationFilter, ApplicationAggregateFilter
+from apps.institute_course.filter import ApplicationFilter, ApplicationAggregateFilter, FilterInstituteCourse
 from apps.institute_course.mixins import ApplyMixin, CourseMixin, FacultyMixin
 from apps.institute.mixins import InstituteMixins
 
@@ -25,7 +25,7 @@ from apps.institute_course.serializers import (
     ListInstituteCourseSerializer,
     StudentApplySerializer, CompareInstituteSerializer, StudentMyApplicationListSerializer,
     GetMyApplicationDocumentSerializer, GetMyApplicationDetailForInstituteSerializer, InstituteActionSerializer,
-    ConsultancyActionSerializer, InstituteApplicationStatus)
+    ConsultancyActionSerializer, InstituteApplicationStatus, InstituteApplicationCountSerializer)
 
 from apps.institute_course import usecases
 # from apps.institute_course.mixins import InstituteCourseMixin
@@ -57,6 +57,9 @@ class ListInstituteCourse(generics.ListAPIView,InstituteMixins):
     permission_classes = (AllowAny,)
     no_content_error_message = _("No institute  course at the moment.")
     queryset = ''
+    filter_class = FilterInstituteCourse
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ["course__name","faculty__name"]
     def get_object(self):
         return self.get_institute()
 
@@ -301,6 +304,20 @@ class ApplicantDashboard(generics.ListAPIView,InstituteMixins):
         return usecases.ApplicationDashboardUsecase(
             institute=self.get_object()
         ).execute()
+
+class CountApplicationStatus(generics.ListAPIView,InstituteMixins):
+    """
+    count student application
+    """
+    serializer_class = InstituteApplicationCountSerializer
+    def get_object(self):
+        return self.get_institute()
+
+    def get_queryset(self):
+        return usecases.CountApplicationUseCase(
+            institute=self.get_object()
+        ).execute()
+
 
 class ListInstituteActionHistoryView(generics.ListAPIView,ApplyMixin):
     """

@@ -93,7 +93,11 @@ urlpatterns = [
         views.ApplicantDashboard.as_view(),
         name = 'applicant-count'
     ),
-
+    path(
+        '<institute_id>/application/count',
+        views.CountApplicationStatus.as_view(),
+        name="count-application"
+    ),
     path(
         '<institute_course_id>/course/compare',
         views.CompareInstituteView.as_view(),

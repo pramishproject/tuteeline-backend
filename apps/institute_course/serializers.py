@@ -93,6 +93,11 @@ class InstituteApplicationStatus(serializers.ModelSerializer):
             'staff_detail',
             )
 
+class InstituteApplicationCountSerializer(serializers.Serializer):
+    action = serializers.CharField()
+    action_count = serializers.IntegerField()
+
+
 class ListInstituteCourseSerializer(InstituteCourseSerializer):
 
     course = CourseSerializer(read_only =True)

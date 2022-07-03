@@ -428,7 +428,19 @@ class ApplicationDashboardUsecase(BaseUseCase):
             ).annotate(date=TruncDay('created_at')).values("date","action").\
             annotate(action_count=Count('action'))
 
+class CountApplicationUseCase(BaseUseCase):
+    def __init__(self,institute):
+        self._institute = institute
 
+    def execute(self):
+        self._factory()
+        return self._count
+
+    def _factory(self):
+        self._count = InstituteApply.objects.filter(
+            institute=self._institute
+        ).values("action").annotate(action_count=Count('action'))
+        print("******",type(self._count))
 
 
 
