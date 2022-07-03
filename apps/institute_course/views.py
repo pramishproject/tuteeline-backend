@@ -1,7 +1,7 @@
 from drf_yasg.utils import swagger_auto_schema
 
 from apps.consultancy.mixins import ConsultancyMixin
-from apps.institute_course.filter import ApplicationFilter
+from apps.institute_course.filter import ApplicationFilter, ApplicationAggregateFilter
 from apps.institute_course.mixins import ApplyMixin, CourseMixin, FacultyMixin
 from apps.institute.mixins import InstituteMixins
 
@@ -271,7 +271,7 @@ class ListStudentApplicationForCounsultancy(generics.ListAPIView,ConsultancyMixi
         ).execute()
 
 
-class CancleStudentApplication(generics.UpdateWithMessageAPIView,ApplyMixin):
+class CancelStudentApplication(generics.UpdateWithMessageAPIView,ApplyMixin):
     """
     This endpoint is used to cancel application
     """
@@ -292,6 +292,8 @@ class ApplicantDashboard(generics.ListAPIView,InstituteMixins):
     student applicant dashboard
     """
     serializer_class = ApplicationSerializerDashboard
+    filter_class = ApplicationAggregateFilter
+    filter_backends = [DjangoFilterBackend]
     def get_object(self):
         return self.get_institute()
 

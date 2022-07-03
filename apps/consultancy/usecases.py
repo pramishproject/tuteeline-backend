@@ -229,3 +229,18 @@ class ActivateConsultancyUserUseCase(BaseUseCase):
             raise ValidationError({
                 'is_active': _("User is already activated.")
             })
+
+class UpdateConsultancyUseCase(BaseUseCase):
+    def __init__(self,instance,serializer):
+        self._instance = instance
+        self._serializer = serializer
+        self._data = self._serializer.validated_data
+
+    def execute(self):
+        self._factory()
+
+    def _factory(self):
+        for data in self._data.keys():
+            setattr(self._instance, data, self._data[data])
+        self._instance.updated_at = timezone.now()
+        self._instance.save()

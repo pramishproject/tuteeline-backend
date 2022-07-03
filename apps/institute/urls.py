@@ -105,6 +105,21 @@ urlpatterns = [
         views.ListInstituteStaffView.as_view(),
         name = 'list-staff'
     ),
+    path(
+        '<institute_id>/broucher/update',
+        views.UpdateBrochureView.as_view(),
+        name='update-broucher'
+    ),
+    path(
+        'staff/<institute_staff_id>/detail',
+        views.GetInstituteStaffDetail.as_view(),
+        name="staff-detail"
+    ),
+    path(
+        'staff/<institute_staff_id>/update',
+        views.UpdateInstituteStaffDetail.as_view(),
+        name="update-staff"
+    )
     # path( #todo
     #     '<staff_id>/staff/role/update',
     #

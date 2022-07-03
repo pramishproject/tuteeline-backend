@@ -393,3 +393,40 @@ class GetFacilityUseCase(BaseUseCase):
 
     def _factory(self):
         self._facility = AddInstituteFacility.objects.filter(institute = self._institute)
+
+
+class GetInstituteStaffDetailUseCase(BaseUseCase):
+    def __init__(self,staff):
+        self._staff = staff
+
+    def execute(self):
+        self._factory()
+        return self._staff_detail
+    def _factory(self):
+        try:
+            self._staff_detail = InstituteStaff.objects.get(pk=self._staff)
+
+        except InstituteStaff.DoesNotExist:
+            raise StaffNotFound
+
+
+class InstituteStaffUpdate(BaseUseCase):
+    def __init__(self, instance, serializer):
+        self._instance = instance
+        self._data = serializer.validated_data
+
+    def execute(self):
+        self._factory()
+
+    def _factory(self):
+        fullname = self._data.pop('fullname')
+        for key in self._data.keys():
+            setattr(self._instance, key, self._data.get(key))
+
+        self._instance.updated_at = datetime.now()
+        self._instance.save()
+
+        self.user = self._instance.user
+        self.user.fullname = fullname
+        self.user.updated_at = datetime.now()
+        self.user.save()

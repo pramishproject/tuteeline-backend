@@ -103,6 +103,7 @@ class ConsultancyDetailSerializer(serializers.ModelSerializer):
             "consultancy_social_media",
             "linkage_consultancy",
             "consultancy_course",
+            'brochure',
         )
 
 class ConsultancyStaffSerializer(serializers.ModelSerializer):
@@ -210,3 +211,11 @@ class DeactivateConsultancyUserSeralizer(serializers.Serializer):
 
 class ActivateConsultancyUserSeralizer(DeactivateConsultancyUserSeralizer):
     pass
+
+
+class UpdateConsultancyBrochureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Consultancy
+        fields = (
+            'brochure',
+        )

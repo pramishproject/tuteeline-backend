@@ -52,6 +52,12 @@ urlpatterns = [
         '<consultancy_id>/consultancy/detail',
         views.ConsultancyDetail.as_view(),
         name = ""
-    )
+    ),
+    path(
+        '<consultancy_id>/broucher/update',
+        views.UpdateConsultancyBrochure.as_view(),
+        name="broucher-update"
+    ),
+
 
 ]

@@ -99,6 +99,19 @@ class UpdateConsultancyStaffView(generics.UpdateWithMessageAPIView, ConsultancyS
             consultancy_staff=self.get_object()
         ).execute()
 
+class UpdateConsultancyBrochure(generics.UpdateWithMessageAPIView,ConsultancyMixin):
+    """update consultancy broucher"""
+    serializer_class = serializers.UpdateConsultancyBrochureSerializer
+    message =_("update successfully")
+
+    def get_object(self):
+        return self.get_consultancy()
+
+    def perform_update(self, serializer):
+        return usecases.UpdateConsultancyUseCase(
+            instance=self.get_object(),
+            serializer=serializer,
+        ).execute()
 
 class UpdateConsultancyStaffPhotoView(generics.UpdateWithMessageAPIView, ConsultancyStaffMixin):
     """

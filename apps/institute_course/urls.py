@@ -65,7 +65,7 @@ urlpatterns = [
     ),
     path(
         '<apply_id>/application/cancel',
-        views.CancleStudentApplication.as_view(),
+        views.CancelStudentApplication.as_view(),
         name='cancel-application'
     ),
     path(

@@ -79,6 +79,16 @@ class InstituteStaffSerializer(serializers.ModelSerializer):
         model = InstituteStaff
         fields = '__all__'
 
+class UpdateInstituteStaffSerializer(serializers.ModelSerializer):
+    fullname = serializers.CharField()
+    class Meta:
+        model = InstituteStaff
+        fields = (
+            'fullname',
+            'contact',
+            'address',
+        )
+
 class CreateInstituteStaffSerializer(InstituteStaffSerializer):
     email = serializers.EmailField()
     fullname = serializers.CharField()
@@ -163,6 +173,8 @@ class ListInstituteSerializer(InstituteSerializer):
             'rating',
             'logo',
             'cover_image',
+            'latitude',
+            'longitude',
         )
 
 
@@ -314,4 +326,11 @@ class FacilityListSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'icon',
+        )
+
+class UpdateBrochureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Institute
+        fields = (
+            'brochure',
         )

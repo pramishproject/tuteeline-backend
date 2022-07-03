@@ -63,7 +63,7 @@ class Institute(BaseModel):
     )
     about = models.TextField(null=True, blank=True)
     type = models.TextField(max_length=200,choices=TYPE_CHOICE,blank=True,null=True)
-
+    # verification_status = models.BooleanField(default=False)
     def __str__(self):
         return self.name
     @property
@@ -74,6 +74,8 @@ class Institute(BaseModel):
 class InstituteStaff(BaseModel):
     user = models.OneToOneField(InstituteUser, on_delete=models.CASCADE)
     institute = models.ForeignKey(Institute,on_delete=models.CASCADE)
+    contact = models.CharField(null=True,blank=True,max_length=100)
+    address = models.CharField(null=True,blank=True,max_length=200)
     role = models.ForeignKey(StaffPosition, on_delete=models.CASCADE)
     profile_photo= models.ImageField(
         upload_to=upload_institute_staff_image_to,

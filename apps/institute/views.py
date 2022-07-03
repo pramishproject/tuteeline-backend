@@ -3,7 +3,8 @@ from django.http.response import JsonResponse
 from apps.institute.filter import  InstituteFilter
 from apps.institute.models import Institute
 from apps import institute
-from apps.institute.mixins import InstituteMixins, ScholorshipMixins, SocialMediaMixins, FacilityMixin
+from apps.institute.mixins import InstituteMixins, ScholorshipMixins, SocialMediaMixins, FacilityMixin, \
+    InstituteStaffMixins
 from apps.studentIdentity import usecases
 from django.utils.translation import gettext_lazy as _
 from rest_framework.parsers import MultiPartParser, FileUploadParser
@@ -63,6 +64,29 @@ class ListInstituteStaffView(generics.ListAPIView,InstituteMixins):
             institute=self.get_object(),
         ).execute()
 
+class GetInstituteStaffDetail(generics.ListAPIView,InstituteStaffMixins):
+    """staff detail"""
+    serializer_class = serializers.InstituteStaffSerializer
+
+    def get_object(self):
+        return self.get_institute_staff()
+
+    def get_queryset(self):
+        return usecase.GetInstituteStaffDetailUseCase(
+            staff=self.get_object()
+        ).execute()
+
+class UpdateInstituteStaffDetail(generics.UpdateWithMessageAPIView,InstituteStaffMixins):
+    """Update staff"""
+    serializer_class = serializers.UpdateInstituteStaffSerializer
+    def get_object(self):
+        return self.get_institute_staff()
+
+    def perform_update(self, serializer):
+        return usecase.InstituteStaffUpdate(
+            instance=self.get_object(),
+            serializer=serializer
+        ).execute()
 
 class UpdateInstituteView(generics.UpdateWithMessageAPIView,InstituteMixins):
     """
@@ -127,7 +151,20 @@ class ListInstituteView(generics.ListAPIView):
     def get_queryset(self):
         return usecase.ListInstituteUseCase().execute()
 
+class UpdateBrochureView(generics.UpdateWithMessageAPIView,InstituteMixins):
+    """
+    this endpoint is use to update institute broucher
+    """
+    serializer_class = serializers.UpdateBrochureSerializer
 
+    def get_object(self):
+        return self.get_institute()
+
+    def perform_update(self, serializer):
+        return usecase.UpdateInstituteUseCase(
+            institute=self.get_institute(),
+            serializer=serializer,
+        ).execute()
 
 class DetailInstituteView(generics.RetrieveAPIView,Institute,InstituteMixins):
     """

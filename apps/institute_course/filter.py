@@ -15,3 +15,10 @@ class ApplicationFilter(django_filters.FilterSet):
     class Meta:
         model = InstituteApply
         fields = ["status","course"]
+
+class ApplicationAggregateFilter(django_filters.FilterSet):
+    min_date = django_filters.DateFilter(field_name="created_at", lookup_expr=('gt'))
+    max_date = django_filters.DateFilter(field_name="created_at", lookup_expr=('lt'))
+    class Meta:
+        model = InstituteApply
+        fields = ["min_date", "max_date"]

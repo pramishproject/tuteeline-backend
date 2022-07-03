@@ -9,6 +9,7 @@ from apps.consultancy.utils import upload_consultancy_logo_to, upload_consultanc
 from apps.core import fields
 from apps.core.models import BaseModel
 from apps.core.validators import validate_image
+from apps.institute.utils import upload_brochure
 from apps.staff.models import StaffPosition
 from apps.user.models import ConsultancyUser
 
@@ -37,6 +38,11 @@ class Consultancy(BaseModel):
     about = models.TextField(null=True, blank=True)
     rating = models.FloatField(
         validators=[MinValueValidator(0.0), MaxValueValidator(5.0)], default=0.0
+    )
+    brochure = models.FileField(
+        null=True,
+        blank=True,
+        upload_to=upload_brochure,
     )
     def __str__(self):
         return self.name

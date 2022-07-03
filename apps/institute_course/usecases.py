@@ -425,9 +425,9 @@ class ApplicationDashboardUsecase(BaseUseCase):
     def _factory(self):
         self.applicant=InstituteApply.objects.filter(
             institute=self._institute,
-            # created_at__range=["2021-12-01", "2022-01-31"]
             ).annotate(date=TruncDay('created_at')).values("date","action").\
             annotate(action_count=Count('action'))
+
 
 
 
