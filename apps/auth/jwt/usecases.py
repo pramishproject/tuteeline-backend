@@ -45,19 +45,19 @@ class UserLoginWithOTPUseCase(CreateUseCase, OTPMixin):
             #     interval=1800
             # )
             # print("code",code)
-            if setting.two_fa:
-                code = self._generate_totp(
-                    user=self._user,
-                    purpose='2FA',
-                    interval=180
-                )
-                send_to = os.getenv("DEFAULT_EMAIL", self._user.email)
-                EmailVerificationEmail(
-                    context={
-                        'code': code,
-                        'uuid': self._user.id
-                    }
-                ).send(to=[send_to])
+            # if setting.two_fa:
+            code = self._generate_totp(
+                user=self._user,
+                purpose='2FA',
+                interval=180
+            )
+            send_to = os.getenv("DEFAULT_EMAIL", self._user.email)
+            EmailVerificationEmail(
+                context={
+                    'code': code,
+                    'uuid': self._user.id
+                }
+            ).send(to=[send_to])
 
 
         else:

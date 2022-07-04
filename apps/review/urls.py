@@ -24,6 +24,11 @@ urlpatterns = [
         name = "institute-aggregate-review"
     ),
     path(
+        '<consultancy_id>/consultancy/aggregate',
+        views.GetConsultancyAggregateReviewView.as_view(),
+        name="consultancy-aggregate"
+    ),
+    path(
         '<student_id>/consultancy/add',
         views.CreateConsultancyReviewView.as_view(),
         name="consultancy-review-add"

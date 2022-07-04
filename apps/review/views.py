@@ -79,6 +79,14 @@ class CreateConsultancyReviewView(generics.CreateAPIView,StudentMixin):
             serializer =serializer
         ).execute()
 
+class GetConsultancyAggregateReviewView(generics.ListAPIView,ConsultancyMixin):
+    serializer_class = InstituteAggregateReviewSerializer
+    def get_object(self):
+        return self.get_consultancy()
+
+    def get_queryset(self):
+        return usecases.GetAggregateConsultancyReviewUseCase(consultancy=self.get_object()).execute()
+
 class ListConsultancyReview(generics.ListAPIView,ConsultancyMixin):
     serializer_class = ListConsultancyReviewSerializer
 

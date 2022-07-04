@@ -48,10 +48,11 @@ class ConsultancyUserLoginView(generics.CreateAPIView, ResponseMixin):
         200: serializers.UserIdResponseSerializer()
     })
     def post(self, request, *args, **kwargs):
-
+        print("consultancy",request.data,"args",*args,"kwargs",**kwargs)
         return self.create(request, *args, **kwargs)
 
     def response(self, serializer, result, status_code):
+        print("reasult",result,serializer)
         serializer = self.get_response_serializer(result)
         return Response(serializer.data)
 

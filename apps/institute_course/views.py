@@ -8,7 +8,7 @@ from apps.institute.mixins import InstituteMixins
 from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from django.core.cache import cache
 
@@ -54,9 +54,11 @@ class ListInstituteCourse(generics.ListAPIView,InstituteMixins):
     put institute id in institute_id field
     """
     serializer_class = ListInstituteCourseSerializer
-    permission_classes = (AllowAny,)
+    # permission_classes = (AllowAny,)
+
     no_content_error_message = _("No institute  course at the moment.")
     queryset = ''
+
     filter_class = FilterInstituteCourse
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ["course__name","faculty__name"]

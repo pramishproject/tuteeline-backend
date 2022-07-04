@@ -9,7 +9,7 @@ urlpatterns = [
     #     name='register-portal'
     # ),
     path(
-        '<portal_id>/add-staff',
+        'add-staff',
         views.CreatePortalStaffView.as_view(),
         name='create-portal-staff'
     ),

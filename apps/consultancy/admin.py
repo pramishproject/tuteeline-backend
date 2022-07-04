@@ -15,6 +15,7 @@ class ConsultancyAdmin(BaseModelAdmin):
 class ConsultancyStaffAdmin(BaseModelAdmin):
     list_filter = BaseModelAdmin.list_filter+(
         'consultancy',
+        'user',
     )
 
 @admin.register(models.ConsultancySocialMediaLink)

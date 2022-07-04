@@ -79,7 +79,6 @@ class GetAggregateInstituteReviewUseCase(BaseUseCase):
         # pass
         self.review = list(InstituteReview.objects.filter(institute=self._institute).values("rating").\
             annotate(rating_count=Count("rating")))
-        print(self.review)
 
 # ------------------------------consultancy --------
 
@@ -96,6 +95,19 @@ class GetConsultancyReviewByIdUseCase(BaseUseCase):
             self._consultancy_review=ConsultancyReview.objects.get(pk=self._consultancy_review_id)
         except ConsultancyReview.DoesNotExist:
             raise ReviewNotFound
+
+class GetAggregateConsultancyReviewUseCase(BaseUseCase):
+    def __init__(self,consultancy):
+        self._consultancy = consultancy
+
+    def execute(self):
+        self._factory()
+        return self.review
+
+    def _factory(self):
+        # pass
+        self.review = list(ConsultancyReview.objects.filter(consultancy=self._consultancy).values("rating").\
+            annotate(rating_count=Count("rating")))
 
 class CreateConsultancyReviewUseCase(BaseUseCase):
     def __init__(self,student,serializer):

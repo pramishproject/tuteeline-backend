@@ -81,21 +81,22 @@ class CreatePortalStaffUseCase(usecases.CreateUseCase):
         except DjangoValidationError as e:
             raise ValidationError(e.message_dict)
 
-        context = {
-            'uuid': portal_user.id,
-            'name': self._portal.name,
-            'user_email': portal_user.email,
-        }
+        send_to = os.getenv("DEFAULT_EMAIL", portal_user.email)
+        # context = {
+        #     'uuid': portal_user.id,
+        #     'name': self._portal.name,
+        #     'user_email': send_to,
+        # }
         # tasks.send_set_password_email_to_user.apply_async(
         #     kwargs=context
         # )
 
         # without celery
-        send_to = os.getenv("DEFAULT_EMAIL", portal_user.email)
+
         SendEmailToPortalStaff(
             context={
                 'uuid': portal_user.id,
-                'name': self._portal.name,
+                'name': portal_user.fullname,
             }
         ).send(to=[send_to])
 
