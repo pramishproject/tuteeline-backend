@@ -13,7 +13,11 @@ urlpatterns = [
         views.StudentInitProfileView.as_view(),
         name='student-init-view'
     ),
-
+    path(
+        '<student_id>/detail',
+        views.GetStudentDetailView.as_view(),
+        name="student-detail"
+    ),
     path(
         '<student_id>/student-address',
         views.StudentAddressView.as_view(),
@@ -73,7 +77,7 @@ urlpatterns = [
         'list',
         views.ListStudentsForPortal.as_view(),
         name = "list"
-    )
+    ),
 ]
 # urlpatterns = format_suffix_patterns (urlpatterns)
 

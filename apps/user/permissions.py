@@ -8,7 +8,6 @@ class IsNormalUser(BasePermission):
         return bool(user.is_authenticated and not user.is_staff)
 
     def has_object_permission(self, request, view, obj):
-        print("*************obj",obj)
         return bool(request.user == obj)
 
 class IsStudentUser(BasePermission):
@@ -19,8 +18,8 @@ class IsStudentUser(BasePermission):
         return False
 
     def has_object_permission(self, request, view, obj):
-        print("*************obj",obj)
         return bool(request.user == obj)
+
 
 class IsInstituteUser(BasePermission):
     def has_permission(self, request, view):

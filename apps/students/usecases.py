@@ -316,3 +316,20 @@ class GetStudentHistryUseCase(BaseUseCase):
 
     def _factory(self):
         self._visitor = InstituteViewers.objects.filter(student= self._student)
+
+class GetStudentDetailUseCase(BaseUseCase):
+    def __init__(self,student):
+        self._student =student
+
+    def execute(self):
+        self._factory()
+        return self._student
+
+    def _factory(self):
+        try:
+            self._student = StudentModel.objects.prefetch_related('language_set','academic_set',
+                                                                  'studentlor_set',"studentsop_set",
+                                                                  "personalessay_set").get(pk=self._student)
+
+        except StudentModel.DoesNotExist:
+            raise StudentModelNotFound

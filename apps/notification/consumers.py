@@ -34,6 +34,7 @@ class PortalUserNotificationConsumer(NotificationConsumer):
         # Checking if the User is logged in
         if self.scope["user"].user_type != 'portal_user':
             # Reject the connection
+            print("*********************portel user")
             self.close()
         else:
             self.group_name = 'portal_user'

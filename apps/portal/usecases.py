@@ -5,7 +5,7 @@ from rest_framework.exceptions import ValidationError
 #
 from apps.core import usecases
 from apps.core.usecases import BaseUseCase
-# from apps.portal import tasks
+from apps.portal import tasks
 from apps.portal.emails import SendEmailToPortalStaff
 from apps.portal.exceptions import PortalNotFound
 from apps.portal.models import PortalStaff
@@ -84,13 +84,13 @@ class CreatePortalStaffUseCase(usecases.CreateUseCase):
         send_to = os.getenv("DEFAULT_EMAIL", portal_user.email)
         # context = {
         #     'uuid': portal_user.id,
-        #     'name': self._portal.name,
+        #     'name': portal_user.fullname,
         #     'user_email': send_to,
         # }
+        # # print("******",context)
         # tasks.send_set_password_email_to_user.apply_async(
         #     kwargs=context
         # )
-
         # without celery
 
         SendEmailToPortalStaff(

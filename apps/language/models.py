@@ -12,7 +12,8 @@ from apps.core.validators import validate_image
 class Language(BaseModel):
     student = models.ForeignKey(
         StudentModel,
-        on_delete=CASCADE
+        on_delete=CASCADE,
+        # related_name=
     )
     name = models.CharField(max_length=100)
     first_language = models.BooleanField(default=False)

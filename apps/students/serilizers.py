@@ -8,7 +8,10 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueTogetherValidator
 
+from apps.academic.serializers import GetAcademicListSerializer, GetLorSerializer, GetSopSerializer, GetPersonalEssay
 from apps.institute.serializers import ListInstituteSerializer
+from apps.language.serializers import ListLanguageSerializer
+from apps.studentIdentity.serializers import GetCitizenshipSerializer, GetPassportSerializer
 from apps.students.models import CompleteProfileTracker, FavouriteInstitute, InstituteViewers, StudentAddress, StudentModel
 from apps.core import fields
 User = get_user_model()
@@ -131,6 +134,39 @@ class StudentDetailSerializer(StudentSerializer):
             'nationality',
             'application_tracker',
             'address_relation',
+        )
+
+class GetStudentDetailSerializer(StudentSerializer):
+    address_relation = StudentAddressSerializer(many=True,read_only=True)
+    email = serializers.CharField(source="get_email")
+    language_set = ListLanguageSerializer(many=True,read_only=True)
+    citizenship = GetCitizenshipSerializer(many=False,read_only=True)
+    passport = GetPassportSerializer(many=False,read_only=True)
+    academic_set = GetAcademicListSerializer(many=True,read_only=True)
+    studentlor_set = GetLorSerializer(many=True,read_only=True)
+    studentsop_set = GetSopSerializer(many=True,read_only=True)
+    personalessay_set=GetPersonalEssay(many=True,read_only=True)
+    class Meta(StudentSerializer.Meta):
+        fields = (
+            'id',
+            'fullname',
+            'contact',
+            'latitude',
+            'longitude',
+            'image',
+            'dob',
+            'gender',
+            'email',
+            'blood_group',
+            'nationality',
+            'address_relation',
+            'language_set',
+            'citizenship',
+            'passport',
+            'academic_set',
+            'studentlor_set',
+            'studentsop_set',
+            'personalessay_set'
         )
 
 class StudentLatitudeLongitudeUpdate(StudentSerializer):

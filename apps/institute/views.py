@@ -151,7 +151,6 @@ class UpdateInstituteCoverimageView(generics.UpdateWithMessageAPIView,InstituteM
 
 
 class ListInstituteView(generics.ListAPIView):
-    # permission_classes = (AllowAny,)
     # permission_classes = (IsAuthenticated,IsStudentUser)
     serializer_class = serializers.ListInstituteSerializer
     filter_class = InstituteFilter
