@@ -1,7 +1,7 @@
 from apps.consultancy.mixins import ConsultancyMixin
 from apps.core import generics
 from django.utils.translation import gettext_lazy as _
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from apps.institute.mixins import InstituteMixins
 from apps.review.mixins import InstituteReviewMixins, ConsultancyReviewMixins
 from apps.review.serializers import CreateInstituteReviewSerializer, ListInstituteReviewSerializer, \
@@ -11,14 +11,17 @@ from apps.review.usecases import GetConsultancyReviewByIdUseCase
 from apps.students.mixins import StudentMixin
 from apps.review import usecases
 # Create your views here.
+from apps.user.permissions import IsStudentUser
+
 
 class CreateInstituteReviewView(generics.CreateWithMessageAPIView,StudentMixin):
 
     serializer_class = CreateInstituteReviewSerializer
     message = _('Create review successfully')
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated, IsStudentUser)
 
     def get_object(self):
+        self.check_object_permissions(self.request, self.get_student().user)
         return self.get_student()
 
     def perform_create(self, serializer):
@@ -30,8 +33,9 @@ class CreateInstituteReviewView(generics.CreateWithMessageAPIView,StudentMixin):
 class UpdateInstituteReviewView(generics.UpdateWithMessageAPIView,InstituteReviewMixins):
     serializer_class = UpdateInstituteReviewSerializer
     message = _('Update review Successfully')
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated, IsStudentUser)
     def get_object(self):
+        self.check_object_permissions(self.request, self.get_Institute_review().student.user)
         return self.get_Institute_review()
 
     def perform_update(self, serializer):
@@ -69,8 +73,9 @@ class GetInstituteAggregateReviewView(generics.ListAPIView,InstituteMixins):
 
 class CreateConsultancyReviewView(generics.CreateAPIView,StudentMixin):
     serializer_class = CreateConsultancyReviewSerializer
-
+    permission_classes = (IsAuthenticated, IsStudentUser)
     def get_object(self):
+        self.check_object_permissions(self.request, self.get_student().user)
         return self.get_student()
 
     def perform_create(self, serializer):
@@ -106,8 +111,9 @@ class ListConsultancyReview(generics.ListAPIView,ConsultancyMixin):
 class UpdateConsultancyReview(generics.UpdateAPIView,ConsultancyReviewMixins):
 
     serializer_class = UpdateConsultancyReviewSerializer
-
+    permission_classes = (IsAuthenticated, IsStudentUser)
     def get_object(self):
+        self.check_object_permissions(self.request, self.get_consultancy_review().student.user)
         return self.get_consultancy_review()
 
     def perform_update(self, serializer):

@@ -34,10 +34,10 @@ class StudentInitProfileView(generics.RetrieveAPIView, StudentMixin):
     """
     Use this endpoint to get student detail
     """
-    # permission_classes = (IsAuthenticated,IsStudentUser)
+    permission_classes = (IsAuthenticated,IsStudentUser)
     serializer_class = serilizers.StudentDetailSerializer
     def get_object(self):
-        # self.check_object_permissions(self.request, self.get_student().user)
+        self.check_object_permissions(self.request, self.get_student().user)
         return self.get_student()
 
     def get_queryset(self):
@@ -55,9 +55,9 @@ class UpdateStudentView(generics.UpdateWithMessageAPIView,StudentMixin):
     """
     message = _("update student detail successfully")
     serializer_class = serilizers.UpdateStudentSerializer
-    # permission_classes = (IsAuthenticated, IsStudentUser)
+    permission_classes = (IsAuthenticated, IsStudentUser)
     def get_object(self):
-        # self.check_object_permissions(self.request, self.get_student().user)
+        self.check_object_permissions(self.request, self.get_student().user)
         return self.get_student()
 
     def perform_update(self, serializer):
@@ -72,9 +72,9 @@ class UpdateImageView(generics.UpdateWithMessageAPIView,StudentMixin):
     """
     message = _("update profile is success")
     serializer_class = serilizers.UpdateProfilePictureSerializer
-    # permission_classes = (IsAuthenticated, IsStudentUser)
+    permission_classes = (IsAuthenticated, IsStudentUser)
     def get_object(self):
-        # self.check_object_permissions(self.request, self.get_student().user)
+        self.check_object_permissions(self.request, self.get_student().user)
         return self.get_student()
 
     def perform_update(self, serializer):
@@ -88,11 +88,11 @@ class StudentAddressView(generics.CreateWithMessageAPIView,StudentMixin):
     this end point is use to take student address
     """
     message =_("address complete successfully")
-    # permission_classes = (IsAuthenticated, IsStudentUser)
+    permission_classes = (IsAuthenticated, IsStudentUser)
     serializer_class = serilizers.StudentAddressSerializer
 
     def get_object(self):
-        # self.check_object_permissions(self.request, self.get_student().user)
+        self.check_object_permissions(self.request, self.get_student().user)
         return self.get_student()
 
     def perform_create(self, serializer):
@@ -108,9 +108,9 @@ class StudentAddressUpdateView(generics.UpdateWithMessageAPIView,AddressMixin):
     message = _("address update successfully")
     permission_classes = (AllowAny,)
     serializer_class = serilizers.StudentAddressSerializer
-    # permission_classes = (IsAuthenticated, IsStudentUser)
+    permission_classes = (IsAuthenticated, IsStudentUser)
     def get_object(self):
-        # self.check_object_permissions(self.request, self.get_address().student.user)
+        self.check_object_permissions(self.request, self.get_address().student.user)
         return self.get_address()
 
     def perform_update(self, serializer):
@@ -124,10 +124,10 @@ class GetStudentAddressView(generics.RetrieveAPIView,AddressMixin):
     """
     This endpoint is use to get student address
     """
-    # permission_classes = (IsAuthenticated, IsStudentUser)
+    permission_classes = (IsAuthenticated, IsStudentUser)
     serializer_class = serilizers.StudentAddressSerializer
     def get_object(self):
-        # self.check_object_permissions(self.request, self.get_address().student.user)
+        self.check_object_permissions(self.request, self.get_address().student.user)
         return self.get_address()
     def get_queryset(self):
         return usecases.GetStudentAddressUseCase(
@@ -138,11 +138,11 @@ class StudentLatitudeAndLongitudeUpdate(generics.UpdateWithMessageAPIView,Studen
     """
     this endpoint is use to update latitude and longitude
     """
-    # permission_classes = (IsAuthenticated, IsStudentUser)
+    permission_classes = (IsAuthenticated, IsStudentUser)
     serializer_class = serilizers.StudentLatitudeLongitudeUpdate
 
     def get_object(self):
-        # self.check_object_permissions(self.request, self.get_student().user)
+        self.check_object_permissions(self.request, self.get_student().user)
         return self.get_student()
 
     def perform_update(self, serializer):
@@ -155,10 +155,10 @@ class AddFavouriteInstitute(generics.CreateWithMessageAPIView,StudentMixin):
     """
     This endpoint is use to add bookmark
     """
-    # permission_classes = (IsAuthenticated, IsStudentUser)
+    permission_classes = (IsAuthenticated, IsStudentUser)
     serializer_class = serilizers.AddFavouriteInstituteSerializer
     def get_object(self):
-        # self.check_object_permissions(self.request, self.get_student().user)
+        self.check_object_permissions(self.request, self.get_student().user)
         return self.get_student()
     def perform_create(self,serializer):
         return usecases.AddFavourateInstituteUseCase(
@@ -171,10 +171,10 @@ class GetFavouriteInstitute(generics.ListAPIView,StudentMixin):
     """
     This endpoint is use to get fav student institute
     """
-    # permission_classes = (IsAuthenticated, IsStudentUser)
+    permission_classes = (IsAuthenticated, IsStudentUser)
     serializer_class  = serilizers.GetFavouriteInstituteSerializer
     def get_object(self):
-        # self.check_object_permissions(self.request, self.get_student().user)
+        self.check_object_permissions(self.request, self.get_student().user)
         return self.get_student()
 
     def get_queryset(self):
@@ -186,9 +186,9 @@ class DeleteFavouriteInstitute(generics.DestroyWithMessageAPIView,FavouriteMixin
     """
     this endpoint is use to delete favourite
     """
-    # permission_classes = (IsAuthenticated, IsStudentUser)
+    permission_classes = (IsAuthenticated, IsStudentUser)
     def get_object(self):
-        # self.check_object_permissions(self.request, self.get_favourite().student.user)
+        self.check_object_permissions(self.request, self.get_favourite().student.user)
         return self.get_favourite()
 
     def perform_destroy(self, instance):
@@ -202,9 +202,9 @@ class CreateInstituteVisitorView(generics.CreateWithMessageAPIView,StudentMixin)
     """
     serializer_class = serilizers.CreateInstituteVisiterSerializer
     message = _("institute visitor Create Successfully")
-    # permission_classes = (IsAuthenticated, IsStudentUser)
+    permission_classes = (IsAuthenticated, IsStudentUser)
     def get_object(self):
-        # self.check_object_permissions(self.request, self.get_student().user)
+        self.check_object_permissions(self.request, self.get_student().user)
         return self.get_student()
 
     def perform_create(self, serializer):
@@ -218,9 +218,9 @@ class ListVisitorHistryView(generics.ListAPIView,StudentMixin):
     This endpoint is use to list histry
     """
     serializer_class = serilizers.ListVisitorHistrySerializer
-    # permission_classes = (IsAuthenticated, IsStudentUser)
+    permission_classes = (IsAuthenticated, IsStudentUser)
     def get_object(self):
-        # self.check_object_permissions(self.request, self.get_student().user)
+        self.check_object_permissions(self.request, self.get_student().user)
         return self.get_student()
 
     def get_queryset(self):
@@ -235,7 +235,9 @@ class DeActivateStudent(generics.UpdateWithMessageAPIView,StudentMixin): #todo
 
 class GetStudentDetailView(generics.RetrieveAPIView,StudentMixin):
     serializer_class = serilizers.GetStudentDetailSerializer
+    permission_classes = (IsAuthenticated, IsStudentUser)
     def get_object(self):
+        self.check_object_permissions(self.request, self.get_student().user)
         return self.get_student()
 
     def get_queryset(self):
