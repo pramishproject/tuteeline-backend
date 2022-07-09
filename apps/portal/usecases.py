@@ -80,25 +80,29 @@ class CreatePortalStaffUseCase(usecases.CreateUseCase):
             portal_staff.clean()
         except DjangoValidationError as e:
             raise ValidationError(e.message_dict)
-
+        # use_celery = os.getenv("ENABLE_CELERY",False)
         send_to = os.getenv("DEFAULT_EMAIL", portal_user.email)
-        # context = {
-        #     'uuid': portal_user.id,
-        #     'name': portal_user.fullname,
-        #     'user_email': send_to,
-        # }
-        # # print("******",context)
-        # tasks.send_set_password_email_to_user.apply_async(
-        #     kwargs=context
-        # )
-        # without celery
-
+        # print("********use cellary",use_celery,send_to)
+        # if use_celery:
+        #     print("celeryunsbd hcvbds")
+        #     context = {
+        #         'uuid': portal_user.id,
+        #         'name': portal_user.fullname +"with celery",
+        #         'user_email': send_to,
+        #     }
+        #     # print("******",context)
+        #     tasks.send_set_password_email_to_user.apply_async(
+        #         kwargs=context
+        #     )
+        # else:
+        #     # without celery
+        #     print("send email")
         SendEmailToPortalStaff(
-            context={
-                'uuid': portal_user.id,
-                'name': portal_user.fullname,
-            }
-        ).send(to=[send_to])
+                context={
+                    'uuid': portal_user.id,
+                    'name': portal_user.fullname+"without celery",
+                }
+            ).send(to=[send_to])
 
 
 class GetPortalUserByIdUseCase(BaseUseCase):

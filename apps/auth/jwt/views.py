@@ -193,3 +193,5 @@ class ChangeStudentPasswordView(generics.CreateAPIView,StudentUserMixin):
             serializer=serializer,
             user=self.get_object()
         ).execute()
+
+# class DeactivateUser(generics.UpdateAPIView,)

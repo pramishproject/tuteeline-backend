@@ -44,7 +44,8 @@ class AddInstituteCourseSerializer(InstituteCourseSerializer):
             'passport', 
             'essay', 
             'lor', 
-            'sop'
+            'sop',
+            'no_of_seats',
         )
         # validators = [UniqueTogetherValidator(
         #     queryset=InstituteCourse.objects.all(),
@@ -142,6 +143,7 @@ class ListInstituteCourseSerializer(InstituteCourseSerializer):
                 'lor',
                 'sop',
                 'is_applied',
+                'no_of_seats',
             )
 
     

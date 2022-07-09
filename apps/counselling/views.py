@@ -1,3 +1,5 @@
+from rest_framework.permissions import IsAuthenticated
+
 from apps.consultancy.mixins import ConsultancyMixin, ConsultancyStaffMixin
 from apps.core import generics
 from apps.counselling import serializers, usecases
@@ -6,6 +8,7 @@ from apps.counselling.mixins import InstituteCounsellingMixin, ConsultancyCounse
 from apps.counselling.models import TestJson
 from apps.institute.mixins import InstituteMixins, InstituteStaffMixins
 from apps.students.mixins import StudentMixin
+from apps.user.permissions import IsStudentUser
 
 
 class CreateInstituteCounselling(generics.CreateAPIView,StudentMixin):
@@ -14,7 +17,9 @@ class CreateInstituteCounselling(generics.CreateAPIView,StudentMixin):
     """
     serializer_class = serializers.CreateInstituteCounsellingSerializer
     message = 'Created Counselling successfully'
+    permission_classes = (IsAuthenticated, IsStudentUser)
     def get_object(self):
+        self.check_object_permissions(self.request, self.get_student().user)
         return self.get_student()
 
     def perform_create(self, serializer):
@@ -28,8 +33,9 @@ class StudentCounsellingList(generics.ListAPIView,StudentMixin):
     This end point is use to list student counciling view
     """
     serializer_class = serializers.ListStudentCounsellingSerializer
-
+    permission_classes = (IsAuthenticated, IsStudentUser)
     def get_object(self):
+        self.check_object_permissions(self.request, self.get_student().user)
         return self.get_student()
 
     def get_queryset(self):
@@ -100,8 +106,10 @@ class CreateConsultancyCounselling(generics.CreateAPIView,StudentMixin):
     This endpoint is use to crate consultancy counselling 2022-05-31T19:16:51+0000
     """
     serializer_class = serializers.CreateConsultancyCounsellingSerializer
+    permission_classes = (IsAuthenticated, IsStudentUser)
 
     def get_object(self):
+        self.check_object_permissions(self.request, self.get_student().user)
         return self.get_student()
 
     def perform_create(self, serializer):
@@ -115,8 +123,10 @@ class ListConsultancyCounsellingForStudent(generics.ListAPIView,StudentMixin):
     This api is use to list counseltancy counselling
     """
     serializer_class = serializers.ListStudentCounsellingOfConsultancySerializer
+    permission_classes = (IsAuthenticated, IsStudentUser)
 
     def get_object(self):
+        self.check_object_permissions(self.request, self.get_student().user)
         return self.get_student()
 
     def get_queryset(self):

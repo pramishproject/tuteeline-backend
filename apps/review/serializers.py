@@ -72,6 +72,7 @@ class CreateConsultancyReviewSerializer(serializers.ModelSerializer):
         )
 
 class ListConsultancyReviewSerializer(serializers.ModelSerializer):
+    student = GetStudentDataSerializer(many=False)
     is_review = serializers.SerializerMethodField()
     def get_is_review(self, obj):
         student_id = self.context['request'].GET.get('student_id', None)

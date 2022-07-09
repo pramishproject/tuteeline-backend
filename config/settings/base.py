@@ -102,6 +102,7 @@ THIRD_PARTY_APPS = [
     "django_filters",
     "rest_framework_tracking",
     "channels",
+    'mailqueue',
 ]
 
 LOCAL_APPS = [
@@ -343,6 +344,11 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'EXCEPTION_HANDLER': 'apps.core.exceptions.custom_exception_handler'
 }
+# calery
+
+MAILQUEUE_CELERY = True
+MAILQUEUE_QUEUE_UP = True
+MAILQUEUE_LIMIT = 50
 
 # JWT CONFIGURATION
 # -----------------------------------------------------------------------------

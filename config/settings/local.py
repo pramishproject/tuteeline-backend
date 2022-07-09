@@ -34,10 +34,11 @@ EMAIL_USE_TLS = True
 # EMAIL_PORT = 465
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'tutee.line@gmail.com'
+EMAIL_HOST_USER = 'tuteeline@gmail.com'
 EMAIL_HOST_PASSWORD = 'tjgdnpkaldkgkgfx'
 DEFAULT_FROM_EMAIL = 'info.aeonsst@gmail.com'
 
+# EMAIL_URL=smtp+tls://tuteeline@gmail.com:tjgdnpkaldkgkgfx@smtp.gmail.com:587
 # django-debug-toolbar
 # ------------------------------------------------------------------------------
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#prerequisites

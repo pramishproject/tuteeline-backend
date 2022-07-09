@@ -53,8 +53,9 @@ class InstituteCourse(BaseModel):
     course= models.ForeignKey(Course,on_delete=models.CASCADE)
     intake=models.CharField(max_length=100,choices=INTAKE_CHOICE)
     #relete the eligibility exam in next table 
-    eligibility = models.CharField(max_length=200)
+    eligibility = models.CharField(max_length=200) #make it json with score todo
     score = models.FloatField()  #this is eligibility score
+    no_of_seats = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(8000)],blank=True,null=True)
     last_mini_academic_score = models.FloatField(
         validators=[MinValueValidator(40.0),MaxValueValidator(100.0)]
         )
