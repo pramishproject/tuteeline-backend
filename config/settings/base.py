@@ -102,7 +102,7 @@ THIRD_PARTY_APPS = [
     "django_filters",
     "rest_framework_tracking",
     "channels",
-    'mailqueue',
+    # 'mailqueue',
 ]
 
 LOCAL_APPS = [
