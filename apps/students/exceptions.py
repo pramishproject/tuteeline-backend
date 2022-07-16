@@ -8,8 +8,10 @@ class StudentModelNotFound(NotFound):
     default_detail = _('Student Not Found for following Id')
 
 class StudentUserNotFound(NotFound):
-    default_detail = _("User not found following id")
+    default_detail = _("User not found following email")
 
+class UserNotFound(NotFound):
+    default_detail = _("User not found following email")
 class StudentAddressUnique(IntegrityError):
     default_detail = _('address already exist')
 

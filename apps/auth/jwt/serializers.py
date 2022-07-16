@@ -421,3 +421,47 @@ class ConsultancyUserChangePasswordSerializer(serializers.Serializer):
                 self.fail('password_requirement_failed')
             )
         return attrs
+
+class GetEmailSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+class ChangeForgetPasswordSerializer(serializers.Serializer):
+    new_password = PasswordField()
+    confirm_new_password = PasswordField()
+
+    default_error_messages = {
+        'password_requirement_failed': _(
+            'Password must 8 character  with one digit,one lowercase,one uppercase and special character.'),
+        'password_same': _("Old password is same as new password"),
+        'password_not_in_db': _("Your existing old password does n\'t match with our database please try "
+                                "again"),
+        'password_not_matched': _("Password not matched please conform your password again."),
+
+    }
+
+    def validate_password(self, value):
+        user = self.context['view'].get_object()
+        if not (user.check_password(value)):
+            raise serializers.ValidationError(self.fail('password_not_in_db'))
+        return value
+
+    def validate(self, attrs):
+        """
+        Rule 1. Password must be 8 length at minimum
+        Rule 2. Password must contain one digit,one lowercase,one uppercase and special character.
+        Rule 3. New password must not match old password
+        Rule 4. New password and confirm password fields must be same.
+        """
+        pattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
+        matched = re.match(pattern, attrs['new_password'])
+        if matched:
+            if attrs['new_password'] != attrs['confirm_new_password']:
+                raise serializers.ValidationError(self.fail('password_not_matched'))
+        else:
+            raise serializers.ValidationError(
+                self.fail('password_requirement_failed')
+            )
+        return attrs
+
+class VerifySerializer(serializers.Serializer):
+    verify = serializers.BooleanField()

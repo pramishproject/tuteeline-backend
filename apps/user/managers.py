@@ -25,6 +25,7 @@ class InstituteUserManager(BaseUserManager):
             user_type='institute_user'
         )
     def create(self, email, password=None, **kwargs):
+
         kwargs.update({
             'is_staff': False,
             'is_superuser': False,

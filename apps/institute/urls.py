@@ -129,6 +129,11 @@ urlpatterns = [
         '<staff_id>/staff/role/update',
         views.UpdateInstituteStaffRoleView.as_view(),
         name="update-institute-staff-role"
+    ),
+    path(
+        '<institute_staff_id>/verify/change_password',
+        views.VerifyUserAndChangePassword.as_view(),
+        name="change-password"
     )
 
 

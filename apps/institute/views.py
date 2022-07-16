@@ -45,7 +45,8 @@ class AddInstituteStaffView(generics.CreateWithMessageAPIView ,InstituteMixins):
     def perform_create(self, serializer):
         return usecase.CreateInstituteStaffUseCase(
             institute=self.get_object(),
-            serializer = serializer
+            serializer = serializer,
+            request=self.request,
         ).execute()
 
 class ListInstituteStaffView(generics.ListAPIView,InstituteMixins):
@@ -365,3 +366,13 @@ class VerifiedInstituteView(generics.UpdateWithMessageAPIView,InstituteMixins):
             instance=self.get_object(),
             serializer=serializer,
         ).execute()
+
+class VerifyUserAndChangePassword(generics.CreateAPIView,InstituteStaffMixins):
+    serializer_class = serializers.VerifyChangePasswordSerializer
+    def get_object(self):
+        return self.get_institute_staff().user
+
+    def perform_create(self, serializer):
+        return usecase.VerifyAndChangePasswordUseCase().execute()
+
+

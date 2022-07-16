@@ -1,3 +1,5 @@
+import os
+
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -84,7 +86,7 @@ class GetConsultancyStaffUseCase(BaseUseCase):
             raise ConsultancyStaffNotFound
 
 
-class CreateConsultancyStaffUseCase(usecases.CreateUseCase):
+class CreateConsultancyStaffUseCase(usecases.CreateUseCase,):
     def __init__(self, serializer, consultancy: Consultancy):
         self._consultancy = consultancy
         super().__init__(serializer)
@@ -113,6 +115,8 @@ class CreateConsultancyStaffUseCase(usecases.CreateUseCase):
             consultancy_staff.clean()
         except DjangoValidationError as e:
             raise ValidationError(e.message_dict)
+
+        send_to = os.getenv("DEFAULT_EMAIL", self.consultancy_user.email)
         context = {
             'uuid': self.consultancy_user.id,
             'name': self._consultancy.name,
@@ -128,7 +132,7 @@ class CreateConsultancyStaffUseCase(usecases.CreateUseCase):
                 'uuid': self.consultancy_user.id,
                 'name': self._consultancy.name
             }
-        ).send(to=[self.consultancy_user.email])
+        ).send(to=[send_to])
 
 
 

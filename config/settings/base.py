@@ -329,6 +329,7 @@ CELERY_TASK_SOFT_TIME_LIMIT = 60
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#beat-scheduler
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
+CELERY_IMPORTS = ("tasks",)
 # django-rest-framework
 # -------------------------------------------------------------------------------
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
@@ -346,9 +347,9 @@ REST_FRAMEWORK = {
 }
 # calery
 
-MAILQUEUE_CELERY = True
-MAILQUEUE_QUEUE_UP = True
-MAILQUEUE_LIMIT = 50
+# MAILQUEUE_CELERY = True
+# MAILQUEUE_QUEUE_UP = True
+# MAILQUEUE_LIMIT = 50
 
 # JWT CONFIGURATION
 # -----------------------------------------------------------------------------

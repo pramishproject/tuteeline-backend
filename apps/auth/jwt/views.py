@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from apps.auth.jwt import serializers, usecases
+from apps.auth.jwt.serializers import GetEmailSerializer
 from apps.core import generics
 from apps.core.mixins import LoggingErrorsMixin, ResponseMixin
 from apps.students.mixins import StudentUserMixin
@@ -192,6 +193,55 @@ class ChangeStudentPasswordView(generics.CreateAPIView,StudentUserMixin):
         return usecases.UpdatePassportUseCase(
             serializer=serializer,
             user=self.get_object()
+        ).execute()
+
+class ForgetPasswordStudentView(generics.CreateAPIView):
+    serializer_class = GetEmailSerializer
+    def perform_create(self, serializer):
+        return usecases.ForgetPasswordStudentUseCase(
+            serializer=serializer,
+            request=self.request,
+        ).execute()
+
+class ForgetPasswordInstituteView(generics.CreateAPIView):
+    serializer_class = GetEmailSerializer
+    def perform_create(self, serializer):
+        return usecases.ForgetPasswordInstituteUseCase(
+            serializer=serializer,
+            request=self.request,
+        ).execute()
+
+
+class ChangeForgetPasswordView(generics.UpdateAPIView,StudentUserMixin):
+    serializer_class = serializers.ChangeForgetPasswordSerializer
+    def get_object(self):
+        return self.get_student_user()
+
+    def perform_update(self, serializer):
+        return usecases.UpdatePassportUseCase(
+            serializer=serializer,
+            user=self.get_object()
+        ).execute()
+
+class ChangeInstituteForgetPassword(generics.UpdateAPIView,InstituteUserMixin):
+    serializer_class = serializers.ChangeForgetPasswordSerializer
+    def get_object(self):
+        return self.get_institute_user()
+
+    def perform_update(self, serializer):
+        return usecases.UpdatePassportUseCase(
+            serializer=serializer,
+            user=self.get_object()
+        ).execute()
+
+class InstituteUserVerify(generics.CreateAPIView,InstituteUserMixin):
+    serializer_class = serializers.VerifySerializer
+    def get_object(self):
+        return self.get_institute_user()
+
+    def perform_create(self, serializer):
+        return usecases.VerifyUseCase(
+            user=self.get_object(),
         ).execute()
 
 # class DeactivateUser(generics.UpdateAPIView,)

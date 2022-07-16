@@ -71,6 +71,10 @@ class Institute(BaseModel):
         self._social_media = [{"name":social_media.name,"link":social_media.link} for social_media in SocialMediaLink.objects.filter(institute=self.id)]
         return self._social_media
 
+    def save(self, *args, **kwargs):
+        self.name = self.name.title()
+        super(Institute, self).save(*args, **kwargs)
+
 class InstituteStaff(BaseModel):
     user = models.OneToOneField(InstituteUser, on_delete=models.CASCADE)
     institute = models.ForeignKey(Institute,on_delete=models.CASCADE)

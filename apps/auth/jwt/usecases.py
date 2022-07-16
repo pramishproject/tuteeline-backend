@@ -8,10 +8,11 @@ from rest_framework.exceptions import ValidationError, PermissionDenied
 
 from apps.auth.jwt.emails import EmailVerificationEmail
 from apps.core import usecases
-from apps.core.usecases import CreateUseCase, BaseUseCase
+from apps.core.usecases import CreateUseCase, BaseUseCase, BaseUserUseCase
 from apps.pyotp.mixins import OTPMixin
 from apps.pyotp.models import PyOTP
-from apps.user.models import ConsultancyUser, PortalUser
+from apps.students.exceptions import StudentUserNotFound, UserNotFound
+from apps.user.models import ConsultancyUser, PortalUser, StudentUser, InstituteUser
 from apps.settings.models import Settings
 
 User = get_user_model()
@@ -173,3 +174,44 @@ class CreatePasswordForPortalUserUseCase(usecases.CreateUseCase):
         password = self._data.pop('password')
         self._portal_user.set_password(password)
         self._portal_user.save()
+
+class ForgetPasswordStudentUseCase(usecases.CreateUseCase,BaseUserUseCase):
+    def __init__(self,serializer,request):
+        self._email = serializer.validated_data
+        self._request = request
+
+    def execute(self):
+        self._factory()
+        super()._send_email(self.student_user, self._request,"change/student/forget/password")
+    def _factory(self):
+        try:
+            email = self._email["email"]
+            self.student_user =  StudentUser.objects.get(email=email)
+        except StudentUser.DoesNotExist:
+            raise StudentUserNotFound
+
+class ForgetPasswordInstituteUseCase(usecases.CreateUseCase,BaseUserUseCase):
+    def __init__(self,serializer,request):
+        self._email = serializer.validated_data
+        self._request = request
+
+    def execute(self):
+        self._factory()
+        super()._send_email(self.institute_user, self._request,"change/institute/forget/password")
+    def _factory(self):
+        try:
+            email = self._email["email"]
+            self.institute_user =  InstituteUser.objects.get(email=email)
+        except InstituteUser.DoesNotExist:
+            raise UserNotFound
+
+class VerifyUseCase(usecases.UpdateUseCase):
+    def __init__(self,user):
+        self._user =user
+
+    def execute(self):
+        self._factory()
+
+    def _factory(self):
+        self._user.verify = True
+        self._user.save()

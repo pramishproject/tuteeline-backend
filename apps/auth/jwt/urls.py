@@ -75,6 +75,31 @@ urlpatterns = [
         'student/<str:user_id>/change-password',
         views.ChangeStudentPasswordView.as_view(),
         name="change-student-passport"
+    ),
+    path(
+        'student/forget/password',
+        views.ForgetPasswordStudentView.as_view(),
+        name='forget-student-password'
+    ),
+    path(
+        '<user_id>/change/student/forget/password',
+        views.ChangeForgetPasswordView.as_view(),
+        name="change-student-forget-password"
+    ),
+    path(
+        '<institute_user_id>/change/institute/user/forget/password',
+        views.ChangeInstituteForgetPassword.as_view(),
+        name ="change-institute-user-forget password"
+    ),
+    path(
+        'institute/forget/password',
+        views.ForgetPasswordInstituteView.as_view(),
+        name="institute-forget-password"
+    ),
+    path(
+        '<institute_user_id>/institute/user/verify',
+        views.InstituteUserVerify.as_view(),
+        name="verify-user"
     )
 
 ]

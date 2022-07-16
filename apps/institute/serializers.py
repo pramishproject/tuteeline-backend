@@ -347,3 +347,8 @@ class UpdateBrochureSerializer(serializers.ModelSerializer):
         fields = (
             'brochure',
         )
+
+class VerifyChangePasswordSerializer(serializers.Serializer):
+    password = serializers.CharField()
+    rePassword = serializers.CharField()
+

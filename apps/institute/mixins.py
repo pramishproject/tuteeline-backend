@@ -29,3 +29,5 @@ class FacilityMixin:
         return usecase.FacilityUseCase(
             facility_id = self.kwargs.get("facility_id")
         ).execute()
+
+

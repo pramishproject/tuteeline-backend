@@ -1,20 +1,18 @@
-from django.db.models import Q
+import os
 
-from apps.institute.email import SendEmailToInstituteStaff
-from apps.auth.jwt import serializers
+
 from datetime import datetime
 from apps.institute.exceptions import FacilityDoesntExist, InstituteNotFound,\
     InstituteScholorshipDoesntExist, SocialMediaLinkDoesntExist,StaffNotFound
-from apps import institute
+
+
 from apps.staff.models import StaffPosition
 from django.core.exceptions import ValidationError as DjangoValidationError
-from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
+
 from rest_framework.exceptions import ValidationError
 
-from apps.consultancy.emails import SendEmailToConsultanySTaff
 from apps.core import usecases
-from apps.core.usecases import BaseUseCase, CreateUseCase
+from apps.core.usecases import BaseUseCase, CreateUseCase, BaseUserUseCase
 from apps.notification.mixins import NotificationMixin
 from apps.institute.models import (AddInstituteFacility, 
                                    Facility, 
@@ -54,6 +52,7 @@ class RegisterInstituteUsecase(usecases.CreateUseCase, NotificationMixin):
             institute=self._institute,
             role=role
         )
+
     def get_notification_data(self):
         return {
             'name': 'Institute Registered',
@@ -62,34 +61,34 @@ class RegisterInstituteUsecase(usecases.CreateUseCase, NotificationMixin):
             'id': str(self._institute.id)
         }
 
-class CreateInstituteStaff(BaseUseCase):
-    def __init__(self,institute,serializer):
-        self._institute = institute
-        self._data = serializer.validated_data
-
-    def execute(self):
-        self._factory()
-
-    def _factory(self):
-        user = {
-            'email':self._data.pop('email'),
-            'fullname':self._data.pop('fullname')
-        }
-        self.institute_user=InstituteUser.objects.create(
-            **user
-        )
-        Settings.objects.create(user=self.institute_staff)
-
-        try:
-            institute_staff = InstituteStaff.objects.create(
-                user = self.institute_user,
-                institute = self._institute,
-                role = self._data['role'],
-                profile_photo = self._data['profile_photo']
-            )
-            institute_staff.clean()
-        except DjangoValidationError as e:
-            raise ValidationError(e.message_dict)
+# class CreateInstituteStaff(BaseUseCase,BaseUserUseCase):
+#     def __init__(self,institute,serializer):
+#         self._institute = institute
+#         self._data = serializer.validated_data
+#
+#     def execute(self):
+#         self._factory()
+#
+#     def _factory(self):
+#         user = {
+#             'email':self._data.pop('email'),
+#             'fullname':self._data.pop('fullname')
+#         }
+#         self.institute_user=InstituteUser.objects.create(
+#             **user
+#         )
+#         Settings.objects.create(user=self.institute_staff)
+#
+#         try:
+#             institute_staff = InstituteStaff.objects.create(
+#                 user = self.institute_user,
+#                 institute = self._institute,
+#                 role = self._data['role'],
+#                 profile_photo = self._data['profile_photo']
+#             )
+#             institute_staff.clean()
+#         except DjangoValidationError as e:
+#             raise ValidationError(e.message_dict)
 
             
 class ListInstituteUseCase(BaseUseCase):
@@ -238,14 +237,14 @@ class DeleteFacilityUseCase(BaseUseCase):
     def _factory(self):
         self._facility.delete()
 
-class CreateInstituteStaffUseCase(BaseUseCase):
-    def __init__(self,serializer,institute):
+class CreateInstituteStaffUseCase(BaseUseCase,BaseUserUseCase):
+    def __init__(self,serializer,institute,request):
         self._institute = institute
         self._data = serializer.validated_data
-
+        self._request = request
     def execute(self):
         self._factory()
-
+        super()._send_email(self.institute_user, self._request,"verify")
     def _factory(self):
         user  = {
             'email':self._data.pop('email'),
@@ -269,6 +268,9 @@ class CreateInstituteStaffUseCase(BaseUseCase):
             consultancy_staff.clean()
         except DjangoValidationError as e:
             raise ValidationError(e.message_dict)
+
+
+        # send_to = os.getenv("DEFAULT_EMAIL", self.institute_user.email)
         # context = {
         #     'uuid': self.institute_user.id,
         #     'name': self.institute_user.name,
@@ -279,12 +281,13 @@ class CreateInstituteStaffUseCase(BaseUseCase):
         # )
 
         # without celery
+
         # SendEmailToInstituteStaff(
         #     context={
         #         'uuid': self.institute_user.id,
         #         'name': self._institute.name
         #     }
-        # ).send(to=[self.institute_user.email])
+        # ).send(to=[send_to])
     
 class ListInstituteStaffUseCase(BaseUseCase):
     def __init__(self,institute):
@@ -446,3 +449,13 @@ class CustomInstituteUpdate(BaseUseCase):
         self._instance.updated_at = datetime.now()
         self._instance.save()
 
+
+class VerifyAndChangePasswordUseCase(BaseUseCase):
+    # def __init__(self,user):
+    #     self._user = user
+
+    def execute(self):
+        self._factory()
+
+    def _factory(self):
+        print(",fkdj")

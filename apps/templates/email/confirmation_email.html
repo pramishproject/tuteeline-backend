@@ -1,0 +1,32 @@
+{% load i18n %}
+
+{% block subject %}
+{% blocktrans %}Email Verification {% endblocktrans %}
+{% endblock subject %}
+
+{% block text_body %}
+{% blocktrans %}You're receiving this email because you need to verify your email.{% endblocktrans %}
+
+{% trans "Please go to the following page to verify your email :" %}
+{{ protocol }}://{{ domain }}/{{ uuid }}
+
+{% trans "Thanks for using our site!" %}
+
+{% endblock text_body %}
+
+{% block html_body %}
+{% blocktrans %}
+<p>You're receiving this email because you need to setup your password for {{ name }}</p>{% endblocktrans %}
+{% blocktrans %}
+<p>Please go through this  link to setup your password</p>{% endblocktrans %}
+<p>{% trans "Please go to the following page to verify your email {{ user }}" %}</p>
+<p>
+  <a href="{{ url }}">Click here</a>
+
+</p>
+
+<p>{% trans "Thanks for using our site!" %}</p>
+
+{#<p>{% blocktrans %}The TripNp team{% endblocktrans %}</p>#}
+
+{% endblock html_body %}
