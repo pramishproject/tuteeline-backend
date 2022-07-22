@@ -8,4 +8,9 @@ urlpatterns = [
         views.AddAffiliation.as_view(),
         name='add-affiliation'
     ),
+    path(
+        'institute/<str:institute_id>/institute/list',
+        views.ListOfAffiliation.as_view(),
+        name="list-affiliation-institute"
+    )
     ]
