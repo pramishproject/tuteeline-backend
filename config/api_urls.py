@@ -99,5 +99,9 @@ urlpatterns = [
     path(
         'consultancy_course/',
         include('apps.consultancy_course.urls')
+    ),
+    path(
+        'affiliation/',
+        include('apps.affiliation.urls')
     )
 ]

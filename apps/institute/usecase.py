@@ -110,6 +110,7 @@ class GetInstituteUseCase(BaseUseCase):
 
     def _factory(self):
         try:
+
             self._institute = Institute.objects.get(pk=self._institute_id)
 
         except Institute.DoesNotExist:

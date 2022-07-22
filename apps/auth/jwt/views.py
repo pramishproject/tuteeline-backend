@@ -34,7 +34,7 @@ class StudentUserLoginView(generics.CreateWithMessageAPIView, ResponseMixin):
         return Response(response_serializer.data, status=status_code)
 
 
-class ConsultancyUserLoginView(generics.CreateAPIView, ResponseMixin):
+class ConsultancyUserLoginView(generics.CreateWithMessageAPIView, ResponseMixin):
     """
     Use this end-point to get login for consultancy user
     """
@@ -53,7 +53,6 @@ class ConsultancyUserLoginView(generics.CreateAPIView, ResponseMixin):
         return self.create(request, *args, **kwargs)
 
     def response(self, serializer, result, status_code):
-        print("reasult",result,serializer)
         serializer = self.get_response_serializer(result)
         return Response(serializer.data)
 

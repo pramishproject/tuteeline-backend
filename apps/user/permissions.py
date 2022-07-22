@@ -1,5 +1,8 @@
 from rest_framework.permissions import BasePermission
 
+from apps.institute.models import InstituteStaff
+from apps.user.models import InstituteUser
+
 
 class IsNormalUser(BasePermission):
     def has_permission(self, request, view):
@@ -29,9 +32,19 @@ class IsInstituteUser(BasePermission):
         return False
 
     def has_object_permission(self, request, view, obj):
-        print("*************obj",obj)
         return bool(request.user == obj)
 
+# class IsSuperUser(BasePermission):
+#     def has_permission(self, request, view):
+#         user = request.user
+#         if user.user_type == "institute_user":
+#             staff  = InstituteStaff.objects.get(user=user)
+#             if staff.role.name == ""
+#             return True
+#         return False
+#
+#     def has_object_permission(self, request, view, obj):
+#         return bool(request.user == obj)
 class IsConsultancyUser(BasePermission):
     def has_permission(self, request, view):
         user = request.user

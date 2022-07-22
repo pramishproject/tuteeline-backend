@@ -1,4 +1,4 @@
-from apps.institute.mixins import InstituteMixins
+
 from django.utils.translation import gettext_lazy as _
 from rest_framework.parsers import MultiPartParser, FileUploadParser
 from rest_framework.permissions import AllowAny, IsAuthenticated

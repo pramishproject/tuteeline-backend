@@ -132,6 +132,7 @@ LOCAL_APPS = [
     "apps.counselling.apps.CounsellingConfig",
     "apps.linkage.apps.LinkageConfig",
     "apps.consultancy_course.apps.ConsultancyCourseConfig",
+    "apps.affiliation.apps.AffiliationConfig"
 
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
