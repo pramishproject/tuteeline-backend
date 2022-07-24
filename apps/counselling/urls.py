@@ -44,6 +44,11 @@ urlpatterns =[
          name = "list-counselling"
     ),
     path(
+        '<str:counselling_id>/institute/detail',
+        views.InstituteCounsellingDetail.as_view(),
+        name="institute-counselling-detail"
+    ),
+    path(
         'test',
         views.TestJsonView.as_view(),
         name="test"

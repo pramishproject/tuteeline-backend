@@ -13,8 +13,25 @@ from apps.institute.models import Institute
 
 
 User = get_user_model()
+class CourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = (
+            'id',
+            'name',
+            'description'
+        )
 
+class FacultySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Faculty
+        fields = (
+            'name',
+            'id'
+        )
 class InstituteCourseSerializer(serializers.ModelSerializer):
+    course = CourseSerializer(read_only=True)
+    faculty = FacultySerializer(read_only=True)
     class Meta:
         model = InstituteCourse
         fields = '__all__'
@@ -69,22 +86,7 @@ class AddInstituteCourseSerializer(InstituteCourseSerializer):
     # def create(self, validate_data):
     #     return InstituteCourse.objects.get_or_create(**validate_data)
 
-class CourseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Course
-        fields = (
-            'id',
-            'name',
-            'description'
-        )
 
-class FacultySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Faculty
-        fields = (
-            'name',
-            'id'
-        )
 class InstituteApplicationStatus(serializers.ModelSerializer):
     staff_detail = serializers.DictField(source="institute_user_detail")
     class Meta:

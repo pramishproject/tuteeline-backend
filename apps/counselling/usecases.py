@@ -2,7 +2,7 @@ from datetime import datetime
 import time
 
 from apps.core.usecases import BaseUseCase
-from apps.counselling.exception import AlreadyBooked, TimeError, CourseDoesntExist
+from apps.counselling.exception import AlreadyBooked, TimeError, CourseDoesntExist, CounsellingDoesntExist
 from apps.counselling.models import InstituteCounselling, InterestedCourse, ConsultancyCounselling
 from apps.institute_course.models import InstituteCourse
 from apps.utils.string_to_json import StringToJson
@@ -62,7 +62,10 @@ class GetCounselling(BaseUseCase):
         return self._counselling
 
     def _factory(self):
-        self._counselling = InstituteCounselling.objects.get(pk=self._counselling_id)
+        try:
+            self._counselling = InstituteCounselling.objects.get(pk=self._counselling_id)
+        except InstituteCounselling.DoesNotExist:
+            raise CounsellingDoesntExist
 
 
 class GetConsultancyCounselling(BaseUseCase):
@@ -100,6 +103,19 @@ class ListStudentCounsellingForInstituteUseCase(BaseUseCase):
     def _factory(self):
         self._counselling =InstituteCounselling.objects.filter(institute=self._institute).prefetch_related("student","assign_to")
 
+class GetInstituteCounsellingDetailUseCase(BaseUseCase):
+    def __init__(self,counselling):
+        self._institute_counselling=counselling
+
+    def execute(self):
+        self._factory()
+        return self._counselling
+
+    def _factory(self):
+        try:
+            self._counselling =InstituteCounselling.objects.get(pk=self._institute_counselling).prefetch_related("student","assign_to")
+        except InstituteCounselling.DoesNotExist:
+            raise CounsellingDoesntExist
 
 class UpdateCounsellingUseCase(BaseUseCase):
     def __init__(self,counselling,serializer):

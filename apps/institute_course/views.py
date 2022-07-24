@@ -25,7 +25,8 @@ from apps.institute_course.serializers import (
     ListInstituteCourseSerializer,
     StudentApplySerializer, CompareInstituteSerializer, StudentMyApplicationListSerializer,
     GetMyApplicationDocumentSerializer, GetMyApplicationDetailForInstituteSerializer, InstituteActionSerializer,
-    ConsultancyActionSerializer, InstituteApplicationStatus, InstituteApplicationCountSerializer)
+    ConsultancyActionSerializer, InstituteApplicationStatus, InstituteApplicationCountSerializer,
+    InstituteCourseSerializer)
 
 from apps.institute_course import usecases
 # from apps.institute_course.mixins import InstituteCourseMixin
@@ -76,6 +77,16 @@ class ListInstituteCourse(generics.ListAPIView,InstituteMixins):
         cache.delete('application')
         return context
 
+
+class CourseDetailView(generics.RetrieveAPIView,CourseMixin):
+    serializer_class = InstituteCourseSerializer
+    def get_object(self):
+        return self.get_institutecourse()
+
+    def get_queryset(self):
+        return usecases.InstituteCourseDetailUseCase(
+            course=self.get_object(),
+        ).execute()
 
 class UpdateInstituteCourse(generics.UpdateWithMessageAPIView,CourseMixin):
     """

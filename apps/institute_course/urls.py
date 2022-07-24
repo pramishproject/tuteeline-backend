@@ -14,6 +14,11 @@ urlpatterns = [
         name = 'get-institute-course'
     ),
     path(
+      '<institute_course_id>/detail',
+      views.CourseDetailView.as_view(),
+      name = 'institute-course-detail'
+    ),
+    path(
         '<institute_course_id>/update',
         views.UpdateInstituteCourse.as_view(),
         name = 'update-course'

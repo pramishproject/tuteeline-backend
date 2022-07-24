@@ -72,6 +72,18 @@ class AssignCounsellingStudent(generics.UpdateWithMessageAPIView,InstituteCounse
             serializer=serializer
         ).execute()
 
+class InstituteCounsellingDetail(generics.RetrieveAPIView,InstituteCounsellingMixin):
+    """
+    institute counselling detail
+    """
+    serializer_class = serializers.InstituteCounsellingDetail
+    def get_object(self):
+        return self.get_counselling()
+
+    def get_queryset(self):
+        return usecases.GetInstituteCounsellingDetailUseCase(
+            counselling=self.get_object()
+        ).execute()
 
 class AddNotesView(generics.UpdateWithMessageAPIView,InstituteCounsellingMixin):
     """

@@ -51,7 +51,20 @@ class GetInstituteCourseUseCase(BaseUseCase):
         #     select_related("")
         self._course = InstituteCourse.objects.filter(institute=self._institute).\
             select_related('course','faculty')
-    
+
+class InstituteCourseDetailUseCase(BaseUseCase):
+    def __init__(self,course):
+        self._institute_course = course
+
+    def execute(self):
+        self._factory()
+        return self._course
+
+    def _factory(self):
+        # self._course = InstituteCourse.objects.filter(institute=self._institute).prefetch_related('course','faculty').\
+        #     select_related("")
+        self._course = InstituteCourse.objects.get(pk=self._institute_course).\
+            select_related('course','faculty')
 
 
 class GetCourseUseCase(BaseUseCase):

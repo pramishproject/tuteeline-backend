@@ -4,6 +4,7 @@ from apps.consultancy.serializers import ListConsultancySerializer
 from apps.counselling import models
 from apps.counselling.models import TestJson
 from apps.institute.models import Institute, InstituteStaff
+from apps.institute.serializers import InstituteStaffSerializer
 from apps.students.models import StudentModel
 import uuid
 
@@ -52,6 +53,26 @@ class ListStudentCounsellingSerializer(serializers.ModelSerializer):
             'physical_counselling',
             'notes',
             'education_level'
+        )
+
+class InstituteCounsellingDetail(serializers.ModelSerializer):
+    interested_Course = serializers.ListSerializer(child=serializers.CharField(), source='get_interested_course')
+    assign_to = InstituteStaffSerializer(many=False,read_only=True)
+    class Meta:
+        model = models.InstituteCounselling
+        fields = (
+            'id',
+            'institute',
+            'interested_Course',
+            'status',
+            'which_time',
+            'physical_counselling',
+            'notes',
+            'education_level',
+            'created_at',
+            'updated_at',
+            'assign_to',
+            'comment',
         )
 
 class GetStudentSerializer(serializers.ModelSerializer):

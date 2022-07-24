@@ -10,3 +10,6 @@ class TimeError(APIException):
 
 class CourseDoesntExist(NotFound):
     default_detail = _("institute course doesnt exist")
+
+class CounsellingDoesntExist(NotFound):
+    default_detail = _("counselling  doesnt exist")
