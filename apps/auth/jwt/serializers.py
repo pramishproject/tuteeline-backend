@@ -283,7 +283,7 @@ class VerifyInstituteUserOTPSerializer(CodeSerializer,OTPMixin):
         # get current user from views
         user = self.context['view'].get_object()
         # check for otp code validation
-        position = InstituteStaff.objects.get(user=user).role.name
+        position = InstituteStaff.objects.get(user=user)
         try:
             color = Settings.objects.get(user=user).color
         except Settings.DoesNotExist:
@@ -294,9 +294,11 @@ class VerifyInstituteUserOTPSerializer(CodeSerializer,OTPMixin):
             refresh = self.get_token(user)
             data['refresh_token'] = str(refresh)
             data['token'] = str(refresh.access_token)
-            data['role'] = position
+            data['role'] = position.role.name
             data['color'] = color
             data['id']=user.id
+            data["staff_id"] = str(position.id)
+            data["institute_id"] = str(position.institute.pk)
             user.last_login = now()
             user.save()
             return data
@@ -348,6 +350,8 @@ class NormalUserLoginResponseSerializer(serializers.Serializer):
     role = serializers.CharField()
     color = serializers.CharField()
     id = serializers.CharField()
+    institute_id = serializers.CharField(required=False)
+    staff_id = serializers.CharField(required=False)
     user_detail = NormalUserLoginDetailSerializer(source='user', read_only=True)
 
 
