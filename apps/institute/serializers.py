@@ -141,6 +141,7 @@ class UpdateInstituteSerializer(InstituteSerializer):
             'latitude',
             'longitude',
             'website',
+            'about',
         )
         
         def validate_email(self, value):

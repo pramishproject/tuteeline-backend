@@ -15,6 +15,10 @@ from apps.institute import usecase
 # Create your views here.
 from apps.user.permissions import IsNormalUser, IsStudentUser
 
+class InitView(generics.RetrieveAPIView):
+    """
+    init api
+    """
 
 class RegisterInstituteView(generics.CreateWithMessageAPIView):
     """
