@@ -68,7 +68,7 @@ class ListInstituteStaffView(generics.ListAPIView,InstituteMixins):
             institute=self.get_object(),
         ).execute()
 
-class GetInstituteStaffDetail(generics.ListAPIView,InstituteStaffMixins):
+class GetInstituteStaffDetail(generics.RetrieveAPIView,InstituteStaffMixins):
     """staff detail"""
     serializer_class = serializers.InstituteStaffSerializer
 

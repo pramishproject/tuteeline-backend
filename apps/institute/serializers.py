@@ -290,6 +290,8 @@ class InstituteStaffSerializer(serializers.ModelSerializer):
             'email',
             'user_name',
             'user_role',
+            'address',
+            'contact',
             'profile_photo',
         )
 

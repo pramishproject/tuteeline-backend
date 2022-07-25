@@ -34,6 +34,15 @@ class IsInstituteUser(BasePermission):
     def has_object_permission(self, request, view, obj):
         return bool(request.user == obj)
 
+class InitInstitute(BasePermission):
+    def has_permission(self, request, view):
+        user = request.user
+        if user.user_type == "institute_user":
+            return True
+        return False
+
+    def has_object_permission(self, request, view):
+        return request.user
 # class IsSuperUser(BasePermission):
 #     def has_permission(self, request, view):
 #         user = request.user
