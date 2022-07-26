@@ -132,8 +132,8 @@ LOCAL_APPS = [
     "apps.counselling.apps.CounsellingConfig",
     "apps.linkage.apps.LinkageConfig",
     "apps.consultancy_course.apps.ConsultancyCourseConfig",
-    "apps.affiliation.apps.AffiliationConfig"
-
+    "apps.affiliation.apps.AffiliationConfig",
+    "apps.role.apps.RoleConfig",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

@@ -65,3 +65,5 @@ class ListAffiliation(BaseUseCase):
 
     def _factory(self):
         self.affiliation = Affiliation.objects.filter(institute=self._institute).select_related("institute","university")
+
+# class ForwardApplicationUseCase

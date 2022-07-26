@@ -13,12 +13,19 @@ from apps.core import generics
 from apps.institute.models import Facility
 from apps.institute import usecase
 # Create your views here.
-from apps.user.permissions import IsNormalUser, IsStudentUser
+from apps.user.permissions import IsNormalUser, IsStudentUser, IsInstituteUser
+
 
 class InitView(generics.RetrieveAPIView):
     """
     init api
     """
+    permission_classes = (IsAuthenticated, IsInstituteUser)
+
+    def get_object(self):
+        return self.get_user_detail(self.request)
+
+    # def get_queryset(self):
 
 class RegisterInstituteView(generics.CreateWithMessageAPIView):
     """
