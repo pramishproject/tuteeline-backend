@@ -453,8 +453,6 @@ class CountApplicationUseCase(BaseUseCase):
         self._count = InstituteApply.objects.filter(
             institute=self._institute
         ).values("action").annotate(action_count=Count('action'))
-        print("******",type(self._count))
-
 
 
 class CompareInstituteCourseUseCase(BaseUseCase):

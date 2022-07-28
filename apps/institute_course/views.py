@@ -15,7 +15,13 @@ import io
 from django.http import FileResponse
 from reportlab.pdfgen import canvas
 from django.core.cache import cache
+import uuid
+# from rest_framework.response import Response
+from django.http import HttpResponse
+# from django.shortcuts import render
 
+# from django.views.generic import View
+from apps.institute_course.utils import html_to_pdf
 from apps.core import generics
 from apps.institute_course.models import InstituteApply
 from apps.institute_course.serializers import (
@@ -336,7 +342,9 @@ class CountApplicationStatus(generics.ListAPIView,InstituteMixins):
             institute=self.get_object()
         ).execute()
 
-
+class PiChart(APIView):
+    def get(self,request,institute_id): #todo
+        pass
 class ListInstituteActionHistoryView(generics.ListAPIView,ApplyMixin):
     """
     action history list
@@ -367,14 +375,27 @@ class CompareInstituteView(generics.RetrieveAPIView,CourseMixin): #TODO SPRINT1
             course=self.get_object(),
         ).execute()
 
-import uuid
-from rest_framework.response import Response
+
+
 class DownloadStudentApplication(APIView):
     def get(self,request,application_id):
+        application = uuid.UUID(application_id)
+        self._application = InstituteApply.objects.get(id=application_id)
+
+        data = GetMyApplicationDetailForInstituteSerializer(self._application, many=False).data
+        student = data.pop('student')
+        address = data.pop("address")
+        pdf = html_to_pdf('pdf/application.html', {"student":student,"address":address})
+
+
+        return HttpResponse(pdf, content_type='application/pdf')
+        # return render(request, 'pdf/application.html', {
+        #     'name': 'bar',
+        # }, content_type='application/xhtml+xml')
         # Create a file-like buffer to receive PDF data.
-        print(application_id)
+        # print(application_id)
         # application = uuid.UUID(application_id)
-        # self._application = InstituteApply.objects.get(id=application)
+        # self._application = InstituteApply.objects.get(id=application_id)
         # data = GetMyApplicationDetailForInstituteSerializer(self._application,many=False).data
         # student=data.pop('student')
         # # address = data.pop("address_relation")
@@ -390,24 +411,27 @@ class DownloadStudentApplication(APIView):
         # action_by = data.pop('action_field')
         # consultancy =data.pop('consultancy')
         # faculty =data.pop('faculty')
-        # print(data,dict(student),dict(identity))
-        buffer = io.BytesIO()
-
-        # Create the PDF object, using the buffer as its "file."
-        p = canvas.Canvas(buffer)
+        # print(institute_logo)
+        # buffer = io.BytesIO()
+        #
+        # # Create the PDF object, using the buffer as its "file."
+        # p = canvas.Canvas(buffer)
 
         # Draw things on the PDF. Here's where the PDF generation happens.
         # See the ReportLab documentation for the full list of functionality.
-        p.drawString(100, 100, "Tuteeline")
-
-
-        # Close the PDF object cleanly, and we're done.
-        p.showPage()
-        p.save()
-
-        # FileResponse sets the Content-Disposition header so that browsers
-        # present the option to save the file.
-        buffer.seek(0)
-        file_name = application_id+".pdf"
-        return FileResponse(buffer, as_attachment=True, filename=file_name)
+        # p.drawString(100, 100, "STUDENT APPLICATION")
+        #
+        #
+        # # Close the PDF object cleanly, and we're done.
+        # p.showPage()
+        # p.save()
+        #
+        # # FileResponse sets the Content-Disposition header so that browsers
+        # # present the option to save the file.
+        # buffer.seek(0)
+        # file_name = application_id+".pdf"
+        #
+        # # return FileResponse(buffer, as_attachment=True, filename=file_name)
         # return Response({"c":1})
+
+

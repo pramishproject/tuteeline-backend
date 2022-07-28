@@ -562,7 +562,7 @@ class GetMyApplicationDetailForInstituteSerializer(serializers.ModelSerializer):
     apply_to = serializers.DictField(source="institute_data")
     student = StudentProfileDetailSerializer(read_only=True,many=False)
     faculty = serializers.CharField(source='get_faculty_name')
-
+    address = serializers.DictField(source='student_address')
     checked_student_academic = CheckedAcademicDocumentInstituteSerializer(read_only=True, many=True)
     checked_student_essay = CheckedStudentEssayForInstituteSerializer(read_only=True, many=True)
     checked_student_identity = CheckStudentIdentityForInstituteSerializer(read_only=True, many=True)
@@ -575,6 +575,7 @@ class GetMyApplicationDetailForInstituteSerializer(serializers.ModelSerializer):
         fields = (
             'student',
             'apply_to',
+            'address',
             'checked_student_identity',
             'checked_student_essay',
             'checked_student_sop',
