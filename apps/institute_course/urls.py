@@ -114,7 +114,7 @@ urlpatterns = [
         name="history-action"
     ),
     path(
-        'application_detail/pdf',
+        '<str:application_id>/application_detail/pdf',
         views.DownloadStudentApplication.as_view()
     )
 

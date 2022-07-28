@@ -370,10 +370,10 @@ class CompareInstituteView(generics.RetrieveAPIView,CourseMixin): #TODO SPRINT1
 import uuid
 from rest_framework.response import Response
 class DownloadStudentApplication(APIView):
-    def get(self,request):
+    def get(self,request,application_id):
         # Create a file-like buffer to receive PDF data.
 
-        application = uuid.UUID("972a3826-c0d0-4839-b852-b29d316618f1")
+        application = uuid.UUID(application_id)
         self._application = InstituteApply.objects.get(id=application)
         data = GetMyApplicationDetailForInstituteSerializer(self._application,many=False).data
         student=data.pop('student')
@@ -407,5 +407,6 @@ class DownloadStudentApplication(APIView):
         # FileResponse sets the Content-Disposition header so that browsers
         # present the option to save the file.
         buffer.seek(0)
-        return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+        file_name = application_id+".pdf"
+        return FileResponse(buffer, as_attachment=True, filename=file_name)
         # return Response({"c":1})
