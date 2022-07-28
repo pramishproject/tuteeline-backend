@@ -8,26 +8,19 @@ from apps.institute.models import Institute
 
 INSTITUTE_PERMISSIONS = [
     "ACTION_INSTITUTE_APPLICATION",
+    "VIEW_STUDENT_APPLICATION",
     "COMMENT_INSTITUTE_APPLICATION",
     "EDIT_INSTITUTE_PROFILE",
-    "ADD_INSTITUTE_USER",
-    "DELETE_INSTITUTE_USER",
-    "EDIT_INSTITUTE_USER"
-    "ADD_INSTITUTE_GALLERY",
-    "DELETE_INSTITUTE_GALLERY",
-    "ADD_INSTITUTE_BLOGS",
-    "EDIT_INSTITUTE_BLOGS",
-    "DELETE_INSTITUTE_BLOGS",
+    "ADD_DELETE_EDIT_INSTITUTE_USER",
+    "VIEW_INSTITUTE_USER",
+    "ADD_DELETE_EDIT_INSTITUTE_GALLERY",
+    "ADD_DELETE_EDIT_INSTITUTE_BLOGS",
     "COUNSELLING_INSTITUTE_STUDENT",
     "APPROVE_LINKAGE_REQUEST",
     "VIEW_LINKAGE_REQUEST",
     "VIEW_DASHBOARD",
-    "ADD_AFFILIATION",
-    "EDIT_AFFILIATION",
-    "DELETE_AFFILIATION",
-    "ADD_INSTITUTE_COURSE",
-    "DELETE_INSTITUTE_COURSE",
-    "UPDATE_INSTITUTE_COURSE",
+    "ADD_EDIT_DELETE_AFFILIATION",
+    "ADD_DELETE_EDIT_INSTITUTE_COURSE",
 ]
 
 class Role(BaseModel):
@@ -40,4 +33,14 @@ class Role(BaseModel):
     class Meta:
         unique_together = ('institute', 'consultancy','portal','name')
         db_table = "staff_role"
+
+    def __str__(self):
+        return self.name
+
+    # def clean(self):
+    #     super(StaffPosition).updated_at =self.name
+
+    def save(self, *args, **kwargs):
+        self.name = self.name.lower()
+        super(Role, self).save(*args, **kwargs)
 

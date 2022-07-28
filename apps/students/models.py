@@ -79,6 +79,7 @@ class StudentModel(BaseModel):
     @property
     def application_status(self):
         # get_student_application_status(self.pk)
+        flexiple.title()
         return {}
 
 

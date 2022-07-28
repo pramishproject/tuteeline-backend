@@ -1,4 +1,5 @@
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.views import APIView
 
 from apps.consultancy.mixins import ConsultancyMixin
 from apps.institute_course.filter import ApplicationFilter, ApplicationAggregateFilter, FilterInstituteCourse
@@ -10,9 +11,13 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+import io
+from django.http import FileResponse
+from reportlab.pdfgen import canvas
 from django.core.cache import cache
 
 from apps.core import generics
+from apps.institute_course.models import InstituteApply
 from apps.institute_course.serializers import (
     ApplicationSerializerDashboard,
     CancelStudentApplicationSerializer,
@@ -362,4 +367,45 @@ class CompareInstituteView(generics.RetrieveAPIView,CourseMixin): #TODO SPRINT1
             course=self.get_object(),
         ).execute()
 
+import uuid
+from rest_framework.response import Response
+class DownloadStudentApplication(APIView):
+    def get(self,request):
+        # Create a file-like buffer to receive PDF data.
 
+        application = uuid.UUID("972a3826-c0d0-4839-b852-b29d316618f1")
+        self._application = InstituteApply.objects.get(id=application)
+        data = GetMyApplicationDetailForInstituteSerializer(self._application,many=False).data
+        student=data.pop('student')
+        # address = data.pop("address_relation")
+        course = data.pop('apply_to')
+        identity = data.pop('checked_student_identity')
+        essay =data.pop('checked_student_essay')
+        sop = data.pop('checked_student_sop')
+        academic = data.pop('checked_student_academic')
+        lor = data.pop('checked_student_lor')
+        institute = data.pop('institute')
+        consultancy = data.pop('apply_from')
+        action = data.pop('action')
+        action_by = data.pop('action_field')
+        consultancy =data.pop('consultancy')
+        faculty =data.pop('faculty')
+        print(data,dict(student),dict(identity))
+        buffer = io.BytesIO()
+
+        # Create the PDF object, using the buffer as its "file."
+        p = canvas.Canvas(buffer)
+
+        # Draw things on the PDF. Here's where the PDF generation happens.
+        # See the ReportLab documentation for the full list of functionality.
+        p.drawString(100, 100, "Tuteeline")
+
+        # Close the PDF object cleanly, and we're done.
+        p.showPage()
+        p.save()
+
+        # FileResponse sets the Content-Disposition header so that browsers
+        # present the option to save the file.
+        buffer.seek(0)
+        # return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+        return Response({"c":1})

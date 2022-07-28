@@ -181,11 +181,29 @@ class InstituteApply(BaseModel):
 
     @property
     def student_address(self):
+        parmanent = ""
+        temporary = ""
         try:
-            self.address = StudentAddress.objects.get(student=self.student)
-            return self.address.country
+            self.address = StudentAddress.objects.filter(student=self.student)
+            # ('permanent', 'PERMANENT'),
+            # ('temporary'
+            for i in self.address:
+                if i.type == "permanent":
+                    parmanent = i.country+','+i.city +","+i.street +","+i.state_provision+","+str(i.postal_code)
+
+                if i.type == "temporary":
+                    temporary = i.country+','+i.city +","+i.street +","+i.state_provision+","+str(i.postal_code)
+            data = {
+                "permanent_address":parmanent,
+                "temporary_address":temporary,
+            }
+            return data
         except StudentAddress.DoesNotExist:
-            return None
+            data = {
+                "permanent_address": parmanent,
+                "temporary_address": temporary,
+            }
+            return data
     @property
     def get_consultancy_name(self):
         if self.consultancy != None:

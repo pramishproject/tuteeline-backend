@@ -30,7 +30,7 @@ class CourseAdmin(BaseModelAdmin):
 @admin.register(InstituteApply)
 class InstituteApplyAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display  + (
-        'institute',
+        'institute','student'
     )
 
 @admin.register(CheckedAcademicDocument)

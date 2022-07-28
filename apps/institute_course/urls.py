@@ -112,6 +112,10 @@ urlpatterns = [
         '<apply_id>/action/history',
         views.ListInstituteActionHistoryView.as_view(),
         name="history-action"
+    ),
+    path(
+        'application_detail/pdf',
+        views.DownloadStudentApplication.as_view()
     )
 
 ]

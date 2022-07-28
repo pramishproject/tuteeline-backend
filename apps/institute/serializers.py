@@ -30,10 +30,11 @@ class InstituteSerializer(serializers.ModelSerializer):
 class RegisterInstituteSerializer(InstituteSerializer):
     email = serializers.EmailField(write_only=True)
     password = fields.PasswordField()
-
+    fullName = serializers.CharField(required=False)
     class Meta(InstituteSerializer.Meta):
         fields = (
             'name',
+            'fullName',
             'institute_email',
             'category',
             'university',

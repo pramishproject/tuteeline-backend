@@ -33,9 +33,13 @@ class RegisterInstituteUsecase(usecases.CreateUseCase, NotificationMixin):
     def _factory(self):
         # email = self._data["email"]
         # create consultancy user
+        fullname = self._data.get("fullName")
+        if fullname != None:
+            self._data.pop("fullName")
         user = InstituteUser.objects.create(
             email=self._data.pop("email"),
-            password=(self._data.pop("password"))
+            password=(self._data.pop("password")),
+            fullname = fullname
         )
 
         #2. Institute
@@ -110,9 +114,7 @@ class GetInstituteUseCase(BaseUseCase):
 
     def _factory(self):
         try:
-
             self._institute = Institute.objects.get(pk=self._institute_id)
-
         except Institute.DoesNotExist:
             raise InstituteNotFound
 
