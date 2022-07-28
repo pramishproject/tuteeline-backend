@@ -13,6 +13,14 @@ from apps.students.models import FavouriteInstitute
 
 User = get_user_model()
 
+class InitSerilizer(serializers.Serializer):
+    staff_id = serializers.CharField()
+    institute_id = serializers.CharField()
+    user_id = serializers.CharField()
+    role = serializers.CharField()
+    image = serializers.URLField()
+    name =  serializers.CharField()
+
 class InstituteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Institute

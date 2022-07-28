@@ -15,7 +15,6 @@ class CreateRoleUseCases(BaseUseCase):
     def _factory(self):
         permissions = self._data.get("permissions")
         name = self._data.get("name")
-        print(type(permissions))
         if not isinstance(permissions, list):
             raise PermissionFormatError
         else:
@@ -30,3 +29,13 @@ class CreateRoleUseCases(BaseUseCase):
             institute=self._institute
             )
 
+class ListInstituteRoleUseCase(BaseUseCase):
+    def __init__(self,institute):
+        self._institute = institute
+
+    def execute(self):
+        self._factory()
+        return self._role
+
+    def _factory(self):
+        self._role = Role.objects.filter(institute=self._institute)

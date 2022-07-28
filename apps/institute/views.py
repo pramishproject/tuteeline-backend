@@ -1,6 +1,6 @@
 
 from apps.institute.filter import  InstituteFilter
-from apps.institute.models import Institute
+from apps.institute.models import Institute, InstituteStaff
 from apps.institute.mixins import InstituteMixins, ScholorshipMixins, SocialMediaMixins, FacilityMixin, \
     InstituteStaffMixins
 from django.utils.translation import gettext_lazy as _
@@ -12,20 +12,30 @@ from apps.institute import serializers
 from apps.core import generics
 from apps.institute.models import Facility
 from apps.institute import usecase
+from rest_framework.response import Response
 # Create your views here.
 from apps.user.permissions import IsNormalUser, IsStudentUser, IsInstituteUser
+from rest_framework.views import APIView
 
-
-class InitView(generics.RetrieveAPIView):
+class InitView(APIView):
     """
     init api
     """
     permission_classes = (IsAuthenticated, IsInstituteUser)
-
-    def get_object(self):
-        return self.get_user_detail(self.request)
-
-    # def get_queryset(self):
+    def  get(self,request):
+        user_id = self.request.user.id
+        staff = InstituteStaff.objects.get(user=self.request.user)
+        data = {
+            "institute_id" : staff.institute.id,
+            "role" : staff.role.name,
+            "staff_id" : staff.id,
+            "name" : self.request.user.fullname,
+            "image" :staff.profile_photo.url,
+            "user_id" : user_id
+        }
+        serializer = serializers.InitSerilizer(instance=data)
+        data = serializer.data
+        return Response(data)
 
 class RegisterInstituteView(generics.CreateWithMessageAPIView):
     """

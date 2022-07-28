@@ -10,3 +10,14 @@ class AddInstituteRoleSerializers(serializers.ModelSerializer):
             'name',
             'permissions',
         )
+
+class InstituteRoleListSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Role
+        fields = (
+            'id',
+            'name',
+            'permissions',
+            'created_at' ,
+            'updated_at',
+        )

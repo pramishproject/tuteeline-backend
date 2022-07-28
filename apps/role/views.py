@@ -7,7 +7,7 @@ class CreateInstituteRole(generics.CreateAPIView,InstituteMixins):
     this api is use to create institute role
     """
     serializer_class = serializers.AddInstituteRoleSerializers
-    def get_queryset(self):
+    def get_object(self):
         return self.get_institute()
 
     def perform_create(self, serializer):
@@ -16,3 +16,13 @@ class CreateInstituteRole(generics.CreateAPIView,InstituteMixins):
             institute=self.get_queryset(),
         ).execute()
 
+class ListInstituteRole(generics.ListAPIView,InstituteMixins):
+    """list role"""
+    serializer_class = serializers.InstituteRoleListSerializers
+    def get_object(self):
+        return self.get_institute()
+
+    def get_queryset(self):
+        return usecases.ListInstituteRoleUseCase(
+            institute=self.get_object()
+        ).execute()

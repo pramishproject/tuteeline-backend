@@ -134,6 +134,11 @@ urlpatterns = [
         '<institute_staff_id>/verify/change_password',
         views.VerifyUserAndChangePassword.as_view(),
         name="change-password"
+    ),
+    path(
+        'init',
+        views.InitView.as_view(),
+        name="init"
     )
 
 
