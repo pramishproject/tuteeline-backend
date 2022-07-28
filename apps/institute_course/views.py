@@ -407,5 +407,5 @@ class DownloadStudentApplication(APIView):
         # FileResponse sets the Content-Disposition header so that browsers
         # present the option to save the file.
         buffer.seek(0)
-        # return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
-        return Response({"c":1})
+        return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+        # return Response({"c":1})
