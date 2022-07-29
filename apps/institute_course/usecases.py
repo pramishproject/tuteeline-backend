@@ -1,8 +1,10 @@
 
 from django.db import connection
 from django.db.models import Count
-from django.db.models.functions import TruncDay
+from django.db.models.functions import TruncDay,TruncWeek,TruncMonth,TruncYear
 from django.utils.datetime_safe import datetime
+from datetime import  timedelta,timezone
+
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
 
@@ -24,7 +26,7 @@ from apps.utils.uuid_validation import is_valid_uuid
 
 
 class AddCourseUseCase(BaseUseCase):
-    def __init__(self , serializer ,institute:str):
+    def __init__(self , serializer ,institute:Institute):
         self._institute= institute
         self._serializer=serializer.validated_data
 
@@ -478,4 +480,52 @@ class ListInstituteActionHistoryUseCase(BaseUseCase):
         self._history = ApplyAction.objects.filter(apply = self._apply)
 
 
+class GetChartUseCase(BaseUseCase):
+    def __init__(self,institute,from_date:datetime,to_date:datetime,days:int):
+        self._institute = institute
+        self._from_date = from_date
+        self._to_date = to_date
+        self._day = days
+
+    def execute(self):
+        self._factory()
+        return self._count
+
+    def _factory(self):
+        self._data = InstituteApply.objects.filter(
+            institute=self._institute
+        )
+        self._count = 0
+        if self._day<= 7:
+            self._count =  self._data.annotate(date=TruncDay('created_at')).values("date","action").\
+                annotate(action_count=Count('action'))
+
+            self._daysChart()
+        elif self._day>7 and self._day < 35:
+            self._count=self._data.annotate(date=TruncWeek('created_at')).values("date","action").\
+                annotate(action_count=Count('action'))
+
+        elif self._day > 35 and self._day < 365:
+            self._count = self._data.annotate(date=TruncMonth('created_at')).values("date", "action"). \
+                annotate(action_count=Count('action'))
+
+        else:
+            self._count = self._data.annotate(date=TruncYear('created_at')).values("date", "action"). \
+                annotate(action_count=Count('action'))
+
+        print(self._count)
+
+    def _daysChart(self):
+        while self._from_date < self._to_date:
+            date_from = self._from_date + timedelta(days=1)
+            applied = 0
+            verify = 0
+            accept = 0
+            reject = 0
+            for application in self._count:
+                applicationTimestamp=application['date'].timestamp()
+                start = datetime(self._from_date.year, self._from_date.month, self._from_date.day).timestamp()
+                end   =  datetime(date_from.year,date_from.month, date_from.day).timestamp()
+                # if applicationTimestamp >
+            self._from_date = date_from
 

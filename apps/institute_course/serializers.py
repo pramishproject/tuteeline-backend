@@ -40,8 +40,9 @@ class InstituteCourseSerializer(serializers.ModelSerializer):
         #     fields=['institute','course']
         # )]
 
-class AddInstituteCourseSerializer(InstituteCourseSerializer):
-    class Meta(InstituteCourseSerializer.Meta):
+class AddInstituteCourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InstituteCourse
         fields = (
             'program',
             'faculty',

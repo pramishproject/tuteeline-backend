@@ -65,7 +65,7 @@ class InstituteCourse(BaseModel):
     total_fee = models.DecimalField(max_digits=10, decimal_places=3)
     reg_fee = models.DecimalField(max_digits=10, decimal_places=3,blank=True,null=True)
     fee_currency = models.CharField(choices=CURRENCY,max_length=20)
-    qualification = models.CharField(choices=LEVEL_CHOICE,default="",max_length=100)
+    qualification = models.CharField(choices=LEVEL_CHOICE,default="",max_length=100,null=True,blank=True)
     #this all are form open and close field
     # curriculum = models.TextField(default='')
 

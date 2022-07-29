@@ -116,6 +116,16 @@ urlpatterns = [
     path(
         '<str:application_id>/application_detail/pdf',
         views.DownloadStudentApplication.as_view()
+    ),
+    path(
+        'getCurrency',
+        views.GetCurrency.as_view(),
+        name="get currency"
+    ),
+    path(
+        '<str:institute_id>/<str:date_to>/<str:date_from>/chart',
+        views.InstituteChart.as_view(),
+        name="institute-chart"
     )
 
 ]

@@ -10,13 +10,14 @@ from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.permissions import AllowAny, IsAuthenticated
-
+from apps.institute_course.utils import parse_date
+from apps.utils.currency import RealTimeCurrencyConverter
 import io
 from django.http import FileResponse
 from reportlab.pdfgen import canvas
 from django.core.cache import cache
 import uuid
-# from rest_framework.response import Response
+from rest_framework.response import Response
 from django.http import HttpResponse
 # from django.shortcuts import render
 
@@ -345,6 +346,8 @@ class CountApplicationStatus(generics.ListAPIView,InstituteMixins):
 class PiChart(APIView):
     def get(self,request,institute_id): #todo
         pass
+
+
 class ListInstituteActionHistoryView(generics.ListAPIView,ApplyMixin):
     """
     action history list
@@ -434,4 +437,27 @@ class DownloadStudentApplication(APIView):
         # # return FileResponse(buffer, as_attachment=True, filename=file_name)
         # return Response({"c":1})
 
+class GetCurrency(APIView):
+    def get(self,request):
+        converter = RealTimeCurrencyConverter()
+        return Response(dict(converter.CurrencyName()))
 
+
+class InstituteChart(APIView):
+    def get(self,request,institute_id,date_to,date_from): #todo
+        date_to = parse_date(date_to)
+        date_from = parse_date(date_from)
+        if date_to == None or date_from == None:
+            return Response({"error":"data to and date from is not in format"},status=404)
+
+        if date_to < date_from:
+            return Response({"error":"date to is less then date from"})
+        delta = date_to - date_from
+        print("deltye",int(delta.days))
+        data = usecases.GetChartUseCase(
+            institute=institute_id,
+            from_date=date_from,
+            to_date=date_to,
+            days=int(delta.days),
+        ).execute()
+        return Response({"x":"x"})

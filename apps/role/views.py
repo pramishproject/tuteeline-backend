@@ -13,7 +13,7 @@ class CreateInstituteRole(generics.CreateAPIView,InstituteMixins):
     def perform_create(self, serializer):
         return usecases.CreateRoleUseCases(
             serializers=serializer,
-            institute=self.get_queryset(),
+            institute=self.get_object(),
         ).execute()
 
 class ListInstituteRole(generics.ListAPIView,InstituteMixins):

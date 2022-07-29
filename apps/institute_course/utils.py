@@ -2,8 +2,12 @@ from django.db.models import Count
 from django.db.models.functions import TruncDay
 
 from apps.institute_course.models import InstituteApply
-
-
+from datetime import datetime
+from django.utils.formats import get_format
+from io import BytesIO
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
 def get_student_application_status(student_id):
     application=InstituteApply.objects.filter(
         student=student_id
@@ -14,10 +18,7 @@ def get_student_application_status(student_id):
     print(application)
     return application
 
-from io import BytesIO
-from django.http import HttpResponse
-from django.template.loader import get_template
-from xhtml2pdf import pisa
+
 
 # defining the function to convert an HTML file to a PDF file
 def html_to_pdf(template_src, context_dict):
@@ -28,3 +29,15 @@ def html_to_pdf(template_src, context_dict):
      if not pdf.err:
          return HttpResponse(result.getvalue(), content_type='application/pdf')
      return None
+
+
+
+def parse_date(date_str):
+    """Parse date from string by DATE_INPUT_FORMATS of current language"""
+    for item in get_format('DATE_INPUT_FORMATS'):
+        try:
+            return datetime.strptime(date_str, item).date()
+        except (ValueError, TypeError):
+            continue
+
+    return None
