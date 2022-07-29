@@ -3,8 +3,8 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
 
 from apps.core.usecases import BaseUseCase
-from apps.staff.exceptions import StaffNotFound
-from apps.staff.models import StaffPosition
+from apps.staff.exceptions import StaffNotFound, PermissionFormatError, UnKnownPermissionType
+from apps.staff.models import StaffPosition,RoleBase,INSTITUTE_PERMISSIONS
 from apps.staff import serializers
 
 
@@ -84,3 +84,46 @@ class DeleteStaffPositionUseCase(BaseUseCase):
 
     def _factory(self):
         self._staff_position.delete()
+
+
+# from apps.core.usecases import BaseUseCase
+# from apps.institute.models import Institute
+# from apps.role.exceptions import PermissionFormatError, UnKnownPermissionType
+
+
+class CreateRoleUseCases(BaseUseCase):
+    def __init__(self,institute,serializers):
+        self._institute = institute
+        self._serializers = serializers
+        self._data = self._serializers.validated_data
+
+    def execute(self):
+        self._factory()
+
+    def _factory(self):
+        permissions = self._data.get("permission_list")
+        name = self._data.get("role_name")
+        if not isinstance(permissions, list):
+            raise PermissionFormatError
+        else:
+            permissions = set(permissions)
+            for i in permissions:
+                if i not in INSTITUTE_PERMISSIONS:
+                    raise UnKnownPermissionType
+
+        RoleBase.objects.create(
+            role_name=name,
+            permission_list=list(permissions),
+            institute=self._institute
+            )
+
+class ListInstituteRoleUseCase(BaseUseCase):
+    def __init__(self,institute):
+        self._institute = institute
+
+    def execute(self):
+        self._factory()
+        return self._role
+
+    def _factory(self):
+        self._role = RoleBase.objects.filter(institute=self._institute)

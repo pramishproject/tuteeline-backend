@@ -22,6 +22,16 @@ urlpatterns = [
         '<str:staff_position_id>/delete',
         views.DeleteStaffPositionView.as_view(),
         name='delete-staff-position',
+    ),
+    path(
+        '<institute_id>/institute/add',
+        views.CreateInstituteRole.as_view(),
+        name='add-institute-role'
+    ),
+    path(
+        '<institute_id>/institute/list',
+        views.ListInstituteRole.as_view(),
+        name="list-institute-role"
     )
 
 ]

@@ -528,5 +528,6 @@ class GetChartUseCase(BaseUseCase):
                 end   =  datetime(date_from.year,date_from.month, date_from.day).timestamp()
                 # if applicationTimestamp >
                 print(applicationTimestamp)
+
             self._from_date = date_from
 

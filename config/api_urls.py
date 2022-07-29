@@ -104,8 +104,4 @@ urlpatterns = [
         'affiliation/',
         include('apps.affiliation.urls')
     ),
-    path(
-        'role/',
-        include('apps.role.urls')
-    )
 ]

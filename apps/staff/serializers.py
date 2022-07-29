@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.staff.models import StaffPosition
+from apps.staff.models import StaffPosition,RoleBase
 
 
 class StaffPositionSerializer(serializers.ModelSerializer):
@@ -31,4 +31,28 @@ class UpdateStaffPositionSerializer(StaffPositionSerializer):
             'name',
         )
 
+
+
+
+
+
+
+class AddInstituteRoleSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = RoleBase
+        fields = (
+            'role_name',
+            'permission_list',
+        )
+
+class InstituteRoleListSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = RoleBase
+        fields = (
+            'id',
+            'role_name',
+            'permission_list',
+            'created_at' ,
+            'updated_at',
+        )
 
