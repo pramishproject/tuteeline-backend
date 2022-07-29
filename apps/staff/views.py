@@ -83,4 +83,8 @@ class ListInstituteRole(generics.ListAPIView,InstituteMixins):
     serializer_class = serializers.InstituteRoleListSerializers
     def get_object(self):
         return self.get_institute()
+    def get_queryset(self):
+        return usecases.ListInstituteRoleUseCase(
+            institute=self.get_object()
+        ).execute()
 #
