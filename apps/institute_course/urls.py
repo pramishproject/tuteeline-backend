@@ -54,6 +54,11 @@ urlpatterns = [
         name='list-application'
     ),
     path(
+        '<institute_staff_id>/institute_staff/assign/application/list',
+        views.AssignInstituteStaffApplicationView.as_view(),
+        name ="assign list",
+    ),
+    path(
         '<consultancy_id>/application/consultancy/list',
         views.ListStudentApplicationForCounsultancy.as_view(),
         name="application-consultancy"

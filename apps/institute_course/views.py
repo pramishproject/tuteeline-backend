@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from apps.consultancy.mixins import ConsultancyMixin
 from apps.institute_course.filter import ApplicationFilter, ApplicationAggregateFilter, FilterInstituteCourse
 from apps.institute_course.mixins import ApplyMixin, CourseMixin, FacultyMixin
-from apps.institute.mixins import InstituteMixins
+from apps.institute.mixins import InstituteMixins, InstituteStaffMixins
 
 from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
@@ -12,16 +12,12 @@ from rest_framework import filters
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from apps.institute_course.utils import parse_date
 from apps.utils.currency import RealTimeCurrencyConverter
-import io
-from django.http import FileResponse
-from reportlab.pdfgen import canvas
+
 from django.core.cache import cache
-import uuid
+
 from rest_framework.response import Response
 from django.http import HttpResponse
-# from django.shortcuts import render
 
-# from django.views.generic import View
 from apps.institute_course.utils import html_to_pdf
 from apps.core import generics
 from apps.institute_course.models import InstituteApply
@@ -41,7 +37,7 @@ from apps.institute_course.serializers import (
     InstituteCourseSerializer)
 
 from apps.institute_course import usecases
-# from apps.institute_course.mixins import InstituteCourseMixin
+
 from apps.students.mixins import StudentMixin
 
 
@@ -284,6 +280,20 @@ class ListStudentApplicationView(generics.ListAPIView,InstituteMixins):
             institute=self.get_object()
         ).execute()
 
+class AssignInstituteStaffApplicationView(generics.ListAPIView,InstituteStaffMixins):
+    serializer_class = GetStudentApplicationInstituteSerializer
+    filter_class = ApplicationFilter
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ["institute__course_related__course__name", "student__fullname"]
+
+    def get_object(self):
+        return self.get_institute_staff()
+
+    def get_queryset(self):
+        return usecases.ListStudentApplicationAssignInstituteStaffCourseUseCase(
+            staff=self.get_object()
+        ).execute()
+
 class ListStudentApplicationForCounsultancy(generics.ListAPIView,ConsultancyMixin):
     serializer_class = GetStudentApplicationInstituteSerializer
     filter_class = ApplicationFilter
@@ -416,7 +426,7 @@ class GetCurrency(APIView):
 
 
 class InstituteChart(APIView):
-    def get(self,request,institute_id,date_to,date_from): #todo
+    def get(self,request,institute_id,date_to,date_from):
         date_to = parse_date(date_to)
         date_from = parse_date(date_from)
         if date_to == None or date_from == None:
@@ -425,7 +435,7 @@ class InstituteChart(APIView):
         if date_to < date_from:
             return Response({"error":"date to is less then date from"})
         delta = date_to - date_from
-        print("deltye",int(delta.days))
+
         data = usecases.GetChartUseCase(
             institute=institute_id,
             from_date=date_from,
