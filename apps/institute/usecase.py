@@ -1,18 +1,16 @@
-import os
-
 
 from datetime import datetime
 from apps.institute.exceptions import FacilityDoesntExist, InstituteNotFound,\
     InstituteScholorshipDoesntExist, SocialMediaLinkDoesntExist,StaffNotFound
 
-
+from apps.staff.models import INSTITUTE_PERMISSIONS
 from apps.staff.models import StaffPosition
 from django.core.exceptions import ValidationError as DjangoValidationError
 
 from rest_framework.exceptions import ValidationError
 
 from apps.core import usecases
-from apps.core.usecases import BaseUseCase, CreateUseCase, BaseUserUseCase
+from apps.core.usecases import BaseUseCase, BaseUserUseCase
 from apps.notification.mixins import NotificationMixin
 from apps.institute.models import (AddInstituteFacility, 
                                    Facility, 
@@ -31,8 +29,6 @@ class RegisterInstituteUsecase(usecases.CreateUseCase, NotificationMixin):
         self.send_notification()
 
     def _factory(self):
-        # email = self._data["email"]
-        # create consultancy user
         fullname = self._data.get("fullName")
         if fullname != None:
             self._data.pop("fullName")
@@ -46,7 +42,10 @@ class RegisterInstituteUsecase(usecases.CreateUseCase, NotificationMixin):
         self._institute =  Institute.objects.create(
             **self._data
         )
-        role,created = StaffPosition.objects.get_or_create(name='owner')
+        role,created = StaffPosition.objects.\
+            get_or_create(name='owner',
+                        institute=self._institute,
+                          permission_list=INSTITUTE_PERMISSIONS)
 
         Settings.objects.create(user=user)
 
@@ -65,34 +64,6 @@ class RegisterInstituteUsecase(usecases.CreateUseCase, NotificationMixin):
             'id': str(self._institute.id)
         }
 
-# class CreateInstituteStaff(BaseUseCase,BaseUserUseCase):
-#     def __init__(self,institute,serializer):
-#         self._institute = institute
-#         self._data = serializer.validated_data
-#
-#     def execute(self):
-#         self._factory()
-#
-#     def _factory(self):
-#         user = {
-#             'email':self._data.pop('email'),
-#             'fullname':self._data.pop('fullname')
-#         }
-#         self.institute_user=InstituteUser.objects.create(
-#             **user
-#         )
-#         Settings.objects.create(user=self.institute_staff)
-#
-#         try:
-#             institute_staff = InstituteStaff.objects.create(
-#                 user = self.institute_user,
-#                 institute = self._institute,
-#                 role = self._data['role'],
-#                 profile_photo = self._data['profile_photo']
-#             )
-#             institute_staff.clean()
-#         except DjangoValidationError as e:
-#             raise ValidationError(e.message_dict)
 
             
 class ListInstituteUseCase(BaseUseCase):

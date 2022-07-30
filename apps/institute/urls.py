@@ -121,6 +121,11 @@ urlpatterns = [
         name="update-staff"
     ),
     path(
+        'staff/<institute_staff_id>/update/image',
+        views.UpdateInstituteStaffProfileImage.as_view(),
+        name="update-staff-profile"
+    ),
+    path(
         '<institute_id>/verified',
         views.VerifiedInstituteView.as_view(),
         name="verified-institute"

@@ -109,6 +109,18 @@ class UpdateInstituteStaffDetail(generics.UpdateWithMessageAPIView,InstituteStaf
             serializer=serializer
         ).execute()
 
+class UpdateInstituteStaffProfileImage(generics.UpdateWithMessageAPIView,InstituteStaffMixins):
+    serializer_class = serializers.UpdateInstituteStaffProfileImage
+
+    def get_object(self):
+        return self.get_institute_staff()
+
+    def perform_update(self, serializer):
+        return usecase.CustomInstituteUpdate(
+            instance=self.get_object(),
+            serializer=serializer
+        ).execute()
+
 class UpdateInstituteStaffRoleView(generics.UpdateWithMessageAPIView,InstituteStaffMixins):
     serializer_class = serializers.UpdateInstituteStaffRoleSerializer
     def get_object(self):

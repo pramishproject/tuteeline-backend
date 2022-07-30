@@ -39,18 +39,18 @@ class UpdateStaffPositionSerializer(StaffPositionSerializer):
 
 class AddInstituteRoleSerializers(serializers.ModelSerializer):
     class Meta:
-        model = RoleBase
+        model = StaffPosition
         fields = (
-            'role_name',
+            'name',
             'permission_list',
         )
 
 class InstituteRoleListSerializers(serializers.ModelSerializer):
     class Meta:
-        model = RoleBase
+        model = StaffPosition
         fields = (
             'id',
-            'role_name',
+            'name',
             'permission_list',
             'created_at' ,
             'updated_at',

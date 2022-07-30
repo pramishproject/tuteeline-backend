@@ -6,7 +6,17 @@ from apps.core.models import BaseModel
 
 class StaffPosition(BaseModel):
     name = models.CharField(max_length=20)
-
+    consultancy = models.ForeignKey('consultancy.Consultancy',
+                                    blank=True, null=True,
+                                    related_name="consultancy_staff_role",
+                                    on_delete=models.CASCADE)
+    institute = models.ForeignKey("institute.Institute",
+                                  blank=True,
+                                  null=True,
+                                  related_name="institute_staff_role",
+                                  on_delete=models.CASCADE)
+    permission_list = models.JSONField(default=[])
+    portal = models.BooleanField(default=False)
     # manager , true -> save
     # manager, false -> raise
     class Meta:
@@ -59,5 +69,5 @@ class RoleBase(BaseModel):
     #     super(StaffPosition).updated_at =self.name
 
     def save(self, *args, **kwargs):
-        self.name = self.role_name.lower()
+        self.name = self.name.lower()
         super(RoleBase, self).save(*args, **kwargs)

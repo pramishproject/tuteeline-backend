@@ -98,6 +98,21 @@ class UpdateInstituteStaffSerializer(serializers.ModelSerializer):
             'address',
         )
 
+class UpdateInstituteStaffSerializer(serializers.ModelSerializer):
+    fullname = serializers.CharField()
+    class Meta:
+        model = InstituteStaff
+        fields = (
+            'fullname',
+            'contact',
+            'address',
+        )
+class UpdateInstituteStaffProfileImage(serializers.ModelSerializer):
+    class Meta:
+        model = InstituteStaff
+        fields = (
+            'profile_photo',
+        )
 class UpdateInstituteStaffRoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = InstituteStaff

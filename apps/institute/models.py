@@ -1,7 +1,5 @@
-from apps import institute
+
 from datetime import datetime
-from django.core import validators
-from django.db.models import Q
 from django.db.models.deletion import CASCADE, DO_NOTHING
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError as DjangoValidationError
@@ -17,7 +15,7 @@ from apps.staff.models import StaffPosition
 from apps.user.models import InstituteUser
 from apps.institute.utils import upload_facility_image_to
 from django.core.validators import MaxValueValidator,MinValueValidator
-# from apps.institute_course.models import InstituteCourse
+
 
 
 # Create your models here.

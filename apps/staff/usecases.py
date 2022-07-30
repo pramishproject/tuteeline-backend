@@ -102,7 +102,7 @@ class CreateRoleUseCases(BaseUseCase):
 
     def _factory(self):
         permissions = self._data.get("permission_list")
-        name = self._data.get("role_name")
+        name = self._data.get("name")
         if not isinstance(permissions, list):
             raise PermissionFormatError
         else:
@@ -111,8 +111,8 @@ class CreateRoleUseCases(BaseUseCase):
                 if i not in INSTITUTE_PERMISSIONS:
                     raise UnKnownPermissionType
 
-        RoleBase.objects.create(
-            role_name=name,
+        StaffPosition.objects.create(
+            name=name,
             permission_list=list(permissions),
             institute=self._institute
             )
@@ -126,4 +126,4 @@ class ListInstituteRoleUseCase(BaseUseCase):
         return self._role
 
     def _factory(self):
-        self._role = RoleBase.objects.filter(institute=self._institute)
+        self._role = StaffPosition.objects.filter(institute=self._institute)
