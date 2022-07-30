@@ -444,6 +444,9 @@ class GetCurrency(APIView):
 
 
 class InstituteChart(APIView):
+    """
+    note:date from is always less then date to and date is always 2022-06-1 this format
+    """
     def get(self,request,institute_id,date_to,date_from): #todo
         date_to = parse_date(date_to)
         date_from = parse_date(date_from)
@@ -453,11 +456,10 @@ class InstituteChart(APIView):
         if date_to < date_from:
             return Response({"error":"date to is less then date from"})
         delta = date_to - date_from
-        print("deltye",int(delta.days))
         data = usecases.GetChartUseCase(
             institute=institute_id,
             from_date=date_from,
             to_date=date_to,
             days=int(delta.days),
         ).execute()
-        return Response({"x":"x"})
+        return Response({"results":data},status=200)
