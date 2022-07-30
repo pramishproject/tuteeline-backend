@@ -382,60 +382,32 @@ class CompareInstituteView(generics.RetrieveAPIView,CourseMixin): #TODO SPRINT1
 
 class DownloadStudentApplication(APIView):
     def get(self,request,application_id):
-        application = uuid.UUID(application_id)
         self._application = InstituteApply.objects.get(id=application_id)
 
         data = GetMyApplicationDetailForInstituteSerializer(self._application, many=False).data
         student = data.pop('student')
         address = data.pop("address")
-        pdf = html_to_pdf('pdf/application.html', {"student":student,"address":address})
+        course = data.pop('apply_to')
+        identity = data.pop('checked_student_identity')
+        essay = data.pop('checked_student_essay')
+        sop = data.pop('checked_student_sop')
+        academic = data.pop('checked_student_academic')
+        lor = data.pop('checked_student_lor')
+        institute_logo = self._application.institute.logo.url
+        apply_from = data.pop('apply_from')
+        action = data.pop('action')
+        action_by = data.pop('action_field')
+        consultancy =data.pop('consultancy')
+        faculty =data.pop('faculty')
+        pdf = html_to_pdf('pdf/application.html', {"student":student,"address":address,"course":course,
+                                                   "identity":identity,"essay":essay,"sop":sop,
+                                                   "academic":academic,"lor":lor,"institute_logo":institute_logo,
+                                                   "consultancy":consultancy,"action":action,"apply_from":apply_from,
+                                                   action_by:"action_by","faculty":faculty})
 
 
         return HttpResponse(pdf, content_type='application/pdf')
-        # return render(request, 'pdf/application.html', {
-        #     'name': 'bar',
-        # }, content_type='application/xhtml+xml')
-        # Create a file-like buffer to receive PDF data.
-        # print(application_id)
-        # application = uuid.UUID(application_id)
-        # self._application = InstituteApply.objects.get(id=application_id)
-        # data = GetMyApplicationDetailForInstituteSerializer(self._application,many=False).data
-        # student=data.pop('student')
-        # # address = data.pop("address_relation")
-        # course = data.pop('apply_to')
-        # identity = data.pop('checked_student_identity')
-        # essay =data.pop('checked_student_essay')
-        # sop = data.pop('checked_student_sop')
-        # academic = data.pop('checked_student_academic')
-        # lor = data.pop('checked_student_lor')
-        # institute_logo = self._application.institute.logo.url
-        # consultancy = data.pop('apply_from')
-        # action = data.pop('action')
-        # action_by = data.pop('action_field')
-        # consultancy =data.pop('consultancy')
-        # faculty =data.pop('faculty')
-        # print(institute_logo)
-        # buffer = io.BytesIO()
-        #
-        # # Create the PDF object, using the buffer as its "file."
-        # p = canvas.Canvas(buffer)
 
-        # Draw things on the PDF. Here's where the PDF generation happens.
-        # See the ReportLab documentation for the full list of functionality.
-        # p.drawString(100, 100, "STUDENT APPLICATION")
-        #
-        #
-        # # Close the PDF object cleanly, and we're done.
-        # p.showPage()
-        # p.save()
-        #
-        # # FileResponse sets the Content-Disposition header so that browsers
-        # # present the option to save the file.
-        # buffer.seek(0)
-        # file_name = application_id+".pdf"
-        #
-        # # return FileResponse(buffer, as_attachment=True, filename=file_name)
-        # return Response({"c":1})
 
 class GetCurrency(APIView):
     def get(self,request):
