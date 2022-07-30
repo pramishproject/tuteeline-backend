@@ -3,15 +3,14 @@ from django.db import connection
 from django.db.models import Count
 from django.db.models.functions import TruncDay,TruncWeek,TruncMonth,TruncYear
 from django.utils.datetime_safe import datetime
-from datetime import  timedelta
+from datetime import  timedelta,timezone
 
-import pytz
-
-utc=pytz.UTC
+from django.utils.translation import gettext_lazy as _
+from rest_framework.exceptions import ValidationError
 
 from apps.academic.exceptions import AcademicNotFound, LorNotFound, SopNotFound, EssayNotFound
 from apps.academic.models import Academic, PersonalEssay, StudentLor, StudentSop
-
+from apps.consultancy.models import Consultancy
 from apps.core.usecases import BaseUseCase
 from apps.institute.models import Institute, InstituteStaff
 from apps.institute_course.exceptions import CourseNotFound, FacultyNotFound, InstituteApplyNotFound, InstituteNotFound, \
@@ -21,12 +20,11 @@ from apps.institute_course.models import CommentApplicationInstitute, InstituteA
     ApplyAction, ActionApplyByConsultancy
 from apps.studentIdentity.exceptions import CitizenshipNotFound,PassportNotFound
 from apps.studentIdentity.models import Citizenship, Passport
+from apps.students.exceptions import StudentModelNotFound
+from apps.students.models import StudentModel
 from apps.utils.uuid_validation import is_valid_uuid
 
-WEEK_TIME="WEEK_TIME"
-DAY_TIME = "DAY_TIME"
-MONTH_TIME = "MONTH_TIME"
-YEAR_TIME ="YEAR_TIME"
+
 class AddCourseUseCase(BaseUseCase):
     def __init__(self , serializer ,institute:Institute):
         self._institute= institute
@@ -481,7 +479,7 @@ class ListInstituteActionHistoryUseCase(BaseUseCase):
     def _factory(self):
         self._history = ApplyAction.objects.filter(apply = self._apply)
 
-import pandas as pd
+
 class GetChartUseCase(BaseUseCase):
     def __init__(self,institute,from_date:datetime,to_date:datetime,days:int):
         self._institute = institute
@@ -491,10 +489,9 @@ class GetChartUseCase(BaseUseCase):
 
     def execute(self):
         self._factory()
-        return self.chart_data
+        return self._count
 
     def _factory(self):
-        self.chart_data = []
         self._data = InstituteApply.objects.filter(
             institute=self._institute
         )
@@ -503,76 +500,34 @@ class GetChartUseCase(BaseUseCase):
             self._count =  self._data.annotate(date=TruncDay('created_at')).values("date","action").\
                 annotate(action_count=Count('action'))
 
-            self._daysChart(DAY_TIME)
+            self._daysChart()
         elif self._day>7 and self._day < 35:
             self._count=self._data.annotate(date=TruncWeek('created_at')).values("date","action").\
                 annotate(action_count=Count('action'))
-            self._daysChart(WEEK_TIME)
 
         elif self._day > 35 and self._day < 365:
             self._count = self._data.annotate(date=TruncMonth('created_at')).values("date", "action"). \
                 annotate(action_count=Count('action'))
-            self._daysChart(MONTH_TIME)
+
         else:
             self._count = self._data.annotate(date=TruncYear('created_at')).values("date", "action"). \
                 annotate(action_count=Count('action'))
-            self._daysChart(YEAR_TIME)
 
-    def _daysChart(self,time_type):
-        label_count = 1
         print(self._count)
+
+    def _daysChart(self):
         while self._from_date < self._to_date:
-            label = self._from_date
-            # if time_type==DAY_TIME:
             date_from = self._from_date + timedelta(days=1)
-            if time_type == WEEK_TIME:
-                date_from = self._from_date + timedelta(weeks=1)
-                label = "weak" + str(label_count)
-                label_count = label_count +1
-
-            elif time_type == MONTH_TIME:
-                date_from = self._from_date + pd.DateOffset(months=1)
-                label = self._from_date.month
-
-            elif time_type == YEAR_TIME:
-                date_from = self._from_date + pd.DateOffset(months=12)
-                label = self._from_date.year
-
             applied = 0
             verify = 0
             accept = 0
             reject = 0
-            hold = 0
-            print(date_from)
             for application in self._count:
-                applicationTimestamp=application['date'].replace(tzinfo=None)
-                start = datetime(self._from_date.year, self._from_date.month, self._from_date.day)
-                end   =  datetime(date_from.year,date_from.month, date_from.day)
-
-                if applicationTimestamp>=start and applicationTimestamp < end:
-                    if application['action']=="verify":
-                        verify = application['action_count']+ verify
-                    elif application['action'] == 'applied':
-                        applied = application['action_count']+applied
-
-                    elif application['action'] == 'accept':
-                        accept = application['action_count']+accept
-
-                    elif application['action'] == 'reject':
-                        reject = application['action_count']+reject
-
-                    elif application['hold'] == 'hold':
-                        hold = application['action_count']+hold
-
-            self.chart_data.append({
-                "accept":accept,
-                "reject":reject,
-                "applied":applied,
-                "hold": hold,
-                "verify":verify,
-                "label":label,
-            })
-
+                applicationTimestamp=application['date'].timestamp()
+                start = datetime(self._from_date.year, self._from_date.month, self._from_date.day).timestamp()
+                end   =  datetime(date_from.year,date_from.month, date_from.day).timestamp()
+                # if applicationTimestamp >
+                print(applicationTimestamp)
 
             self._from_date = date_from
 
