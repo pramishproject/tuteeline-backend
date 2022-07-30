@@ -160,7 +160,16 @@ class InstituteApply(BaseModel):
             "contact":self.institute.contact,
             "country":self.institute.country,
         }
-
+    @property
+    def assign_institute_staff(self):
+        if self.institute_staff_assign != None:
+            return {
+                "name":self.institute_staff_assign.user.fullname,
+                "id":self.institute_staff_assign.id,
+                "email": self.institute_staff_assign.user.email,
+                "contact": self.institute_staff_assign.contact,
+            }
+        return {}
     @property
     def consultancy_data(self):
         if self.consultancy is not None:

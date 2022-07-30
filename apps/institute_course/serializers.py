@@ -268,6 +268,12 @@ class CancelStudentApplicationSerializer(serializers.ModelSerializer):
             'cancel',
         )
 
+class AssignStudentApplicationToInstituteStaff(serializers.ModelSerializer):
+    class Meta:
+        model = InstituteApply
+        fields = (
+            'institute_staff_assign',
+        )
 
 class GetStudentApplicationInstituteSerializer(serializers.ModelSerializer):
     student_name = serializers.CharField(source='get_student_user_name')
@@ -571,6 +577,7 @@ class GetMyApplicationDetailForInstituteSerializer(serializers.ModelSerializer):
     checked_student_sop = GetCheckedStudentSopForInstituteSerializer(read_only=True, many=True)
     course_name = serializers.CharField(source="get_student_course")
     action_field = InstituteApplicationStatus(read_only=True,many=False)
+    assign_institute_staff_data = serializers.DictField(source="assign_institute_staff")
     class Meta:
         model = InstituteApply
         fields = (
@@ -578,6 +585,7 @@ class GetMyApplicationDetailForInstituteSerializer(serializers.ModelSerializer):
             'apply_to',
             'address',
             'checked_student_identity',
+            'assign_institute_staff_data',
             'checked_student_essay',
             'checked_student_sop',
             'checked_student_academic',

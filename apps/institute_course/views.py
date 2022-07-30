@@ -34,7 +34,7 @@ from apps.institute_course.serializers import (
     StudentApplySerializer, CompareInstituteSerializer, StudentMyApplicationListSerializer,
     GetMyApplicationDocumentSerializer, GetMyApplicationDetailForInstituteSerializer, InstituteActionSerializer,
     ConsultancyActionSerializer, InstituteApplicationStatus, InstituteApplicationCountSerializer,
-    InstituteCourseSerializer)
+    InstituteCourseSerializer, AssignStudentApplicationToInstituteStaff)
 
 from apps.institute_course import usecases
 
@@ -292,6 +292,16 @@ class AssignInstituteStaffApplicationView(generics.ListAPIView,InstituteStaffMix
     def get_queryset(self):
         return usecases.ListStudentApplicationAssignInstituteStaffCourseUseCase(
             staff=self.get_object()
+        ).execute()
+class AssignApplicationToInstituteStaff(generics.UpdateWithMessageAPIView,ApplyMixin):
+    serializer_class = AssignStudentApplicationToInstituteStaff
+    def get_object(self):
+        return self.get_apply()
+
+    def perform_update(self, serializer):
+        return usecases.CancleStudentApplicationUseCase(
+            application=self.get_object(),
+            serializer = serializer
         ).execute()
 
 class ListStudentApplicationForCounsultancy(generics.ListAPIView,ConsultancyMixin):

@@ -363,6 +363,7 @@ class ListStudentApplicationAssignInstituteStaffCourseUseCase(BaseUseCase):
     def _factory(self):
         self._apply = InstituteApply.objects.filter(institute_staff_assign=self._staff).distinct()
 
+
 class ListStudentApplicationConsultancyCourseUseCase(BaseUseCase):
     def __init__(self, consultancy):
         self._consultancy = consultancy
@@ -401,7 +402,7 @@ class CancleStudentApplicationUseCase(BaseUseCase):
     def _factory(self):
         for key in self._data.keys():
             setattr(self._application,key,self._data.get(key))
-        # self._application.cancel = self._data.pop("cancel")
+
         self._application.updated_at = datetime.now()
         self._application.save()
 
