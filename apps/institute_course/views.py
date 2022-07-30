@@ -432,4 +432,4 @@ class InstituteChart(APIView):
             to_date=date_to,
             days=int(delta.days),
         ).execute()
-        return Response({"x":"x"})
+        return Response({"results":data})

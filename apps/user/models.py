@@ -65,7 +65,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     def save(self, *args, **kwargs):
         if not self.username:
             self.username = self.email
-        self.fullname = self.fullname.title()
+        if self.fullname != None:
+            self.fullname = self.fullname.title()
         super(User, self).save(*args, **kwargs)
 
     def activate(self):
