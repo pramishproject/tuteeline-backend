@@ -14,7 +14,7 @@ from apps.institute.models import Facility
 from apps.institute import usecase
 from rest_framework.response import Response
 # Create your views here.
-from apps.user.permissions import IsNormalUser, IsStudentUser, IsInstituteUser
+from apps.user.permissions import IsNormalUser, CheckPermission, IsInstituteUser
 from rest_framework.views import APIView
 
 class InitView(APIView):
@@ -185,23 +185,25 @@ class UpdateInstituteCoverimageView(generics.UpdateWithMessageAPIView,InstituteM
 
 
 class ListInstituteView(generics.ListAPIView):
-    # permission_classes = (IsAuthenticated,IsStudentUser)
+    # permission_classes = (IsAuthenticated, IsInstituteUser)
     serializer_class = serializers.ListInstituteSerializer
     filter_class = InstituteFilter
     filter_backends = [filters.SearchFilter,DjangoFilterBackend]
     search_fields = ['name','course_related__course__name','course_related__faculty__name']
     # https://www.django-rest-framework.org/api-guide/filtering/
-
     def get_queryset(self):
+
         return usecase.ListInstituteUseCase().execute()
 
 class UpdateBrochureView(generics.UpdateWithMessageAPIView,InstituteMixins):
     """
     this endpoint is use to update institute broucher
     """
+    permission_classes = (IsAuthenticated, IsInstituteUser)
     serializer_class = serializers.UpdateBrochureSerializer
 
     def get_object(self):
+        # is_auth = CheckPermission(permissions=["ACTION_INSTITUTE_APPLICATION"], user=self.request.user).has_permission()
         return self.get_institute()
 
     def perform_update(self, serializer):
@@ -234,7 +236,7 @@ class AddScholorshipView(generics.CreateWithMessageAPIView,InstituteMixins):
     """
     This endpoint is use to add scholorship
     """
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated, IsInstituteUser)
     serializer_class = serializers.AddScholorshipSerializer
     message = "Add scholorship successfully"
     def get_object(self):
@@ -268,6 +270,7 @@ class UpdateScholorshipView(generics.UpdateWithMessageAPIView,ScholorshipMixins)
     """
     serializer_class = serializers.AddScholorshipSerializer
     message =_("update successfullt")
+    permission_classes = (IsAuthenticated, IsInstituteUser)
     def get_object(self):
         return self.get_scholorship()
 
@@ -281,6 +284,7 @@ class DeleteScholorshipView(generics.DestroyWithMessageAPIView,ScholorshipMixins
     """
     This endpoint is use to delete scholorship
     """
+    permission_classes = (IsAuthenticated, IsInstituteUser)
     message =_("delete successfully")
     def get_object(self):
         return self.get_scholorship()
@@ -296,6 +300,7 @@ class AddSolicalMediaView(generics.CreateWithMessageAPIView,InstituteMixins):
     this endpoint is use to add sociali media
     """
     message = _("social media added")
+    permission_classes = (IsAuthenticated, IsInstituteUser)
     serializer_class = serializers.AddSocialMediaSerializer
     def get_object(self):
         return self.get_institute()
@@ -312,7 +317,7 @@ class DeleteSocialMediaView(generics.DestroyWithMessageAPIView,SocialMediaMixins
     This endpont is use to delete social media
     """
     message = _("social media delete successfully")
-
+    permission_classes = (IsAuthenticated, IsInstituteUser)
     def get_object(self):
         return self.get_socialmedia()
 
@@ -340,7 +345,7 @@ class AddFacilityView(generics.CreateWithMessageAPIView,InstituteMixins):
     This end point is use to add facility
     """
     serializer_class =serializers.AddInstituteFacilitySerializer
-
+    permission_classes = (IsAuthenticated, IsInstituteUser)
     def get_object(self):
         return self.get_institute()
 

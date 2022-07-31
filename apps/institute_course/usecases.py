@@ -507,7 +507,8 @@ class GetChartUseCase(BaseUseCase):
     def _factory(self):
         self.chart_data = []
         self._data = InstituteApply.objects.filter(
-            institute=self._institute
+            institute=self._institute,
+            created_at__range=[self._from_date, self._to_date]
         )
         self._count = 0
         if self._day<= 7:

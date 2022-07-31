@@ -15,7 +15,7 @@ urlpatterns = [
     ),
     path(
         '<str:staff_position_id>/update',
-        views.UpdateStaffPositionView.as_view(),
+        views.UpdateInstituteStaffRole.as_view(),
         name='update-staff-position',
     ),
     path(

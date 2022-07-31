@@ -69,8 +69,17 @@ class UpdateStaffPositionUseCase(BaseUseCase):
         self._factory()
 
     def _factory(self):
-        for key in self._data.keys():
-            setattr(self._staff_position, key, self._data.get(key))
+        permissions = self._data.get("permission_list")
+        name = str(self._data.get("name"))
+        if not isinstance(permissions, list):
+            raise PermissionFormatError
+        else:
+            permissions = set(permissions)
+            for i in permissions:
+                if i not in INSTITUTE_PERMISSIONS:
+                    raise UnKnownPermissionType
+        self._staff_position.name = name.lower()
+        self._staff_position.permission_list = permissions
         self._staff_position.updated_at = datetime.now()
         self._staff_position.save()
 

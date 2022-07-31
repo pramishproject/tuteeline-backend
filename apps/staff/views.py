@@ -30,14 +30,9 @@ class ListStaffPositionView(generics.ListAPIView):
         return usecases.ListStaffPositionUseCase().execute()
 
 
-class UpdateStaffPositionView(generics.UpdateAPIView, StaffPositionMixin):
-    """
-    Use this end-point to Update  Staff position.
-    """
-
-    serializer_class = serializers.UpdateStaffPositionSerializer
-    queryset = ''
-    permission_classes = (AllowAny,)
+class UpdateInstituteStaffRole(generics.UpdateAPIView, StaffPositionMixin):
+    """update institute role"""
+    serializer_class = serializers.AddInstituteRoleSerializers
 
     def get_object(self):
         return self.get_staff_position()
@@ -87,4 +82,4 @@ class ListInstituteRole(generics.ListAPIView,InstituteMixins):
         return usecases.ListInstituteRoleUseCase(
             institute=self.get_object()
         ).execute()
-#
+

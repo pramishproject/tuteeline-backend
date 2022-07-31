@@ -11,6 +11,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from apps.institute_course.utils import parse_date
+from apps.user.permissions import IsInstituteUser
 from apps.utils.currency import RealTimeCurrencyConverter
 
 from django.core.cache import cache
@@ -47,7 +48,7 @@ class AddInstituteCourse(generics.CreateWithMessageAPIView,InstituteMixins):
     """
     message = _('Create successfully')
     serializer_class = AddInstituteCourseSerializer
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated, IsInstituteUser)
     
     def get_object(self):
         return self.get_institute()
@@ -100,9 +101,8 @@ class UpdateInstituteCourse(generics.UpdateWithMessageAPIView,CourseMixin):
     """
     This endpoint is use to update institute course
     """
-
+    permission_classes = (IsAuthenticated, IsInstituteUser)
     serializer_class = AddInstituteCourseSerializer
-    permission_classes = (AllowAny,)
     message = _("update successfully")
 
     def get_object(self):
@@ -121,7 +121,7 @@ class DeleteInstituteCourseView(generics.DestroyWithMessageAPIView,CourseMixin):
     This endpoint is use to destroy institute course
     """
     message = _("institute course delete successfully")
-
+    permission_classes = (IsAuthenticated, IsInstituteUser)
     def get_object(self):
         return self.get_institutecourse()
 
@@ -181,6 +181,7 @@ class GetMyApplicationDetailView(generics.RetrieveAPIView,ApplyMixin):
 
 class GetStudentApplicationDetailForInstitute(generics.RetrieveAPIView,ApplyMixin):
     serializer_class = GetMyApplicationDetailForInstituteSerializer
+    permission_classes = (IsAuthenticated, IsInstituteUser)
 
     def get_object(self):
         return self.get_apply()
@@ -196,7 +197,7 @@ class ApplyInstituteCourseView(generics.CreateAPIView):
     """
     serializer_class = StudentApplySerializer
     message = _("student apply successfully")
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated)
 
     def perform_create(self, serializer):
 
@@ -210,6 +211,7 @@ class ActionByInstitute(generics.CreateWithMessageAPIView,ApplyMixin):
     """
     serializer_class = InstituteActionSerializer
     message =_("action successfully")
+    permission_classes = (IsAuthenticated, IsInstituteUser)
     def get_object(self):
         return self.get_apply()
     def perform_create(self, serializer):
@@ -272,6 +274,7 @@ class ListStudentApplicationView(generics.ListAPIView,InstituteMixins):
     filter_class = ApplicationFilter
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ["institute__course_related__course__name", "student__fullname"]
+    permission_classes = (IsAuthenticated, IsInstituteUser)
     def get_object(self):
         return self.get_institute()
 
@@ -285,7 +288,7 @@ class AssignInstituteStaffApplicationView(generics.ListAPIView,InstituteStaffMix
     filter_class = ApplicationFilter
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ["institute__course_related__course__name", "student__fullname"]
-
+    permission_classes = (IsAuthenticated, IsInstituteUser)
     def get_object(self):
         return self.get_institute_staff()
 
@@ -295,6 +298,7 @@ class AssignInstituteStaffApplicationView(generics.ListAPIView,InstituteStaffMix
         ).execute()
 class AssignApplicationToInstituteStaff(generics.UpdateWithMessageAPIView,ApplyMixin):
     serializer_class = AssignStudentApplicationToInstituteStaff
+    permission_classes = (IsAuthenticated, IsInstituteUser)
     def get_object(self):
         return self.get_apply()
 
@@ -339,6 +343,7 @@ class ApplicantDashboard(generics.ListAPIView,InstituteMixins):
     """
     student applicant dashboard
     """
+    permission_classes = (IsAuthenticated, IsInstituteUser)
     serializer_class = ApplicationSerializerDashboard
     filter_class = ApplicationAggregateFilter
     filter_backends = [DjangoFilterBackend]
@@ -354,6 +359,7 @@ class CountApplicationStatus(generics.ListAPIView,InstituteMixins):
     """
     count student application
     """
+    permission_classes = (IsAuthenticated, IsInstituteUser)
     serializer_class = InstituteApplicationCountSerializer
     def get_object(self):
         return self.get_institute()
@@ -363,15 +369,13 @@ class CountApplicationStatus(generics.ListAPIView,InstituteMixins):
             institute=self.get_object()
         ).execute()
 
-class PiChart(APIView):
-    def get(self,request,institute_id): #todo
-        pass
 
 
 class ListInstituteActionHistoryView(generics.ListAPIView,ApplyMixin):
     """
     action history list
     """
+    permission_classes = (IsAuthenticated, IsInstituteUser)
     serializer_class = InstituteApplicationStatus
 
     def get_object(self):
@@ -401,6 +405,7 @@ class CompareInstituteView(generics.RetrieveAPIView,CourseMixin): #TODO SPRINT1
 
 
 class DownloadStudentApplication(APIView):
+    permission_classes = (IsAuthenticated, IsInstituteUser)
     def get(self,request,application_id):
         self._application = InstituteApply.objects.get(id=application_id)
 
@@ -436,6 +441,7 @@ class GetCurrency(APIView):
 
 
 class InstituteChart(APIView):
+    permission_classes = (IsAuthenticated, IsInstituteUser)
     def get(self,request,institute_id,date_to,date_from):
         date_to = parse_date(date_to)
         date_from = parse_date(date_from)
