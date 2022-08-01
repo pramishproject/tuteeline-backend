@@ -48,7 +48,7 @@ class AddInstituteCourse(generics.CreateWithMessageAPIView,InstituteMixins):
     """
     message = _('Create successfully')
     serializer_class = AddInstituteCourseSerializer
-    permission_classes = (IsAuthenticated, IsInstituteUser)
+    # permission_classes = (IsAuthenticated, IsInstituteUser)
     
     def get_object(self):
         return self.get_institute()
@@ -101,7 +101,7 @@ class UpdateInstituteCourse(generics.UpdateWithMessageAPIView,CourseMixin):
     """
     This endpoint is use to update institute course
     """
-    permission_classes = (IsAuthenticated, IsInstituteUser)
+    # permission_classes = (IsAuthenticated, IsInstituteUser)
     serializer_class = AddInstituteCourseSerializer
     message = _("update successfully")
 
@@ -121,7 +121,7 @@ class DeleteInstituteCourseView(generics.DestroyWithMessageAPIView,CourseMixin):
     This endpoint is use to destroy institute course
     """
     message = _("institute course delete successfully")
-    permission_classes = (IsAuthenticated, IsInstituteUser)
+    # permission_classes = (IsAuthenticated, IsInstituteUser)
     def get_object(self):
         return self.get_institutecourse()
 
@@ -181,7 +181,7 @@ class GetMyApplicationDetailView(generics.RetrieveAPIView,ApplyMixin):
 
 class GetStudentApplicationDetailForInstitute(generics.RetrieveAPIView,ApplyMixin):
     serializer_class = GetMyApplicationDetailForInstituteSerializer
-    permission_classes = (IsAuthenticated, IsInstituteUser)
+    # permission_classes = (IsAuthenticated, IsInstituteUser)
 
     def get_object(self):
         return self.get_apply()
@@ -197,7 +197,7 @@ class ApplyInstituteCourseView(generics.CreateAPIView):
     """
     serializer_class = StudentApplySerializer
     message = _("student apply successfully")
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def perform_create(self, serializer):
 
@@ -211,7 +211,7 @@ class ActionByInstitute(generics.CreateWithMessageAPIView,ApplyMixin):
     """
     serializer_class = InstituteActionSerializer
     message =_("action successfully")
-    permission_classes = (IsAuthenticated, IsInstituteUser)
+    # permission_classes = (IsAuthenticated, IsInstituteUser)
     def get_object(self):
         return self.get_apply()
     def perform_create(self, serializer):
@@ -288,7 +288,7 @@ class AssignInstituteStaffApplicationView(generics.ListAPIView,InstituteStaffMix
     filter_class = ApplicationFilter
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ["institute__course_related__course__name", "student__fullname"]
-    permission_classes = (IsAuthenticated, IsInstituteUser)
+    # permission_classes = (IsAuthenticated, IsInstituteUser)
     def get_object(self):
         return self.get_institute_staff()
 
@@ -298,7 +298,7 @@ class AssignInstituteStaffApplicationView(generics.ListAPIView,InstituteStaffMix
         ).execute()
 class AssignApplicationToInstituteStaff(generics.UpdateWithMessageAPIView,ApplyMixin):
     serializer_class = AssignStudentApplicationToInstituteStaff
-    permission_classes = (IsAuthenticated, IsInstituteUser)
+    # permission_classes = (IsAuthenticated, IsInstituteUser)
     def get_object(self):
         return self.get_apply()
 
@@ -412,23 +412,25 @@ class DownloadStudentApplication(APIView):
         data = GetMyApplicationDetailForInstituteSerializer(self._application, many=False).data
         student = data.pop('student')
         address = data.pop("address")
-        course = data.pop('apply_to')
-        identity = data.pop('checked_student_identity')
-        essay = data.pop('checked_student_essay')
-        sop = data.pop('checked_student_sop')
-        academic = data.pop('checked_student_academic')
-        lor = data.pop('checked_student_lor')
-        institute_logo = self._application.institute.logo.url
-        apply_from = data.pop('apply_from')
-        action = data.pop('action')
-        action_by = data.pop('action_field')
-        consultancy =data.pop('consultancy')
-        faculty =data.pop('faculty')
-        pdf = html_to_pdf('pdf/application.html', {"student":student,"address":address,"course":course,
-                                                   "identity":identity,"essay":essay,"sop":sop,
-                                                   "academic":academic,"lor":lor,"institute_logo":institute_logo,
-                                                   "consultancy":consultancy,"action":action,"apply_from":apply_from,
-                                                   action_by:"action_by","faculty":faculty})
+        # course = data.pop('apply_to')
+        # identity = data.pop('checked_student_identity')
+        # essay = data.pop('checked_student_essay')
+        # sop = data.pop('checked_student_sop')
+        # academic = data.pop('checked_student_academic')
+        # lor = data.pop('checked_student_lor')
+        # institute_logo = self._application.institute.logo.url
+        # apply_from = data.pop('apply_from')
+        # action = data.pop('action')
+        # action_by = data.pop('action_field')
+        # consultancy =data.pop('consultancy')
+        # faculty =data.pop('faculty')
+        pdf = html_to_pdf('pdf/application.html', {"student":student,"address":address,
+                                                   # "course":course,
+                                                   # "identity":identity,"essay":essay,"sop":sop,
+                                                   # "academic":academic,"lor":lor,"institute_logo":institute_logo,
+                                                   # "consultancy":consultancy,"action":action,"apply_from":apply_from,
+                                                   # "action_by":action_by,"faculty":faculty
+                                                   })
 
 
         return HttpResponse(pdf, content_type='application/pdf')

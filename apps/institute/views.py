@@ -59,7 +59,7 @@ class AddInstituteStaffView(generics.CreateWithMessageAPIView ,InstituteMixins):
     serializer_class = serializers.CreateInstituteStaffSerializer
     parser_classes = (MultiPartParser,FileUploadParser)
     message = _('Add staff successfully')
-    permission_classes = (IsAuthenticated, IsInstituteUser)
+    # permission_classes = (IsAuthenticated, IsInstituteUser)
     def get_object(self):
         return self.get_institute()
 
