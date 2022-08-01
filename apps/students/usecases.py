@@ -333,3 +333,12 @@ class GetStudentDetailUseCase(BaseUseCase):
 
         except StudentModel.DoesNotExist:
             raise StudentModelNotFound
+
+class CountInstituteVisitor(BaseUseCase):
+    def __init__(self,institute):
+        self._institute = institute
+    def execute(self):
+        self._factory()
+        return self._count
+    def _factory(self):
+        self._count = InstituteViewers.objects.filter(institute=self._institute).count()

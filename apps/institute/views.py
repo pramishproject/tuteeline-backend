@@ -59,7 +59,7 @@ class AddInstituteStaffView(generics.CreateWithMessageAPIView ,InstituteMixins):
     serializer_class = serializers.CreateInstituteStaffSerializer
     parser_classes = (MultiPartParser,FileUploadParser)
     message = _('Add staff successfully')
-    # permission_classes = (IsAuthenticated, IsStudentUser)
+    permission_classes = (IsAuthenticated, IsInstituteUser)
     def get_object(self):
         return self.get_institute()
 
@@ -199,7 +199,7 @@ class UpdateBrochureView(generics.UpdateWithMessageAPIView,InstituteMixins):
     """
     this endpoint is use to update institute broucher
     """
-    permission_classes = (IsAuthenticated, IsInstituteUser)
+    # permission_classes = (IsAuthenticated, IsInstituteUser)
     serializer_class = serializers.UpdateBrochureSerializer
 
     def get_object(self):
@@ -236,7 +236,7 @@ class AddScholorshipView(generics.CreateWithMessageAPIView,InstituteMixins):
     """
     This endpoint is use to add scholorship
     """
-    permission_classes = (IsAuthenticated, IsInstituteUser)
+    # permission_classes = (IsAuthenticated, IsInstituteUser)
     serializer_class = serializers.AddScholorshipSerializer
     message = "Add scholorship successfully"
     def get_object(self):
@@ -270,7 +270,7 @@ class UpdateScholorshipView(generics.UpdateWithMessageAPIView,ScholorshipMixins)
     """
     serializer_class = serializers.AddScholorshipSerializer
     message =_("update successfullt")
-    permission_classes = (IsAuthenticated, IsInstituteUser)
+    # permission_classes = (IsAuthenticated, IsInstituteUser)
     def get_object(self):
         return self.get_scholorship()
 
@@ -284,7 +284,7 @@ class DeleteScholorshipView(generics.DestroyWithMessageAPIView,ScholorshipMixins
     """
     This endpoint is use to delete scholorship
     """
-    permission_classes = (IsAuthenticated, IsInstituteUser)
+    # permission_classes = (IsAuthenticated, IsInstituteUser)
     message =_("delete successfully")
     def get_object(self):
         return self.get_scholorship()
@@ -300,7 +300,7 @@ class AddSolicalMediaView(generics.CreateWithMessageAPIView,InstituteMixins):
     this endpoint is use to add sociali media
     """
     message = _("social media added")
-    permission_classes = (IsAuthenticated, IsInstituteUser)
+    # permission_classes = (IsAuthenticated, IsInstituteUser)
     serializer_class = serializers.AddSocialMediaSerializer
     def get_object(self):
         return self.get_institute()
@@ -317,7 +317,7 @@ class DeleteSocialMediaView(generics.DestroyWithMessageAPIView,SocialMediaMixins
     This endpont is use to delete social media
     """
     message = _("social media delete successfully")
-    permission_classes = (IsAuthenticated, IsInstituteUser)
+    # permission_classes = (IsAuthenticated, IsInstituteUser)
     def get_object(self):
         return self.get_socialmedia()
 
@@ -345,7 +345,7 @@ class AddFacilityView(generics.CreateWithMessageAPIView,InstituteMixins):
     This end point is use to add facility
     """
     serializer_class =serializers.AddInstituteFacilitySerializer
-    permission_classes = (IsAuthenticated, IsInstituteUser)
+    # permission_classes = (IsAuthenticated, IsInstituteUser)
     def get_object(self):
         return self.get_institute()
 

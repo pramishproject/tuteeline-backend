@@ -197,7 +197,7 @@ class ApplyInstituteCourseView(generics.CreateAPIView):
     """
     serializer_class = StudentApplySerializer
     message = _("student apply successfully")
-    permission_classes = (IsAuthenticated)
+    permission_classes = (IsAuthenticated,)
 
     def perform_create(self, serializer):
 
@@ -343,7 +343,7 @@ class ApplicantDashboard(generics.ListAPIView,InstituteMixins):
     """
     student applicant dashboard
     """
-    permission_classes = (IsAuthenticated, IsInstituteUser)
+    # permission_classes = (IsAuthenticated, IsInstituteUser)
     serializer_class = ApplicationSerializerDashboard
     filter_class = ApplicationAggregateFilter
     filter_backends = [DjangoFilterBackend]
@@ -359,7 +359,7 @@ class CountApplicationStatus(generics.ListAPIView,InstituteMixins):
     """
     count student application
     """
-    permission_classes = (IsAuthenticated, IsInstituteUser)
+    # permission_classes = (IsAuthenticated, IsInstituteUser)
     serializer_class = InstituteApplicationCountSerializer
     def get_object(self):
         return self.get_institute()
@@ -375,7 +375,7 @@ class ListInstituteActionHistoryView(generics.ListAPIView,ApplyMixin):
     """
     action history list
     """
-    permission_classes = (IsAuthenticated, IsInstituteUser)
+    # permission_classes = (IsAuthenticated, IsInstituteUser)
     serializer_class = InstituteApplicationStatus
 
     def get_object(self):
@@ -405,7 +405,7 @@ class CompareInstituteView(generics.RetrieveAPIView,CourseMixin): #TODO SPRINT1
 
 
 class DownloadStudentApplication(APIView):
-    permission_classes = (IsAuthenticated, IsInstituteUser)
+    # permission_classes = (IsAuthenticated, IsInstituteUser)
     def get(self,request,application_id):
         self._application = InstituteApply.objects.get(id=application_id)
 
@@ -441,7 +441,7 @@ class GetCurrency(APIView):
 
 
 class InstituteChart(APIView):
-    permission_classes = (IsAuthenticated, IsInstituteUser)
+    # permission_classes = (IsAuthenticated, IsInstituteUser)
     def get(self,request,institute_id,date_to,date_from):
         date_to = parse_date(date_to)
         date_from = parse_date(date_from)

@@ -124,7 +124,7 @@ class InstituteApply(BaseModel):
     student = models.ForeignKey(StudentModel, 
     on_delete=DO_NOTHING
     )
-    course = models.ForeignKey(InstituteCourse, on_delete=DO_NOTHING)
+    course = models.ForeignKey(InstituteCourse, on_delete=models.CASCADE)
     consultancy = models.ForeignKey(
         Consultancy, 
         blank=True, 
@@ -269,7 +269,7 @@ class AddScholorshipInCourse(BaseModel):
     # pass
 
 class CommentApplicationInstitute(BaseModel):
-    application = models.ForeignKey(InstituteApply,on_delete=DO_NOTHING)
+    application = models.ForeignKey(InstituteApply,on_delete=models.CASCADE)
     institute_user = models.ForeignKey(InstituteStaff,on_delete=DO_NOTHING)
     comment = models.TextField()
 

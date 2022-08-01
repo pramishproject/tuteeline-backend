@@ -124,7 +124,7 @@ class GetInstituteGalleryUseCase(BaseUseCase):
     def _factory(self):
         try:
             self._institute_gallery = InstituteGallery.objects.get(pk=self._gallery)
-        except Gallery.DoesNotExist:
+        except InstituteGallery.DoesNotExist:
             raise ValidationError({'error': _('Gallery  does not exist for following id.')})
 
 

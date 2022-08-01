@@ -221,3 +221,5 @@ class ListVisitorHistrySerializer(serializers.ModelSerializer):
     #     )]
 
 
+class CountInstituteVisitorsSerializer(serializers.Serializer):
+    count = serializers.IntegerField()

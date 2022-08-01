@@ -103,11 +103,16 @@ class UpdateInstituteCourseUseCase(BaseUseCase):
 
 
 class DeleteInstituteCourseUseCase(BaseUseCase):
-    def __init__(self,institute_course):
+    def __init__(self,institute_course:InstituteCourse):
         self._institute_course = institute_course
 
     def execute(self):
+        print(self._institute_course.institute)
+        self._factory()
+
+    def _factory(self):
         self._institute_course.delete()
+
 
 class ListFacultyUseCase(BaseUseCase):
     def execute(self):
@@ -510,6 +515,7 @@ class GetChartUseCase(BaseUseCase):
             institute=self._institute,
             created_at__range=[self._from_date, self._to_date]
         )
+        print(self._data)
         self._count = 0
         if self._day<= 7:
             self._count =  self._data.annotate(date=TruncDay('created_at')).values("date","action").\

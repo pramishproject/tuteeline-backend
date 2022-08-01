@@ -2,8 +2,11 @@
 from django.utils.translation import gettext_lazy as _
 from rest_framework.parsers import MultiPartParser, FileUploadParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.views import APIView
 
 from apps.core import generics
+from apps.institute.mixins import InstituteMixins
+from rest_framework.response import Response
 from apps.students import serilizers, usecases
 from apps.students.mixins import AddressMixin, FavouriteMixin, StudentMixin
 from apps.students.models import StudentModel
@@ -244,6 +247,18 @@ class GetStudentDetailView(generics.RetrieveAPIView,StudentMixin):
         return usecases.GetStudentDetailUseCase(
             student=self.get_object()
         ).execute()
+
+
+class CountInstituteVisitors(APIView):
+    def get(self,request,institute_id):
+        count = usecases.CountInstituteVisitor(
+            institute=institute_id
+        ).execute()
+        return Response(
+            {
+                "count":count
+            },status=200
+        )
 
 # portal
 class ListStudentsForPortal(generics.ListAPIView):

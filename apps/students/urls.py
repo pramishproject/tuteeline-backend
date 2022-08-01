@@ -78,6 +78,11 @@ urlpatterns = [
         views.ListStudentsForPortal.as_view(),
         name = "list"
     ),
+    path(
+        '<institute_id>/visitors/count',
+        views.CountInstituteVisitors.as_view(),
+        name="count-visitors"
+    ),
 ]
 # urlpatterns = format_suffix_patterns (urlpatterns)
 
