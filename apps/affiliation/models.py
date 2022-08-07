@@ -9,5 +9,6 @@ class Affiliation(BaseModel):
     university = models.ForeignKey(Institute,on_delete=models.CASCADE , related_name="university_affiliation")
     course = models.JSONField()# {type:"ALL or CUSTOM",course:["course_id"]}
     verify = models.BooleanField(default=False)
+    university_user= models.ForeignKey(Institute,on_delete=models.DO_NOTHING,blank=True,null=True)
     class Meta:
         unique_together = ('institute','university')

@@ -128,6 +128,11 @@ urlpatterns = [
         views.DownloadStudentApplication.as_view()
     ),
     path(
+        'csv',
+        views.ApplicationCsv.as_view(),
+        name="csv"
+    ),
+    path(
         'getCurrency',
         views.GetCurrency.as_view(),
         name="get currency"

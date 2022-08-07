@@ -5,6 +5,7 @@ from apps.affiliation.exceptions import UniqueKeyError, UniversityIsNotAffiliate
 from django.db import IntegrityError
 
 from apps.institute.models import Institute
+from apps.institute_course.models import InstituteApply
 
 
 class AddAffiliationUseCase(BaseUseCase):
@@ -66,4 +67,13 @@ class ListAffiliation(BaseUseCase):
     def _factory(self):
         self.affiliation = Affiliation.objects.filter(institute=self._institute).select_related("institute","university")
 
-# class ForwardApplicationUseCase
+class ForwardApplicationUseCase(BaseUseCase):
+    def __init__(self,university,institute):
+        self._university = university
+        self._institute = institute
+
+    def execute(self):
+        self._factory()
+
+    def _factory(self):
+        InstituteApply.objects.filter(institute=self._institute).update()

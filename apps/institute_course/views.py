@@ -432,9 +432,27 @@ class DownloadStudentApplication(APIView):
                                                    # "action_by":action_by,"faculty":faculty
                                                    })
 
+        download = 'application/html'
+        return HttpResponse(pdf, content_type=download)
 
-        return HttpResponse(pdf, content_type='application/pdf')
+import csv
+from django.http import HttpResponse
 
+class ApplicationCsv(APIView):
+    def get(self,request):
+        # Create the HttpResponse object with the appropriate CSV header.
+        download = 'text/csv'
+        view_csv = 'text/html'
+        response = HttpResponse(
+            content_type=view_csv,
+            headers={'Content-Disposition': 'attachment; filename="somefilename.csv"'},
+        )
+
+        writer = csv.writer(response)
+        writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
+        writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
+
+        return response
 
 class GetCurrency(APIView):
     def get(self,request):

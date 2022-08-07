@@ -141,7 +141,7 @@ class InstituteApply(BaseModel):
                                      related_name="action_institute")
     consultancy_action = models.ForeignKey('ActionApplyByConsultancy',blank=True, null=True,on_delete=models.DO_NOTHING
                                            ,related_name="action_consultancy")
-    institute = models.ForeignKey(Institute, on_delete=CASCADE)
+    institute = models.ForeignKey(Institute, on_delete=CASCADE,related_name="apply_institute")
     institute_staff_assign = models.ForeignKey(InstituteStaff,
                                                on_delete=models.CASCADE,
                                                blank=True,
@@ -150,7 +150,7 @@ class InstituteApply(BaseModel):
     view_date = models.DateField(blank=True, null=True)
     forward = models.BooleanField(default=False)
     cancel = models.BooleanField(default=False)
-
+    # university = models.ForeignKey(Institute, on_delete=models.DO_NOTHING,null=True,blank=True,related_name="university_forward")
     @property
     def institute_data(self):
         return {

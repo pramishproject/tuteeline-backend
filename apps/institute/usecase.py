@@ -222,7 +222,8 @@ class CreateInstituteStaffUseCase(BaseUseCase,BaseUserUseCase):
     def _factory(self):
         user  = {
             'email':self._data.pop('email'),
-            'fullname' : self._data.pop('fullname')
+            'fullname' : self._data.pop('fullname'),
+            "password" : (self._data.pop("password")),
         }
 
         #1. create institute user
@@ -233,13 +234,13 @@ class CreateInstituteStaffUseCase(BaseUseCase,BaseUserUseCase):
 
         #2 . institute staff
         try:
-            consultancy_staff = InstituteStaff.objects.create(
+            institute_staff = InstituteStaff.objects.create(
                 user=self.institute_user,
                 institute=self._institute,
                 role=self._data['role'],
                 profile_photo=self._data['profile_photo']
             )
-            consultancy_staff.clean()
+            institute_staff.clean()
         except DjangoValidationError as e:
             raise ValidationError(e.message_dict)
 

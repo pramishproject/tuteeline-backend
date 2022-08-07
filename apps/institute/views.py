@@ -31,7 +31,11 @@ class InitView(APIView):
             "staff_id" : staff.id,
             "name" : self.request.user.fullname,
             "image" :staff.profile_photo.url,
-            "user_id" : user_id
+            "user_id" : user_id,
+            "institute_type":staff.institute.category,
+            "email":staff.user.email,
+            "contact":staff.contact,
+            "address":staff.address,
         }
         serializer = serializers.InitSerilizer(instance=data)
         data = serializer.data

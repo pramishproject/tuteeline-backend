@@ -20,6 +20,10 @@ class InitSerilizer(serializers.Serializer):
     role = serializers.CharField()
     image = serializers.URLField()
     name =  serializers.CharField()
+    institute_type = serializers.CharField()
+    email =  serializers.EmailField()
+    contact: serializers.CharField()
+    address: serializers.CharField()
 
 class InstituteSerializer(serializers.ModelSerializer):
     class Meta:
@@ -324,7 +328,7 @@ class CreateInstituteStaffSerializer(InstituteStaffSerializer):
     email = serializers.EmailField()
     fullname = serializers.CharField()
     profile_photo = serializers.ImageField(write_only=True)
-
+    password = serializers.CharField(required=False)
     class Meta(InstituteStaffSerializer.Meta):
         model = InstituteStaff
         fields = (
@@ -332,6 +336,7 @@ class CreateInstituteStaffSerializer(InstituteStaffSerializer):
             'fullname',
             'role',
             'profile_photo',
+            'password',
         )
 
 class AddSocialMediaSerializer(serializers.ModelSerializer):
