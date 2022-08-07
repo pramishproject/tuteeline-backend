@@ -271,6 +271,7 @@ class InstituteActionUseCase(BaseUseCase):
             apply=self._apply
             )
         self._apply.action_field = self.status
+        self._apply.action = self.status.action
         self._apply.updated_at = datetime.now()
         self._apply.save()
 

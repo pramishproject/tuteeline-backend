@@ -130,6 +130,12 @@ class ListInstituteStaffCounsellingSerializer(serializers.ModelSerializer):
             'education_level',
             'assign_to',
         )
+class ActionCounselling(serializers.ModelSerializer):
+    class Meta:
+        model = models.InstituteCounselling
+        fields = (
+            'status',
+        )
 
 class AssignCounselorUserSerializer(serializers.ModelSerializer):
     class Meta:
