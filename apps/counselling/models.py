@@ -9,9 +9,9 @@ from apps.institute_course.models import InstituteCourse
 # Create your models here.
 
 COUNCELLING_STATUS = (
-    ("START","start"),
-    ("COMPLETE","complete"),
-    ("NOT STARTED","not_start")
+    ("START","START"),
+    ("COMPLETE","COMPLETE"),
+    ("NOT_STARTED","NOT_STARTED")
 )
 class InstituteCounselling(BaseModel):
     student = models.ForeignKey(to=StudentModel,on_delete=models.CASCADE)
