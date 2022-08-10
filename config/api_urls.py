@@ -17,6 +17,10 @@ urlpatterns = [
         include('apps.notification.urls'),
     ),
     path(
+        'comments/',
+        include('apps.comment.urls'),
+    ),
+    path(
         'students/',
         include('apps.students.urls')
     ),
