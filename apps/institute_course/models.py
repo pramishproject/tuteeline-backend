@@ -150,6 +150,8 @@ class InstituteApply(BaseModel):
     view_date = models.DateField(blank=True, null=True)
     forward = models.BooleanField(default=False)
     cancel = models.BooleanField(default=False)
+    request_for_application_fee = models.BooleanField(default=False)
+
     # university = models.ForeignKey(Institute, on_delete=models.DO_NOTHING,null=True,blank=True,related_name="university_forward")
     @property
     def institute_data(self):
@@ -228,6 +230,11 @@ class InstituteApply(BaseModel):
         return self.institute.name
     class Meta:
         unique_together = ('student','course')
+
+# class PaymentVerification(BaseModel):
+#     apply = models.ForeignKey(to=InstituteApply,on_delete=models.DO_NOTHING)
+#     institute_user = models.ForeignKey(to=InstituteStaff, on_delete=models.DO_NOTHING)
+#     verify = models.BooleanField(default=False)
 
 class ApplyAction(BaseModel):
     apply = models.ForeignKey(to=InstituteApply,on_delete=models.CASCADE)
