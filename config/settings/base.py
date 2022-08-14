@@ -133,7 +133,8 @@ LOCAL_APPS = [
     "apps.linkage.apps.LinkageConfig",
     "apps.consultancy_course.apps.ConsultancyCourseConfig",
     "apps.affiliation.apps.AffiliationConfig",
-    "apps.comment.apps.CommentConfig"
+    "apps.comment.apps.CommentConfig",
+    "apps.payment_method.apps.PaymentMethodConfig",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

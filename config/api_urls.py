@@ -21,6 +21,10 @@ urlpatterns = [
         include('apps.comment.urls'),
     ),
     path(
+        'payment_method/',
+        include('apps.payment_method.urls')
+    ),
+    path(
         'students/',
         include('apps.students.urls')
     ),
