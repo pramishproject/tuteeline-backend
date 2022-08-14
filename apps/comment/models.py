@@ -30,7 +30,7 @@ class ApplicationComments(BaseModel):
         upload_to=upload_comment_image_to,
         blank=True,
         null=True,)
-    parent_comment = models.ForeignKey(to="ApplicationComments",on_delete=models.CASCADE,null=True,blank=True)
+    parent_comment = models.ForeignKey(to="ApplicationComments",related_name="parent_application_comment",on_delete=models.CASCADE,null=True,blank=True)
     application = models.ForeignKey(to=InstituteApply,on_delete=models.CASCADE)
 
     @property

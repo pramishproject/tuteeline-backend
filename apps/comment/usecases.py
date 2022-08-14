@@ -45,7 +45,7 @@ class ListApplicationComment(BaseUseCase):
             application=self._application,
             parent_comment=None,
             # user_id__user_type ="institute_user"
-        ).order_by('created_at')[:: -1]
+        ).prefetch_related('parent_application_comment').order_by('created_at')[:: -1]
 
 class ListChildApplicationComment(BaseUseCase):
     def __init__(self,comment):
@@ -55,7 +55,7 @@ class ListChildApplicationComment(BaseUseCase):
         self._factory()
         return self._child_comment
     def _factory(self):
-        print(":**************")
+
         self._child_comment = ApplicationComments.objects.filter(
             parent_comment=self._comment,
         ).order_by('created_at')
