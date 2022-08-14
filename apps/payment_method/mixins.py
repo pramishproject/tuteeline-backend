@@ -1,7 +1,7 @@
-from apps.institute_course import usecases
+from apps.payment_method import usecases
 
-class CourseMixin:
+class ProviderMixins:
     def get_provider(self):
-        return usecases.GetCourseUseCase(
-            institute_course_id = self.kwargs.get('institute_course_id')
+        return usecases.GetProviderUseCase(
+            provider_payment_id = self.kwargs.get('provider_payment_id')
         ).execute()
