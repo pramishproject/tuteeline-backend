@@ -35,7 +35,7 @@ from apps.institute_course.serializers import (
     StudentApplySerializer, CompareInstituteSerializer, StudentMyApplicationListSerializer,
     GetMyApplicationDocumentSerializer, GetMyApplicationDetailForInstituteSerializer, InstituteActionSerializer,
     ConsultancyActionSerializer, InstituteApplicationStatus, InstituteApplicationCountSerializer,
-    InstituteCourseSerializer, AssignStudentApplicationToInstituteStaff)
+    InstituteCourseSerializer, AssignStudentApplicationToInstituteStaff, ApproveApplicationFeeSerializer)
 
 from apps.institute_course import usecases
 
@@ -251,7 +251,25 @@ class AddCommentApplicationView(generics.CreateWithMessageAPIView,ApplyMixin):
             serializer =serializer,
             apply = self.get_object()
         )
+class RequestForApplicationFeeView(generics.UpdateWithMessageAPIView,ApplyMixin):
+    serializer_class = ApproveApplicationFeeSerializer
+    def get_object(self):
+        return self.get_apply()
 
+    def perform_update(self, serializer):
+        return usecases.RequestForApplicationFeeUseCase(
+            apply=self.get_object()
+        ).execute()
+
+class ApproveApplicationVoucher(generics.CreateWithMessageAPIView,ApplyMixin):
+    def get_object(self):
+        return self.get_apply()
+
+    def perform_create(self, serializer):
+        return usecases.ApproveApplicationVoucher(
+            apply=self.get_object(),
+            serializer =serializer,
+        ).execute()
 class GetListCommentApplicationView(generics.ListAPIView,ApplyMixin):
     """
     this endpoint is use to get comment
@@ -386,6 +404,7 @@ class ListInstituteActionHistoryView(generics.ListAPIView,ApplyMixin):
             apply=self.get_object(),
         ).execute()
 
+
 # -------------------------------------Application end-----------------------------
 
 
@@ -434,6 +453,7 @@ class DownloadStudentApplication(APIView):
 
         download = 'application/html'
         return HttpResponse(pdf, content_type=download)
+
 
 import csv
 from django.http import HttpResponse

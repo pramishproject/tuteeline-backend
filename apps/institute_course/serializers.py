@@ -29,6 +29,14 @@ class FacultySerializer(serializers.ModelSerializer):
             'name',
             'id'
         )
+
+class ApproveApplicationFeeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InstituteApply
+        fields = (
+            'approve_application_fee',
+        )
+
 class InstituteCourseSerializer(serializers.ModelSerializer):
     course = CourseSerializer(read_only=True)
     faculty = FacultySerializer(read_only=True)

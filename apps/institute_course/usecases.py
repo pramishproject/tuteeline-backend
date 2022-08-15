@@ -292,6 +292,33 @@ class ConsultancyActionUseCase(BaseUseCase):
         self._apply.updated_at = datetime.now()
         self._apply.save()
 
+class RequestForApplicationFeeUseCase(BaseUseCase):
+    def __init__(self,apply:InstituteApply):
+        self._apply = apply
+
+    def execute(self):
+        self._factory()
+
+    def _factory(self):
+        self._apply.request_for_application_fee = True
+        self._apply.updated_at = datetime.now()
+        self._apply.save()
+
+class ApproveApplicationVoucher(BaseUseCase):
+    def __init__(self,apply:InstituteApply,serializer):
+        self._apply = apply
+        self._serializer = serializer
+        self._data = self._serializer.validated_data
+    def execute(self):
+        self._factory()
+
+    def _factory(self):
+        for key in self._data.keys():
+            setattr(self._apply,key,self._data.get(key))
+
+        self._apply.updated_at = datetime.now()
+        self._apply.save()
+
 class ListStudentMyApplication(BaseUseCase):
     def __init__(self,student):
         self._student = student

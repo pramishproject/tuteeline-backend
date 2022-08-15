@@ -1,22 +1,42 @@
 from django.db.models import Count
 from django.db.models.functions import TruncDay
 
-from apps.institute_course.models import InstituteApply
+# from apps.institute_course.models import InstituteApply
 from datetime import datetime
 from django.utils.formats import get_format
 from io import BytesIO
 from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
-def get_student_application_status(student_id):
-    application=InstituteApply.objects.filter(
-        student=student_id
-        # created_at__range=["2021-12-01", "2022-01-31"]
-    ).annotate(date=TruncDay('created_at')).values("date", "action"). \
-        annotate(action_count=Count('action'))
 
-    print(application)
-    return application
+from django.core.exceptions import ValidationError
+from django.utils.datetime_safe import datetime
+from django.utils.text import slugify
+
+
+def upload_voucher_file(instance, filename):
+    ext = filename.split('.')[-1]
+    new_filename = "%s.%s" % (slugify(instance.institute), ext)
+
+    return 'institute/voucher/{}'.format(
+        new_filename
+    )
+
+def ImageAndPdfValidator(value):
+    value = str(value).lower()
+    if value.endswith('.pdf') != True:
+        raise ValidationError("Only PDF and Word Documents can be uploaded")
+    else:
+        return value
+# def get_student_application_status(student_id):
+#     application=InstituteApply.objects.filter(
+#         student=student_id
+#         # created_at__range=["2021-12-01", "2022-01-31"]
+#     ).annotate(date=TruncDay('created_at')).values("date", "action"). \
+#         annotate(action_count=Count('action'))
+#
+#     print(application)
+#     return application
 
 
 

@@ -18,6 +18,7 @@ urlpatterns = [
       views.CourseDetailView.as_view(),
       name = 'institute-course-detail'
     ),
+
     path(
         '<institute_course_id>/update',
         views.UpdateInstituteCourse.as_view(),
@@ -141,6 +142,15 @@ urlpatterns = [
         '<str:institute_id>/<str:date_to>/<str:date_from>/chart',
         views.InstituteChart.as_view(),
         name="institute-chart"
+    ),
+    path(
+        '<str:apply_id>/request/application/fee',
+        views.RequestForApplicationFeeView.as_view(),
+        name="application-request-fee"
+    ),
+    path(
+        '<str:apply_id>/approve/application/fee',
+        views.ApproveApplicationVoucher.as_view(),
+        name="approve-voucher"
     )
-
 ]

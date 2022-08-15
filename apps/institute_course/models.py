@@ -1,5 +1,6 @@
 from apps import consultancy
 from apps.academic.models import Academic, PersonalEssay, StudentLor, StudentSop, LEVEL_CHOICE
+from apps.institute_course.utils import upload_voucher_file, ImageAndPdfValidator
 from apps.studentIdentity.models import Citizenship, Passport
 from apps.user.models import InstituteUser
 from apps.consultancy.models import Consultancy, ConsultancyStaff
@@ -80,7 +81,7 @@ class InstituteCourse(BaseModel):
         _("Date"),
         blank=True
     )
-    
+    course_description = models.TextField(blank=True,null=True)
     #required Document
     academic = models.BooleanField(default=False)
     citizenship = models.BooleanField(default=False)
@@ -146,12 +147,18 @@ class InstituteApply(BaseModel):
                                                on_delete=models.CASCADE,
                                                blank=True,
                                                null=True,
+                                               related_name="staff_assign_application"
                                                )
     view_date = models.DateField(blank=True, null=True)
     forward = models.BooleanField(default=False)
     cancel = models.BooleanField(default=False)
     request_for_application_fee = models.BooleanField(default=False)
-
+    approve_application_fee = models.ForeignKey(InstituteStaff,
+                                               on_delete=models.DO_NOTHING,
+                                               blank=True,
+                                               null=True,
+                                                related_name="staff_approve_application"
+                                               )
     # university = models.ForeignKey(Institute, on_delete=models.DO_NOTHING,null=True,blank=True,related_name="university_forward")
     @property
     def institute_data(self):
@@ -236,6 +243,17 @@ class InstituteApply(BaseModel):
 #     institute_user = models.ForeignKey(to=InstituteStaff, on_delete=models.DO_NOTHING)
 #     verify = models.BooleanField(default=False)
 
+class VoucherFile(BaseModel):
+    apply = models.ForeignKey(to=InstituteApply,on_delete=models.CASCADE)
+    file = models.FileField(
+        upload_to=upload_voucher_file, blank=True, validators=[ImageAndPdfValidator]
+    )
+    doc_type = models.CharField(max_length=100, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        name, extension = os.path.splitext(str(self.document))
+        self.doc_type = extension
+        super(VoucherFile, self).save(*args, **kwargs)
 class ApplyAction(BaseModel):
     apply = models.ForeignKey(to=InstituteApply,on_delete=models.CASCADE)
     action = models.CharField(choices=ACTION_OPTION,
