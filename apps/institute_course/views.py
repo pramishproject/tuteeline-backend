@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 
 from apps.consultancy.mixins import ConsultancyMixin
 from apps.institute_course.filter import ApplicationFilter, ApplicationAggregateFilter, FilterInstituteCourse
-from apps.institute_course.mixins import ApplyMixin, CourseMixin, FacultyMixin
+from apps.institute_course.mixins import ApplyMixin, CourseMixin, FacultyMixin, VoucherFileMixin
 from apps.institute.mixins import InstituteMixins, InstituteStaffMixins
 
 from django.utils.translation import gettext_lazy as _
@@ -35,7 +35,8 @@ from apps.institute_course.serializers import (
     StudentApplySerializer, CompareInstituteSerializer, StudentMyApplicationListSerializer,
     GetMyApplicationDocumentSerializer, GetMyApplicationDetailForInstituteSerializer, InstituteActionSerializer,
     ConsultancyActionSerializer, InstituteApplicationStatus, InstituteApplicationCountSerializer,
-    InstituteCourseSerializer, AssignStudentApplicationToInstituteStaff, ApproveApplicationFeeSerializer)
+    InstituteCourseSerializer, AssignStudentApplicationToInstituteStaff, ApproveApplicationFeeSerializer,
+    AddVoucherFileSerializer)
 
 from apps.institute_course import usecases
 
@@ -260,6 +261,29 @@ class RequestForApplicationFeeView(generics.UpdateWithMessageAPIView,ApplyMixin)
         return usecases.RequestForApplicationFeeUseCase(
             apply=self.get_object()
         ).execute()
+
+class AddVoucherFile(generics.CreateWithMessageAPIView,ApplyMixin):
+    serializer_class = AddVoucherFileSerializer
+
+    def get_object(self):
+        return self.get_apply()
+
+    def perform_create(self, serializer):
+        return usecases.AddVoucherFileUseCase(
+            application=self.get_object(),
+            serializer=serializer,
+        ).execute()
+
+class DeleteVoucherFile(generics.DestroyWithMessageAPIView,VoucherFileMixin):
+    message = _("Delete Successfully")
+    def get_object(self):
+        return self.get_voucher()
+
+    def perform_destroy(self, instance):
+        return usecases.DeleteVoucherUseCase(
+            instance=self.get_object()
+        ).execute()
+
 
 class ApproveApplicationVoucher(generics.CreateWithMessageAPIView,ApplyMixin):
     def get_object(self):

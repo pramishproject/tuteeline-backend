@@ -16,7 +16,7 @@ from django.utils.text import slugify
 
 def upload_voucher_file(instance, filename):
     ext = filename.split('.')[-1]
-    new_filename = "%s.%s" % (slugify(instance.institute), ext)
+    new_filename = "%s.%s" % (slugify(instance.apply), ext)
 
     return 'institute/voucher/{}'.format(
         new_filename
@@ -24,8 +24,10 @@ def upload_voucher_file(instance, filename):
 
 def ImageAndPdfValidator(value):
     value = str(value).lower()
-    if value.endswith('.pdf') != True:
-        raise ValidationError("Only PDF and Word Documents can be uploaded")
+    print(value.endswith('.jpg'))
+    if value.endswith('.pdf') != True and value.endswith(".jpg") != True and\
+            value.endswith('png') != True and value.endswith('jpeg') != True :
+        raise ValidationError("Only PDF and image can be uploaded")
     else:
         return value
 # def get_student_application_status(student_id):

@@ -152,5 +152,15 @@ urlpatterns = [
         '<str:apply_id>/approve/application/fee',
         views.ApproveApplicationVoucher.as_view(),
         name="approve-voucher"
+    ),
+    path(
+        '<str:apply_id>/voucher/add',
+        views.AddVoucherFile.as_view(),
+        name= "add-voucher"
+    ),
+    path(
+        '<str:voucher_id>/voucher/delete',
+        views.DeleteVoucherFile.as_view(),
+        name="delete-voucher"
     )
 ]

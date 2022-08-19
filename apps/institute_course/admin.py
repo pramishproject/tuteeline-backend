@@ -1,10 +1,10 @@
 from django.contrib import admin
 
 from apps.core.admin import BaseModelAdmin
-from apps.institute_course.models import  Faculty, \
-    InstituteApply,CheckStudentIdentity,\
-    CheckedAcademicDocument,CheckedStudentEssay,CheckedStudentLor,CheckedStudentSop\
-    ,CommentApplicationInstitute,ApplyAction,ActionApplyByConsultancy
+from apps.institute_course.models import Faculty, \
+    InstituteApply, CheckStudentIdentity, \
+    CheckedAcademicDocument, CheckedStudentEssay, CheckedStudentLor, CheckedStudentSop \
+    , CommentApplicationInstitute, ApplyAction, ActionApplyByConsultancy, VoucherFile
 
 from apps.institute_course.models import Course
 from apps.institute_course.models import InstituteCourse
@@ -82,6 +82,12 @@ class ApplyActionAdmin(BaseModelAdmin):
 
 @admin.register(ActionApplyByConsultancy)
 class ActionApplyByConsultancyAdmin(BaseModelAdmin):
+    list_display = BaseModelAdmin.list_display + (
+        'apply',
+    )
+
+@admin.register(VoucherFile)
+class VoucherFileAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display + (
         'apply',
     )

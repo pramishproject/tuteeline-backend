@@ -14,9 +14,7 @@ from django.db.models.fields import CharField
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MaxValueValidator,MinValueValidator
 from apps.institute.models import Institute, InstituteScholorship, InstituteStaff
-import datetime
-
-from apps.core import fields
+import os
 from apps.core.models import BaseModel
 from apps.utils.currency import RealTimeCurrencyConverter
 
@@ -251,7 +249,7 @@ class VoucherFile(BaseModel):
     doc_type = models.CharField(max_length=100, blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        name, extension = os.path.splitext(str(self.document))
+        name, extension = os.path.splitext(str(self.file))
         self.doc_type = extension
         super(VoucherFile, self).save(*args, **kwargs)
 class ApplyAction(BaseModel):

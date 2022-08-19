@@ -18,3 +18,8 @@ class ApplyMixin:
             apply_id=self.kwargs.get("apply_id")
         ).execute()
 
+class VoucherFileMixin:
+    def get_voucher(self):
+        return usecases.GetVoucherFileUseCase(
+            voucher_id=self.kwargs.get('voucher_id')
+        ).execute()

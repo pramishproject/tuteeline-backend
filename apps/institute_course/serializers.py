@@ -5,7 +5,7 @@ from django.core.cache import cache
 
 from apps.institute_course.models import CommentApplicationInstitute, Course, Faculty, InstituteApply, InstituteCourse, \
     CheckedAcademicDocument, CheckStudentIdentity, CheckedStudentLor, CheckedStudentEssay, CheckedStudentSop, \
-    ApplyAction, ActionApplyByConsultancy
+    ApplyAction, ActionApplyByConsultancy, VoucherFile
 from apps.parentsDetail.serializers import ParentsDetailSerializer
 from apps.studentIdentity.serializers import StudentCitizenshipSerializer, StudentPassportSerializer
 from apps.students.models import StudentModel,StudentAddress
@@ -28,6 +28,13 @@ class FacultySerializer(serializers.ModelSerializer):
         fields = (
             'name',
             'id'
+        )
+
+class AddVoucherFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VoucherFile
+        fields = (
+            'file',
         )
 
 class ApproveApplicationFeeSerializer(serializers.ModelSerializer):

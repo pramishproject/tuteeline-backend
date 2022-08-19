@@ -11,10 +11,10 @@ from apps.consultancy.models import Consultancy
 from apps.core.usecases import BaseUseCase
 from apps.institute.models import Institute, InstituteStaff
 from apps.institute_course.exceptions import CourseNotFound, FacultyNotFound, InstituteApplyNotFound, InstituteNotFound, \
-    InstituteStaffNotFound, UniqueStudentApply
+    InstituteStaffNotFound, UniqueStudentApply, VoucherNotFound
 from apps.institute_course.models import CommentApplicationInstitute, InstituteApply, InstituteCourse, Course, Faculty, \
     CheckedAcademicDocument, CheckStudentIdentity, CheckedStudentLor, CheckedStudentSop, CheckedStudentEssay, \
-    ApplyAction, ActionApplyByConsultancy
+    ApplyAction, ActionApplyByConsultancy, VoucherFile
 from apps.studentIdentity.exceptions import CitizenshipNotFound,PassportNotFound
 from apps.studentIdentity.models import Citizenship, Passport
 
@@ -124,6 +124,7 @@ class GetFacultyUseCase(BaseUseCase):
         self._faculty = faculty_id
 
     def execute(self):
+        self._factory()
         return self._faculty
 
     def _factory(self):
@@ -133,6 +134,30 @@ class GetFacultyUseCase(BaseUseCase):
         except Faculty.DoesNotExist:
             raise FacultyNotFound
 
+class GetVoucherFileUseCase(BaseUseCase):
+    def __init__(self,voucher_id):
+        self._voucher_id=voucher_id
+
+    def execute(self):
+
+        return self._voucher
+
+    def _factory(self):
+        try:
+            self._voucher = VoucherFile.objects.get(pk=self._voucher_id)
+
+        except VoucherFile.DoesNotExist:
+            raise VoucherNotFound
+
+class DeleteVoucherUseCase(BaseUseCase):
+    def __init__(self,instance:VoucherFile):
+        self._instance = instance
+
+    def execute(self):
+        self._factory()
+
+    def _factory(self):
+        self._instance.delete()
 
 class ListCourseUseCase(BaseUseCase):
     def __init__(self,faculty):
@@ -524,6 +549,20 @@ class ListInstituteActionHistoryUseCase(BaseUseCase):
     def _factory(self):
         self._history = ApplyAction.objects.filter(apply = self._apply)
 
+class AddVoucherFileUseCase(BaseUseCase):
+    def __init__(self,application,serializer):
+        self._application = application
+        self._serializer = serializer.validated_data
+        self._data = self._serializer
+
+    def execute(self):
+        self._factory()
+
+    def _factory(self):
+        VoucherFile.objects.create(
+            apply=self._application,
+            **self._data
+        )
 
 
 class GetChartUseCase(BaseUseCase):
