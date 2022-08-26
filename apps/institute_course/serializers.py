@@ -74,7 +74,8 @@ class AddInstituteCourseSerializer(serializers.ModelSerializer):
             'reg_close', 
             'academic',
             'citizenship',  
-            'passport', 
+            'passport',
+            'course_description',
             'essay', 
             'lor', 
             'sop',
@@ -513,7 +514,8 @@ class GetMyApplicationDocumentSerializer(serializers.ModelSerializer):
             'action',
             'action_field',
             'view_date',
-            'cancel'
+            'cancel',
+            'request_for_application_fee',
         )
 
 
