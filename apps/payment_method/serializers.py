@@ -10,3 +10,4 @@ class AddProviderSerializer(serializers.ModelSerializer):
             'provider_id',
             'name',
         )
+

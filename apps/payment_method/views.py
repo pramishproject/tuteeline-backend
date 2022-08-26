@@ -26,3 +26,5 @@ class UpdateProviderPaymentMethod(generics.UpdateWithMessageAPIView,ProviderMixi
             instance=self.get_object(),
             serializer=serializer
         ).execute()
+
+# class AddVoucherPaymentDetail(generics.A)

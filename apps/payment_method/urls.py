@@ -13,5 +13,8 @@ urlpatterns = [
         views.UpdateProviderPaymentMethod.as_view(),
         name="update-provider"
     ),
+    # path(
+    #     '<institute_id>'
+    # )
 
 ]
