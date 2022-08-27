@@ -60,6 +60,11 @@ urlpatterns = [
       name='delete-check-doc'
     ),
     path(
+        '<doc_type>/<apply_doc_id>/<apply_id>/add',
+        views.AddCheckDocument.as_view(),
+        name="add-check-document"
+    ),
+    path(
         '<institute_staff_id>/institute_staff/assign/application/list',
         views.AssignInstituteStaffApplicationView.as_view(),
         name ="assign list",

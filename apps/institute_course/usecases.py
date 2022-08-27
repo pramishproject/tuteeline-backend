@@ -32,7 +32,8 @@ APPLY_DOC_TYPE_LOR="LOR"
 APPLY_DOC_TYPE_SOP="SOP"
 APPLY_DOC_TYPE_ESSAY="ESSAY"
 APPLY_DOC_TYPE_IDENTITY="IDENTITY"
-
+APPLY_DOC_TYPE_CITIZENSHIP ="CITIZENSHIP"
+APPLY_DOC_TYPE_PASSWORD ="PASSWORD"
 class AddCourseUseCase(BaseUseCase):
     def __init__(self , serializer ,institute:Institute):
         self._institute= institute
@@ -331,6 +332,80 @@ class ApplyUseCase(BaseUseCase):
                 except PersonalEssay.DoesNotExist:
                     raise EssayNotFound
 
+class AddCheckDocumentUseCase(BaseUseCase):
+    def __init__(self,doc_type,doc_id,apply):
+        self._doc_id = doc_id
+        self._doc_type =doc_type
+        self._apply = apply
+
+    def execute(self):
+        self._factory()
+
+    def _factory(self):
+        if self._doc_type == APPLY_DOC_TYPE_CITIZENSHIP:
+            try:
+                citizenship = Citizenship.objects.get(pk=self._doc_id)
+                identity = CheckStudentIdentity(
+                    application=self._apply,
+                    citizenship = citizenship,
+                )
+                identity.save()
+            except Citizenship.DoesNotExist:
+                raise CitizenshipNotFound
+
+        elif self._doc_type == APPLY_DOC_TYPE_PASSWORD:
+            try:
+                passport = Passport.objects.get(pk=self._doc_id)
+                identity = CheckStudentIdentity(
+                    application=self._apply,
+                    passport=passport,
+                )
+                identity.save()
+            except Passport.DoesNotExist:
+                raise PassportNotFound
+
+        elif self._doc_type == APPLY_DOC_TYPE_SOP:
+            try:
+                sop = StudentSop.objects.get(pk=self._doc_id)
+                sop_obj = CheckedStudentSop(
+                    application=self._apply,
+                    sop=sop
+                )
+                sop_obj.save()
+            except StudentSop.DoesNotExist:
+                raise SopNotFound
+
+        elif self._doc_type == APPLY_DOC_TYPE_LOR:
+            try:
+                lor=StudentLor.objects.get(pk=self._doc_id)
+                check_lor =  CheckedStudentLor(
+                        application=self._apply,
+                        lor = lor,
+                    )
+                check_lor.save()
+            except StudentLor.DoesNotExist:
+                raise LorNotFound
+
+        elif self._doc_type == APPLY_DOC_TYPE_ESSAY:
+            try:
+                essay = PersonalEssay.objects.get(pk=self._doc_id)
+                CheckedStudentEssay.objects.create(
+                    application=self._apply,
+                    essay=essay
+                )
+            except PersonalEssay.DoesNotExist:
+                raise EssayNotFound
+
+        elif self._doc_type == APPLY_DOC_TYPE_ACADEMIC:
+            try:
+                academic_obj = Academic.objects.get(pk=self._doc_type)
+                academic=CheckedAcademicDocument(
+                    application=self._apply,
+                    academic=academic_obj
+                )
+                academic.save()
+            except Academic.DoesNotExist:
+                raise AcademicNotFound
 class InstituteActionUseCase(BaseUseCase):
     def __init__(self,apply,serializer):
         self._apply = apply

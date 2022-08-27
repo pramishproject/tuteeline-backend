@@ -310,11 +310,11 @@ class GetListCommentApplicationView(generics.ListAPIView,ApplyMixin):
 
 class DeleteCheckDocument(generics.DestroyWithMessageAPIView,ApplyDocMixin):
     """
-    APPLY_DOC_TYPE_ACADEMIC="ACADEMIC"
-APPLY_DOC_TYPE_LOR="LOR"
-APPLY_DOC_TYPE_SOP="SOP"
-APPLY_DOC_TYPE_ESSAY="ESSAY"
-APPLY_DOC_TYPE_IDENTITY="IDENTITY"
+        APPLY_DOC_TYPE_ACADEMIC="ACADEMIC"
+        APPLY_DOC_TYPE_LOR="LOR"
+        APPLY_DOC_TYPE_SOP="SOP"
+        APPLY_DOC_TYPE_ESSAY="ESSAY"
+        APPLY_DOC_TYPE_IDENTITY="IDENTITY"
     """
     def get_object(self):
         return self.get_document()
@@ -323,6 +323,12 @@ APPLY_DOC_TYPE_IDENTITY="IDENTITY"
         return usecases.DeleteCheckDocumentUseCase(
             instance=self.get_object(),
         ).execute()
+
+class AddCheckDocument(APIView,ApplyMixin):
+    def post(self,request,doc_type,doc_id,apply_id):
+        # mixin = ApplyMixin()
+        self.get_apply()
+        return Response({"x":1})
 
 class ListStudentApplicationView(generics.ListAPIView,InstituteMixins):
     """
