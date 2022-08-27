@@ -248,12 +248,15 @@ class VoucherFile(BaseModel):
     file = models.FileField(
         upload_to=upload_voucher_file, blank=True, validators=[ImageAndPdfValidator]
     )
+    transaction_id = models.CharField(max_length=200,blank=True,null=True)
     doc_type = models.CharField(max_length=100, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         name, extension = os.path.splitext(str(self.file))
         self.doc_type = extension
         super(VoucherFile, self).save(*args, **kwargs)
+
+
 class ApplyAction(BaseModel):
     apply = models.ForeignKey(to=InstituteApply,on_delete=models.CASCADE)
     action = models.CharField(choices=ACTION_OPTION,

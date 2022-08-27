@@ -26,11 +26,23 @@ from apps.institute.models import Institute
         #    "name":"",
         #    }
         #     }
+from apps.students.models import StudentModel
 
 PROVIDER_NAME=(
     ("KHALTI","KHALTI"),
     ("ESEWA","ESEWA")
 )
+
+PAYMENT_METHOD = (
+    ("KHALTI","KHALTI"),
+    ("ESEWA","ESEWA"),
+    ("CASH","CASH"),
+)
+
+# class ProviderName(BaseModel):
+#     icon = models.FileField()
+#     name = models.CharField(max_length=200,choices=PROVIDER_NAME)
+
 class Provider(BaseModel):
     institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE)
     name = models.CharField(max_length=200,choices=PROVIDER_NAME)
@@ -42,3 +54,11 @@ class VoucherPayment(BaseModel):
     branch = models.CharField(max_length=300)
     account_name = models.CharField(max_length=300)
     bank_name = models.CharField(max_length=200)
+
+class Transaction(BaseModel):
+    student = models.ForeignKey(to=StudentModel,on_delete=models.DO_NOTHING,blank=True,null=True)
+    institute = models.ForeignKey(to=Institute,on_delete=models.DO_NOTHING,blank=True,null=True)
+    payment_method = models.CharField(choices=PAYMENT_METHOD,max_length=100)
+    data = models.TextField(blank=True,null=True)
+    amount  = models.FloatField()
+    transaction_id = models.CharField(max_length=200,default="")
