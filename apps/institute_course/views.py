@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 
 from apps.consultancy.mixins import ConsultancyMixin
 from apps.institute_course.filter import ApplicationFilter, ApplicationAggregateFilter, FilterInstituteCourse
-from apps.institute_course.mixins import ApplyMixin, CourseMixin, FacultyMixin, VoucherFileMixin
+from apps.institute_course.mixins import ApplyMixin, CourseMixin, FacultyMixin, VoucherFileMixin, ApplyDocMixin
 from apps.institute.mixins import InstituteMixins, InstituteStaffMixins
 
 from django.utils.translation import gettext_lazy as _
@@ -306,6 +306,22 @@ class GetListCommentApplicationView(generics.ListAPIView,ApplyMixin):
     def get_queryset(self):
         return usecases.ListCommentInstituteUseCase(
             apply = self.get_object()
+        ).execute()
+
+class DeleteCheckDocument(generics.DestroyWithMessageAPIView,ApplyDocMixin):
+    """
+    APPLY_DOC_TYPE_ACADEMIC="ACADEMIC"
+APPLY_DOC_TYPE_LOR="LOR"
+APPLY_DOC_TYPE_SOP="SOP"
+APPLY_DOC_TYPE_ESSAY="ESSAY"
+APPLY_DOC_TYPE_IDENTITY="IDENTITY"
+    """
+    def get_object(self):
+        return self.get_document()
+
+    def perform_destroy(self, instance):
+        return usecases.DeleteCheckDocumentUseCase(
+            instance=self.get_object(),
         ).execute()
 
 class ListStudentApplicationView(generics.ListAPIView,InstituteMixins):

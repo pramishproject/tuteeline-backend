@@ -55,6 +55,11 @@ urlpatterns = [
         name='list-application'
     ),
     path(
+      '<doc_type>/<apply_doc_id>/check/doc/delete',
+      views.DeleteCheckDocument.as_view(),
+      name='delete-check-doc'
+    ),
+    path(
         '<institute_staff_id>/institute_staff/assign/application/list',
         views.AssignInstituteStaffApplicationView.as_view(),
         name ="assign list",

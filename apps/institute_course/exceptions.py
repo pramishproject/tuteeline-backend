@@ -23,3 +23,12 @@ class InstituteStaffNotFound(NotFound):
 class UniqueStudentApply(NotFound):
     default_detail = _("Student Already apply this course")
 
+class CheckDocumentDoesntExist(NotFound):
+    default_detail = _("document doesnt exist")
+
+
+
+class DocTypeNotFound(APIException):
+    status_code = 204
+    default_detail = 'document type not found'
+    default_code = 'service_unavailable'

@@ -23,3 +23,11 @@ class VoucherFileMixin:
         return usecases.GetVoucherFileUseCase(
             voucher_id=self.kwargs.get('voucher_id')
         ).execute()
+
+
+class ApplyDocMixin:
+    def get_document(self):
+        return usecases.GetApplyDocumentUseCase(
+            doc_type= self.kwargs.get('doc_type'),
+            apply_doc_id= self.kwargs.get('apply_doc_id')
+        ).execute()

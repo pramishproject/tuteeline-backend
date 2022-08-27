@@ -11,7 +11,7 @@ from apps.consultancy.models import Consultancy
 from apps.core.usecases import BaseUseCase
 from apps.institute.models import Institute, InstituteStaff
 from apps.institute_course.exceptions import CourseNotFound, FacultyNotFound, InstituteApplyNotFound, InstituteNotFound, \
-    InstituteStaffNotFound, UniqueStudentApply, VoucherNotFound
+    InstituteStaffNotFound, UniqueStudentApply, VoucherNotFound, CheckDocumentDoesntExist, DocTypeNotFound
 from apps.institute_course.models import CommentApplicationInstitute, InstituteApply, InstituteCourse, Course, Faculty, \
     CheckedAcademicDocument, CheckStudentIdentity, CheckedStudentLor, CheckedStudentSop, CheckedStudentEssay, \
     ApplyAction, ActionApplyByConsultancy, VoucherFile
@@ -25,6 +25,13 @@ WEEK_TIME="WEEK_TIME"
 DAY_TIME = "DAY_TIME"
 MONTH_TIME = "MONTH_TIME"
 YEAR_TIME ="YEAR_TIME"
+
+
+APPLY_DOC_TYPE_ACADEMIC="ACADEMIC"
+APPLY_DOC_TYPE_LOR="LOR"
+APPLY_DOC_TYPE_SOP="SOP"
+APPLY_DOC_TYPE_ESSAY="ESSAY"
+APPLY_DOC_TYPE_IDENTITY="IDENTITY"
 
 class AddCourseUseCase(BaseUseCase):
     def __init__(self , serializer ,institute:Institute):
@@ -40,6 +47,7 @@ class AddCourseUseCase(BaseUseCase):
             institute=self._institute
             )
    
+
 
 class GetInstituteCourseUseCase(BaseUseCase):
     def __init__(self,inst):
@@ -68,7 +76,6 @@ class InstituteCourseDetailUseCase(BaseUseCase):
         #     select_related("")
         self._course = InstituteCourse.objects.get(pk=self._institute_course).\
             select_related('course','faculty')
-
 
 class GetCourseUseCase(BaseUseCase):
     def __init__(self,institute_course_id):
@@ -139,7 +146,7 @@ class GetVoucherFileUseCase(BaseUseCase):
         self._voucher_id=voucher_id
 
     def execute(self):
-
+        self._factory()
         return self._voucher
 
     def _factory(self):
@@ -148,6 +155,49 @@ class GetVoucherFileUseCase(BaseUseCase):
 
         except VoucherFile.DoesNotExist:
             raise VoucherNotFound
+
+class GetApplyDocumentUseCase(BaseUseCase):
+    def __init__(self,apply_doc_id,doc_type):
+        self._apply_doc_id = apply_doc_id
+        self._doc_type = doc_type
+
+    def execute(self):
+        self._factory()
+        print(self._doc)
+        return self._doc
+
+    def _factory(self):
+        if self._doc_type == APPLY_DOC_TYPE_ACADEMIC:
+            try:
+                self._doc = CheckedAcademicDocument.objects.get(id=self._apply_doc_id)
+            except CheckedAcademicDocument.DoesNotExist:
+                raise CheckDocumentDoesntExist
+
+        elif self._doc_type == APPLY_DOC_TYPE_ESSAY:
+            try:
+                self._doc = CheckedStudentEssay.objects.get(pk=self._apply_doc_id)
+            except CheckedStudentEssay.DoesNotExist:
+                raise CheckDocumentDoesntExist
+
+        elif self._doc_type == APPLY_DOC_TYPE_LOR:
+            try:
+                self._doc = CheckedStudentLor.objects.get(pk=self._apply_doc_id)
+            except CheckedStudentLor.DoesNotExist:
+                raise CheckDocumentDoesntExist
+
+        elif self._doc_type == APPLY_DOC_TYPE_SOP:
+            try:
+                self._doc = CheckedStudentSop.objects.get(pk=self._apply_doc_id)
+            except CheckedStudentSop.DoesNotExist:
+                raise CheckDocumentDoesntExist
+
+        elif self._doc_type == APPLY_DOC_TYPE_IDENTITY:
+            try:
+                self._doc = CheckStudentIdentity.objects.get(pk=self._apply_doc_id)
+            except CheckStudentIdentity.DoesNotExist:
+                raise CheckDocumentDoesntExist
+        else:
+            raise DocTypeNotFound
 
 class DeleteVoucherUseCase(BaseUseCase):
     def __init__(self,instance:VoucherFile):
@@ -668,3 +718,4 @@ class DeleteCheckDocumentUseCase(BaseUseCase):
 
     def execute(self):
         self._instance.delete()
+
