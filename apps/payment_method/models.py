@@ -26,6 +26,7 @@ from apps.institute.models import Institute
         #    "name":"",
         #    }
         #     }
+from apps.payment_method.utils import upload_voucher_icon
 from apps.students.models import StudentModel
 
 PROVIDER_NAME=(
@@ -40,12 +41,23 @@ PAYMENT_METHOD = (
 )
 
 class ProviderName(BaseModel):
-    icon = models.FileField()
+    icon = models.FileField(upload_to=upload_voucher_icon)
     name = models.CharField(max_length=200,choices=PROVIDER_NAME)
 
 class Provider(BaseModel):
     institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE)
+    provider_name = models.ForeignKey(to=ProviderName, on_delete=models.CASCADE,null=True,blank=True)
     provider_id = models.CharField(max_length=200)
+
+    @property
+    def provider_name(self):
+        if self.provider_name != None:
+            return {
+                    "name":self.provider_name.name,
+                    "icon":self.provider_name.icon,
+                }
+        else:
+            return {}
 
 class VoucherPayment(BaseModel):
     institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE)

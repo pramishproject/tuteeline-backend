@@ -1,5 +1,5 @@
 from apps.core.usecases import BaseUseCase
-from apps.payment_method.models import Provider, VoucherPayment
+from apps.payment_method.models import Provider, VoucherPayment, ProviderName
 from django.utils.datetime_safe import datetime
 
 class GetProviderUseCase(BaseUseCase):
@@ -25,6 +25,15 @@ class AddProviderUseCase(BaseUseCase):
                     **self._serializer,
                     institute=self._institute
                 )
+
+class ListProviderNameUseCase(BaseUseCase):
+
+    def execute(self):
+        self._factory()
+        self._provider
+
+    def _factory(self):
+        self._provider=ProviderName.objects.all()
 
 class ListProviderUseCase(BaseUseCase):
     def __init__(self,institute):

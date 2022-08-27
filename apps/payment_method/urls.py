@@ -27,6 +27,11 @@ urlpatterns = [
         '<institute_id>/provider/list',
         views.ListProviderPaymentMethod.as_view(),
         name = "provider-list"
+    ),
+    path(
+        'list_provider_name',
+        views.ListProviderName.as_view(),
+        name='list-provider-name'
     )
 
 ]

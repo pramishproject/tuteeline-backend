@@ -3,8 +3,13 @@ from apps.institute.mixins import InstituteMixins
 from apps.payment_method import usecases
 from apps.payment_method.mixins import ProviderMixins
 from apps.payment_method.serializers import AddProviderSerializer, AddVoucherPaymentSerializer, ListProviderSerializer, \
-    ListVoucherPaymentSerializer
+    ListVoucherPaymentSerializer, ListProviderNameSerializer
 from rest_framework.views import APIView
+
+class ListProviderName(generics.ListAPIView):
+    serializer_class = ListProviderNameSerializer
+    def get_queryset(self):
+        return usecases.ListProviderNameUseCase().execute()
 
 class AddProviderPaymentMethod(generics.CreateAPIView,InstituteMixins):
     serializer_class = AddProviderSerializer

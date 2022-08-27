@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.payment_method.models import Provider, VoucherPayment
+from apps.payment_method.models import Provider, VoucherPayment, ProviderName
 
 
 class AddProviderSerializer(serializers.ModelSerializer):
@@ -8,13 +8,29 @@ class AddProviderSerializer(serializers.ModelSerializer):
         model = Provider
         fields = (
             'provider_id',
-            'name',
+            'provider_name',
         )
 
+class ListProviderNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProviderName,
+        fields = (
+            'icon',
+            'name',
+        )
 class ListProviderSerializer(serializers.ModelSerializer):
+    name=serializers.DictField(source="provider_name")
     class Meta:
         model = Provider
-        fields = '__all__'
+        fields = (
+            'id',
+            'institute'
+            'provider_name',
+            'provider_id',
+            'name',
+            'created_at',
+            'updated_at',
+        )
 
 class AddVoucherPaymentSerializer(serializers.ModelSerializer):
     class Meta:
