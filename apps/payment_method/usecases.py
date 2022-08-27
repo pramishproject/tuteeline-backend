@@ -1,5 +1,5 @@
 from apps.core.usecases import BaseUseCase
-from apps.payment_method.models import Provider
+from apps.payment_method.models import Provider, VoucherPayment
 from django.utils.datetime_safe import datetime
 
 class GetProviderUseCase(BaseUseCase):
@@ -40,3 +40,17 @@ class CustomUpdateUseCase(BaseUseCase):
 
         self._instance.updated_at = datetime.now()
         self._instance.save()
+
+class CreateVoucherPaymentDetail(BaseUseCase):
+    def __init__(self,institute,serializer):
+        self._institute = institute
+        self._data = serializer.validated_data
+
+    def execute(self):
+        self._factory()
+
+    def _factory(self):
+        VoucherPayment.objects.create(
+            **self._data,
+            institute=self._institute
+        )

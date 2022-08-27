@@ -661,3 +661,10 @@ class GetChartUseCase(BaseUseCase):
 
             self._from_date = date_from
 
+
+class DeleteCheckDocumentUseCase(BaseUseCase):
+    def __init__(self,instance):
+        self._instance = instance
+
+    def execute(self):
+        self._instance.delete()

@@ -2,8 +2,8 @@ from apps.core import generics
 from apps.institute.mixins import InstituteMixins
 from apps.payment_method import usecases
 from apps.payment_method.mixins import ProviderMixins
-from apps.payment_method.serializers import AddProviderSerializer
-
+from apps.payment_method.serializers import AddProviderSerializer, AddVoucherPaymentSerializer
+from rest_framework.views import APIView
 
 class AddProviderPaymentMethod(generics.CreateAPIView,InstituteMixins):
     serializer_class = AddProviderSerializer
@@ -27,4 +27,18 @@ class UpdateProviderPaymentMethod(generics.UpdateWithMessageAPIView,ProviderMixi
             serializer=serializer
         ).execute()
 
-# class AddVoucherPaymentDetail(generics.A)
+class AddVoucherPaymentDetail(generics.CreateWithMessageAPIView,InstituteMixins):
+    serializer_class = AddVoucherPaymentSerializer
+    def get_object(self):
+        return self.get_institute()
+
+    def perform_create(self, serializer):
+        return usecases.CreateVoucherPaymentDetail(
+            institute=self.get_object(),
+            serializer = serializer,
+        ).execute()
+
+
+
+
+

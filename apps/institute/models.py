@@ -133,7 +133,7 @@ class SocialMediaLink(BaseModel):
     SOCIAL_MEDIA = (
         ('facebook','facebook'),
         ('youtube','youtube'),
-        ('linkdin','linkdin'),
+        ('linkedin','linkedin'),
         ('instagram','instagram')
     )
     institute  = models.ForeignKey(Institute,on_delete=CASCADE)

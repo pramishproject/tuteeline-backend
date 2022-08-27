@@ -315,6 +315,7 @@ class GetStudentApplicationInstituteSerializer(serializers.ModelSerializer):
             'created_at',
             'address',
             'action_field',
+            'request_for_application_fee',
         )
 
 class GetStudentApplicationStudentSerializer(serializers.ModelSerializer):
@@ -616,6 +617,7 @@ class GetMyApplicationDetailForInstituteSerializer(serializers.ModelSerializer):
             'view_date',
             'cancel',
             'course_name',
+            'request_for_application_fee',
         )
 
 

@@ -111,7 +111,9 @@ ACTION_OPTION=(
         ('accept','accept'),
         ('reject','reject'),
         ('pending','pending'),
-        ('applied','applied')
+        ('applied','applied'),
+        ('payment_requested','payment_requested'),
+        ('payment_verify','payment_verify'),
     )
 
 ACTION_OPTION_CONSULTANCY = (

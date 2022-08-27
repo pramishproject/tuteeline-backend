@@ -13,8 +13,10 @@ urlpatterns = [
         views.UpdateProviderPaymentMethod.as_view(),
         name="update-provider"
     ),
-    # path(
-    #     '<institute_id>'
-    # )
+    path(
+        '<institute_id>/voucher/add',
+        views.AddVoucherPaymentDetail.as_view(),
+        name="voucher-add"
+    )
 
 ]
