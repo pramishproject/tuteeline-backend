@@ -325,10 +325,24 @@ class DeleteCheckDocument(generics.DestroyWithMessageAPIView,ApplyDocMixin):
         ).execute()
 
 class AddCheckDocument(APIView,ApplyMixin):
-    def post(self,request,doc_type,doc_id,apply_id):
+    """
+        APPLY_DOC_TYPE_ACADEMIC="ACADEMIC"
+         APPLY_DOC_TYPE_LOR="LOR"
+        APPLY_DOC_TYPE_SOP="SOP"
+        APPLY_DOC_TYPE_ESSAY="ESSAY"
+        APPLY_DOC_TYPE_IDENTITY="IDENTITY"
+        APPLY_DOC_TYPE_CITIZENSHIP ="CITIZENSHIP"
+        APPLY_DOC_TYPE_PASSWORD ="PASSWORD"
+            """
+    def post(self,request,doc_type,apply_doc_id,apply_id):
         # mixin = ApplyMixin()
-        self.get_apply()
-        return Response({"x":1})
+        apply = self.get_apply()
+        usecases.AddCheckDocumentUseCase(
+            apply=apply,
+            doc_type=doc_type,
+            doc_id=apply_doc_id
+        ).execute()
+        return Response({"message":"Added successfully"},status=200)
 
 class ListStudentApplicationView(generics.ListAPIView,InstituteMixins):
     """

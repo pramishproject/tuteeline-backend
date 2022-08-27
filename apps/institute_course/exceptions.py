@@ -29,6 +29,6 @@ class CheckDocumentDoesntExist(NotFound):
 
 
 class DocTypeNotFound(APIException):
-    status_code = 204
+    status_code = 404
     default_detail = 'document type not found'
     default_code = 'service_unavailable'

@@ -11,6 +11,11 @@ class AddProviderSerializer(serializers.ModelSerializer):
             'name',
         )
 
+class ListProviderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Provider
+        fields = '__all__'
+
 class AddVoucherPaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = VoucherPayment
@@ -20,3 +25,8 @@ class AddVoucherPaymentSerializer(serializers.ModelSerializer):
             'account_name',
             'bank_name',
         )
+
+class ListVoucherPaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VoucherPayment
+        fields = '__all__'

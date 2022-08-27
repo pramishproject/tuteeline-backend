@@ -34,6 +34,7 @@ APPLY_DOC_TYPE_ESSAY="ESSAY"
 APPLY_DOC_TYPE_IDENTITY="IDENTITY"
 APPLY_DOC_TYPE_CITIZENSHIP ="CITIZENSHIP"
 APPLY_DOC_TYPE_PASSWORD ="PASSWORD"
+
 class AddCourseUseCase(BaseUseCase):
     def __init__(self , serializer ,institute:Institute):
         self._institute= institute
@@ -406,6 +407,8 @@ class AddCheckDocumentUseCase(BaseUseCase):
                 academic.save()
             except Academic.DoesNotExist:
                 raise AcademicNotFound
+        else:
+            raise DocTypeNotFound
 class InstituteActionUseCase(BaseUseCase):
     def __init__(self,apply,serializer):
         self._apply = apply

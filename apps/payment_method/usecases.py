@@ -26,6 +26,17 @@ class AddProviderUseCase(BaseUseCase):
                     institute=self._institute
                 )
 
+class ListProviderUseCase(BaseUseCase):
+    def __init__(self,institute):
+        self._institute = institute
+
+    def execute(self):
+        self._factory()
+        self._provider
+
+    def _factory(self):
+        self._provider=Provider.objects.filter(institute=self._institute)
+
 class CustomUpdateUseCase(BaseUseCase):
     def __init__(self, instance, serializer):
         self._instance= instance
@@ -52,5 +63,18 @@ class CreateVoucherPaymentDetail(BaseUseCase):
     def _factory(self):
         VoucherPayment.objects.create(
             **self._data,
+            institute=self._institute
+        )
+
+class ListVoucherUseCase(BaseUseCase):
+    def __init__(self,institute):
+        self._institute = institute
+
+    def execute(self):
+        self._factory()
+        return self._voucher
+
+    def _factory(self):
+        self._voucher = VoucherPayment.objects.filter(
             institute=self._institute
         )
