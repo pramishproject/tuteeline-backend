@@ -56,7 +56,6 @@ class ListChildApplicationComment(BaseUseCase):
         self._factory()
         return self._child_comment
     def _factory(self):
-        print(self._comment)
         self._child_comment = ApplicationComments.objects.filter(
             parent_comment=self._comment,
         ).order_by('created_at')
