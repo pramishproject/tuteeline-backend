@@ -9,7 +9,7 @@ from apps.payment_method.models import Provider,VoucherPayment
 @admin.register(Provider)
 class RelationAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display+(
-        'name',
+        'provider_id',
     )
 
 @admin.register(VoucherPayment)

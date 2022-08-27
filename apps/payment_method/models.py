@@ -39,13 +39,12 @@ PAYMENT_METHOD = (
     ("CASH","CASH"),
 )
 
-# class ProviderName(BaseModel):
-#     icon = models.FileField()
-#     name = models.CharField(max_length=200,choices=PROVIDER_NAME)
+class ProviderName(BaseModel):
+    icon = models.FileField()
+    name = models.CharField(max_length=200,choices=PROVIDER_NAME)
 
 class Provider(BaseModel):
     institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE)
-    name = models.CharField(max_length=200,choices=PROVIDER_NAME)
     provider_id = models.CharField(max_length=200)
 
 class VoucherPayment(BaseModel):
