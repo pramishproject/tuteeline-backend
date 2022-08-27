@@ -19,15 +19,15 @@ class ListProviderNameSerializer(serializers.ModelSerializer):
             'name',
         )
 class ListProviderSerializer(serializers.ModelSerializer):
-    name=serializers.DictField(source="provider_name")
+    # name = serializers.DictField(source="provider_name")
     class Meta:
         model = Provider
         fields = (
             'id',
-            'institute'
+            'institute',
             'provider_name',
             'provider_id',
-            'name',
+            # 'name',
             'created_at',
             'updated_at',
         )

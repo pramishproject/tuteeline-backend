@@ -53,8 +53,8 @@ class Provider(BaseModel):
     def provider_name(self):
         if self.provider_name != None:
             return {
-                    "name":self.provider_name.name,
-                    "icon":self.provider_name.icon,
+                    # "name":self.provider_name.name,
+                    # "icon":self.provider_name.icon,
                 }
         else:
             return {}

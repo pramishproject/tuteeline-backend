@@ -286,6 +286,7 @@ class DeleteVoucherFile(generics.DestroyWithMessageAPIView,VoucherFileMixin):
 
 
 class ApproveApplicationVoucher(generics.CreateWithMessageAPIView,ApplyMixin):
+    serializer_class = None
     def get_object(self):
         return self.get_apply()
 
