@@ -10,10 +10,11 @@ class GetCommentUseCase(BaseUseCase):
 
     def execute(self):
         self._factory()
+        return self._comment
 
     def _factory(self):
         try:
-            ApplicationComments.objects.get(
+            self._comment=ApplicationComments.objects.get(
                 pk = self._comment_id
             )
         except ApplicationComments.DoesNotExist:
@@ -55,7 +56,7 @@ class ListChildApplicationComment(BaseUseCase):
         self._factory()
         return self._child_comment
     def _factory(self):
-
+        print(self._comment)
         self._child_comment = ApplicationComments.objects.filter(
             parent_comment=self._comment,
         ).order_by('created_at')

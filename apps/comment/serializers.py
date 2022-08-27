@@ -31,7 +31,7 @@ class ListChildCommentSerializer(serializers.ModelSerializer):
         )
 class ListAppliocationCommentsSerializer(serializers.ModelSerializer):
     child_comment = serializers.SerializerMethodField(method_name="count_child_comment")
-    parent_application_comment = ListChildCommentSerializer(many=True)
+    # parent_application_comment = ListChildCommentSerializer(many=True)
     user = serializers.DictField(source="user_data")
     class Meta:
         model =  ApplicationComments
@@ -41,7 +41,8 @@ class ListAppliocationCommentsSerializer(serializers.ModelSerializer):
             'user',
             'text_comment',
             'file_comment',
-            'parent_application_comment',
+            # 'parent_application_comment',
+            'parent_comment',
             'application',
             'created_at',
             'updated_at',
