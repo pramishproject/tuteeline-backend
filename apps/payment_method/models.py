@@ -42,7 +42,7 @@ PAYMENT_METHOD = (
 
 class ProviderName(BaseModel):
     icon = models.FileField(upload_to=upload_voucher_icon)
-    name = models.CharField(max_length=200,choices=PROVIDER_NAME)
+    name = models.CharField(choices=PROVIDER_NAME,max_length=200)
 
 class Provider(BaseModel):
     institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE)
@@ -50,11 +50,11 @@ class Provider(BaseModel):
     provider_id = models.CharField(max_length=200)
 
     @property
-    def provider_name(self):
+    def get_provider_name(self):
         if self.provider_name != None:
             return {
-                    # "name":self.provider_name.name,
-                    # "icon":self.provider_name.icon,
+                    "name":self.provider_name.name,
+                    "icon":self.provider_name.icon.url,
                 }
         else:
             return {}

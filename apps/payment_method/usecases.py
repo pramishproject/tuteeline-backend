@@ -27,10 +27,9 @@ class AddProviderUseCase(BaseUseCase):
                 )
 
 class ListProviderNameUseCase(BaseUseCase):
-
     def execute(self):
         self._factory()
-        self._provider
+        return self._provider
 
     def _factory(self):
         self._provider=ProviderName.objects.all()
@@ -41,10 +40,10 @@ class ListProviderUseCase(BaseUseCase):
 
     def execute(self):
         self._factory()
-        self._provider
+        return self._provider
 
     def _factory(self):
-        self._provider=Provider.objects.filter(institute=self._institute)
+        self._provider = Provider.objects.filter(institute=self._institute)
 
 class CustomUpdateUseCase(BaseUseCase):
     def __init__(self, instance, serializer):

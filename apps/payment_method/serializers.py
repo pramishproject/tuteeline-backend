@@ -13,13 +13,11 @@ class AddProviderSerializer(serializers.ModelSerializer):
 
 class ListProviderNameSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ProviderName,
-        fields = (
-            'icon',
-            'name',
-        )
+        model = ProviderName
+        fields = "__all__"
+
 class ListProviderSerializer(serializers.ModelSerializer):
-    # name = serializers.DictField(source="provider_name")
+    name = serializers.DictField(source="get_provider_name")
     class Meta:
         model = Provider
         fields = (
@@ -27,7 +25,7 @@ class ListProviderSerializer(serializers.ModelSerializer):
             'institute',
             'provider_name',
             'provider_id',
-            # 'name',
+            'name',
             'created_at',
             'updated_at',
         )
