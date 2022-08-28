@@ -1,3 +1,4 @@
+import json
 
 from django.db.models import Count
 from django.db.models.functions import TruncDay,TruncWeek,TruncMonth,TruncYear
@@ -17,7 +18,7 @@ from apps.institute_course.models import CommentApplicationInstitute, InstituteA
     ApplyAction, ActionApplyByConsultancy, VoucherFile
 from apps.studentIdentity.exceptions import CitizenshipNotFound,PassportNotFound
 from apps.studentIdentity.models import Citizenship, Passport
-
+from apps.payment_method.models import Transaction
 from apps.utils.uuid_validation import is_valid_uuid
 
 
@@ -466,11 +467,31 @@ class ApproveApplicationVoucher(BaseUseCase):
         self._factory()
 
     def _factory(self):
-        for key in self._data.keys():
-            setattr(self._apply,key,self._data.get(key))
+        staff_id = self._data.pop('approve_by')
+        try:
 
-        self._apply.updated_at = datetime.now()
-        self._apply.save()
+            staff = InstituteStaff.objects.get(pk=staff_id)
+            self._apply.approve_application_fee = staff
+            dictionary = {
+                "apply_id": str(self._apply.id)
+            }
+            json_object = json.dumps(dictionary, indent=4)
+            payment_type = self._data.pop('payment_type')
+            payment_method = self._data.pop('payment_method')
+
+            Transaction.objects.create(
+                institute=self._apply.institute,
+                payment_type=payment_type,
+                payment_method=payment_method,
+                amount=self._apply.course.reg_fee,
+                student=self._apply.student,
+                json_data=json_object,
+            )
+            self._apply.updated_at = datetime.now()
+            self._apply.save()
+        except InstituteStaff.DoesNotExist:
+            raise InstituteStaffNotFound
+
 
 class ListStudentMyApplication(BaseUseCase):
     def __init__(self,student):

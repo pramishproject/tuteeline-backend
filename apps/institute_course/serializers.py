@@ -35,6 +35,7 @@ class AddVoucherFileSerializer(serializers.ModelSerializer):
         model = VoucherFile
         fields = (
             'file',
+            'transaction_id',
         )
 
 class ApproveApplicationFeeSerializer(serializers.ModelSerializer):

@@ -11,6 +11,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from apps.institute_course.utils import parse_date
+from apps.payment_method.serializers import TransactionSerializer
 from apps.user.permissions import IsInstituteUser
 from apps.utils.currency import RealTimeCurrencyConverter
 
@@ -286,7 +287,7 @@ class DeleteVoucherFile(generics.DestroyWithMessageAPIView,VoucherFileMixin):
 
 
 class ApproveApplicationVoucher(generics.CreateWithMessageAPIView,ApplyMixin):
-    serializer_class = None
+    serializer_class = TransactionSerializer
     def get_object(self):
         return self.get_apply()
 
@@ -295,6 +296,7 @@ class ApproveApplicationVoucher(generics.CreateWithMessageAPIView,ApplyMixin):
             apply=self.get_object(),
             serializer =serializer,
         ).execute()
+
 class GetListCommentApplicationView(generics.ListAPIView,ApplyMixin):
     """
     this endpoint is use to get comment

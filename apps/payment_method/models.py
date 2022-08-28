@@ -3,29 +3,6 @@ from apps.core.models import BaseModel
 # Create your models here.
 from apps.institute.models import Institute
 
-
-# class PaymentMethod(BaseModel):
-#     institute = models.ForeignKey(to=Institute,on_delete=models.CASCADE)
-#     cash_receipt = models.BooleanField(default=False)
-#     esewa = models.BooleanField(default=False)
-#     khalti = models.BooleanField(default=False)
-#     skrill = models.BooleanField(default=False)
-#     stripe = models.BooleanField(default=False)
-#     paypal = models.BooleanField(default=False)
-#     payment_detail = models.JSONField()
-        #     {
-        #     "esewa":{
-        #       "esewa_id":""
-        #     },
-        #       "khalti":{
-        #           "khalti_id":""
-        # },
-        #    "cash_recipt":{
-        #    "account_no":"",
-        #    "branch":"branch",
-        #    "name":"",
-        #    }
-        #     }
 from apps.payment_method.utils import upload_voucher_icon
 from apps.students.models import StudentModel
 
@@ -34,6 +11,9 @@ PROVIDER_NAME=(
     ("ESEWA","ESEWA")
 )
 
+PAYMENT_TYPE = (
+    ("REGISTRATION_FEE","REGISTRATION_FEE"),
+)
 PAYMENT_METHOD = (
     ("KHALTI","KHALTI"),
     ("ESEWA","ESEWA"),
@@ -70,6 +50,8 @@ class Transaction(BaseModel):
     student = models.ForeignKey(to=StudentModel,on_delete=models.DO_NOTHING,blank=True,null=True)
     institute = models.ForeignKey(to=Institute,on_delete=models.DO_NOTHING,blank=True,null=True)
     payment_method = models.CharField(choices=PAYMENT_METHOD,max_length=100)
+    payment_type = models.CharField(choices=PAYMENT_TYPE,max_length=200,blank=True,null=True)
     data = models.TextField(blank=True,null=True)
+    json_data = models.JSONField(blank=True,null=True)
     amount  = models.FloatField()
     transaction_id = models.CharField(max_length=200,default="")
