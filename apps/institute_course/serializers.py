@@ -48,7 +48,6 @@ class ApproveApplicationFeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = InstituteApply
         fields = (
-            'approve_application_fee',
             'staff_id',
         )
 

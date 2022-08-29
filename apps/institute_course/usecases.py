@@ -460,7 +460,7 @@ class RequestForApplicationFeeUseCase(BaseUseCase):
             staff = InstituteStaff.objects.get(pk=staff_id)
             apply_action=ApplyAction.objects.create(
                 apply=self._apply,
-                staff = staff,
+                institute_user = staff,
                 action="payment_requested"
             )
             self._apply.request_for_application_fee = True
