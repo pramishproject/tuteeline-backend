@@ -1,7 +1,7 @@
 from apps.core import generics
 from apps.institute.mixins import InstituteMixins
 from apps.payment_method import usecases
-from apps.payment_method.mixins import ProviderMixins
+from apps.payment_method.mixins import ProviderMixins, VoucherMixins
 from apps.payment_method.serializers import AddProviderSerializer, AddVoucherPaymentSerializer, ListProviderSerializer, \
     ListVoucherPaymentSerializer, ListProviderNameSerializer
 from rest_framework.views import APIView
@@ -31,6 +31,35 @@ class UpdateProviderPaymentMethod(generics.UpdateWithMessageAPIView,ProviderMixi
         return usecases.CustomUpdateUseCase(
             instance=self.get_object(),
             serializer=serializer
+        ).execute()
+
+class DeleteProviderPaymentMethod(generics.DestroyWithMessageAPIView,ProviderMixins):
+    def get_object(self):
+        return self.get_provider()
+
+    def perform_destroy(self, instance):
+        return usecases.DeleteProviderUseCase(
+            provider=self.get_provider()
+        ).execute()
+
+class DeleteVoucherPaymentMethod(generics.DestroyWithMessageAPIView,VoucherMixins):
+    def get_object(self):
+        return self.get_voucher()
+
+    def perform_destroy(self, instance):
+        return usecases.DeleteVoucherUseCase(
+            voucher=self.get_object()
+        ).execute()
+
+class UpdateVoucherPaymentMethod(generics.UpdateWithMessageAPIView,VoucherMixins):
+    serializer_class = AddVoucherPaymentSerializer
+    def get_object(self):
+        return self.get_voucher()
+
+    def perform_update(self, serializer):
+        return usecases.CustomUpdateUseCase(
+            instance=self.get_object(),
+            serializer=serializer,
         ).execute()
 
 class AddVoucherPaymentDetail(generics.CreateWithMessageAPIView,InstituteMixins):

@@ -260,7 +260,8 @@ class RequestForApplicationFeeView(generics.UpdateWithMessageAPIView,ApplyMixin)
 
     def perform_update(self, serializer):
         return usecases.RequestForApplicationFeeUseCase(
-            apply=self.get_object()
+            apply=self.get_object(),
+            serializer= serializer,
         ).execute()
 
 class AddVoucherFile(generics.CreateWithMessageAPIView,ApplyMixin):

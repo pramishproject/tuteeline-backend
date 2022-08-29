@@ -447,16 +447,31 @@ class ConsultancyActionUseCase(BaseUseCase):
         self._apply.save()
 
 class RequestForApplicationFeeUseCase(BaseUseCase):
-    def __init__(self,apply:InstituteApply):
+    def __init__(self,apply:InstituteApply,serializer):
         self._apply = apply
-
+        self._serializer = serializer
+        self._data = self._serializer.validated_data
     def execute(self):
         self._factory()
 
     def _factory(self):
-        self._apply.request_for_application_fee = True
-        self._apply.updated_at = datetime.now()
-        self._apply.save()
+        staff_id = self._data.pop("staff_id")
+        try:
+            staff = InstituteStaff.objects.get(pk=staff_id)
+            apply_action=ApplyAction.objects.create(
+                apply=self._apply,
+                staff = staff,
+                action="payment_requested"
+            )
+            self._apply.request_for_application_fee = True
+            self._apply.action = "payment_requested"
+            self._apply.action_field =apply_action
+            self._apply.updated_at = datetime.now()
+
+            self._apply.save()
+        except InstituteStaff.DoesNotExist:
+            raise InstituteStaffNotFound
+
 
 class ApproveApplicationVoucher(BaseUseCase):
     def __init__(self,apply:InstituteApply,serializer):
@@ -487,6 +502,7 @@ class ApproveApplicationVoucher(BaseUseCase):
                 student=self._apply.student,
                 json_data=json_object,
             )
+            self._apply.action = "payment_verify"
             self._apply.updated_at = datetime.now()
             self._apply.save()
         except InstituteStaff.DoesNotExist:

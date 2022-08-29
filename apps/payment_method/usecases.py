@@ -13,6 +13,17 @@ class GetProviderUseCase(BaseUseCase):
     def _factory(self):
         self._provider = Provider.objects.get(pk = self._provider_id)
 
+class GetVoucherUseCase(BaseUseCase):
+    def __init__(self,voucher_id):
+        self._voucher_id = voucher_id
+
+    def execute(self):
+        self._factory()
+        return self._voucher
+
+    def _factory(self):
+        self._voucher = VoucherPayment.objects.get(pk = self._voucher_id)
+
 class AddProviderUseCase(BaseUseCase):
     def __init__(self,serializer,institute):
         self._institute = institute
@@ -86,3 +97,17 @@ class ListVoucherUseCase(BaseUseCase):
         self._voucher = VoucherPayment.objects.filter(
             institute=self._institute
         )
+
+class DeleteProviderUseCase(BaseUseCase):
+    def __init__(self,provider:Provider):
+        self._provider = provider
+
+    def execute(self):
+        self._provider.delete()
+
+class DeleteVoucherUseCase(BaseUseCase):
+    def __init__(self,voucher:VoucherPayment):
+        self._voucher = voucher
+
+    def execute(self):
+        self._voucher.delete()

@@ -39,10 +39,12 @@ class AddVoucherFileSerializer(serializers.ModelSerializer):
         )
 
 class ApproveApplicationFeeSerializer(serializers.ModelSerializer):
+    staff_id = serializers.UUIDField(required=False)
     class Meta:
         model = InstituteApply
         fields = (
             'approve_application_fee',
+            'staff_id',
         )
 
 class InstituteCourseSerializer(serializers.ModelSerializer):
