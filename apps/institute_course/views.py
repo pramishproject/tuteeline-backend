@@ -37,7 +37,7 @@ from apps.institute_course.serializers import (
     GetMyApplicationDocumentSerializer, GetMyApplicationDetailForInstituteSerializer, InstituteActionSerializer,
     ConsultancyActionSerializer, InstituteApplicationStatus, InstituteApplicationCountSerializer,
     InstituteCourseSerializer, AssignStudentApplicationToInstituteStaff, ApproveApplicationFeeSerializer,
-    AddVoucherFileSerializer)
+    AddVoucherFileSerializer, ListVoucherFileSerializer)
 
 from apps.institute_course import usecases
 
@@ -297,6 +297,18 @@ class ApproveApplicationVoucher(generics.CreateWithMessageAPIView,ApplyMixin):
             apply=self.get_object(),
             serializer =serializer,
         ).execute()
+
+class ListPaymentVoucherFileView(generics.ListAPIView,ApplyMixin):
+    serializer_class = ListVoucherFileSerializer
+
+    def get_object(self):
+        return self.get_apply()
+
+    def get_queryset(self):
+        return usecases.ListPaymentVoucherUseCase(
+            apply=self.get_object()
+        ).execute()
+
 
 class GetListCommentApplicationView(generics.ListAPIView,ApplyMixin):
     """

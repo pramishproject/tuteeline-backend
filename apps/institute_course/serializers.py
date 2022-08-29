@@ -38,6 +38,11 @@ class AddVoucherFileSerializer(serializers.ModelSerializer):
             'transaction_id',
         )
 
+class ListVoucherFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VoucherFile
+        fields = '__all__'
+
 class ApproveApplicationFeeSerializer(serializers.ModelSerializer):
     staff_id = serializers.UUIDField(required=False)
     class Meta:

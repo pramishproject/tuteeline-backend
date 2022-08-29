@@ -172,5 +172,10 @@ urlpatterns = [
         '<str:voucher_id>/voucher/delete',
         views.DeleteVoucherFile.as_view(),
         name="delete-voucher"
+    ),
+    path(
+        '<str:apply_id>/voucher/file/list',
+        views.ListPaymentVoucherFileView.as_view(),
+        name="list-voucher"
     )
 ]

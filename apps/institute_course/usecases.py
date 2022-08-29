@@ -520,6 +520,17 @@ class ListStudentMyApplication(BaseUseCase):
     def _factory(self):
         self._application = InstituteApply.objects.filter(student=self._student)
 
+class ListPaymentVoucherUseCase(BaseUseCase):
+    def __init__(self,apply):
+        self._apply =  apply
+
+    def execute(self):
+        self._factory()
+        return self._voucher
+
+    def _factory(self):
+        self._voucher = VoucherFile.objects.filter(apply=self._apply)
+
 class GetMyApplicationDetailUsecase(BaseUseCase):
     def __init__(self,application):
         self._application = application
