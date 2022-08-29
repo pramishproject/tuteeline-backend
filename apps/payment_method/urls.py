@@ -13,9 +13,21 @@ urlpatterns = [
         views.UpdateProviderPaymentMethod.as_view(),
         name="update-provider"
     ),
-    # path(
-    #
-    # ),
+    path(
+        '<voucher_id>/voucher/update',
+        views.UpdateVoucherPaymentMethod.as_view(),
+        name="update_voucher"
+    ),
+    path(
+        '<voucher_id>/voucher/delete',
+        views.DeleteVoucherPaymentMethod.as_view(),
+        name="delete-voucher"
+    ),
+    path(
+        '<provider_id>/provider/delete',
+        views.DeleteProviderPaymentMethod.as_view(),
+        name="delete-provider"
+    ),
     path(
         '<institute_id>/voucher/add',
         views.AddVoucherPaymentDetail.as_view(),
