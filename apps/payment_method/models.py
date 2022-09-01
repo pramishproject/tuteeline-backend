@@ -24,11 +24,12 @@ class ProviderName(BaseModel):
     icon = models.FileField(upload_to=upload_voucher_icon)
     name = models.CharField(choices=PROVIDER_NAME,max_length=200)
 
+class Receiver(BaseModel):
+    receiver_id = models.CharField(max_length=200)
 class Provider(BaseModel):
     institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE)
-    provider_name = models.ForeignKey(to=ProviderName, on_delete=models.CASCADE,null=True,blank=True)
-    provider_id = models.CharField(max_length=200)
-
+    provider = models.ForeignKey(to=ProviderName, on_delete=models.CASCADE,null=True,blank=True)
+    receiver = models.ForeignKey(to= Receiver, on_delete=models.CASCADE,null=True,blank=True)
     @property
     def get_provider_name(self):
         if self.provider_name != None:

@@ -7,7 +7,7 @@ from django.utils.formats import get_format
 from io import BytesIO
 from django.http import HttpResponse
 from django.template.loader import get_template
-from xhtml2pdf import pisa
+# from xhtml2pdf import pisa
 
 from django.core.exceptions import ValidationError
 from django.utils.datetime_safe import datetime
@@ -47,9 +47,9 @@ def html_to_pdf(template_src, context_dict):
      template = get_template(template_src)
      html  = template.render(context_dict)
      result = BytesIO()
-     pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
-     if not pdf.err:
-         return HttpResponse(result.getvalue(), content_type='application/pdf')
+     # pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+     # if not pdf.err:
+     #     return HttpResponse(result.getvalue(), content_type='application/pdf')
      return None
 
 
