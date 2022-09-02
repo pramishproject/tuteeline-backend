@@ -131,7 +131,7 @@ class ListFacultyUseCase(BaseUseCase):
 
 class GetFacultyUseCase(BaseUseCase):
     def __init__(self,faculty_id):
-        self._faculty = faculty_id
+        self._faculty_id = faculty_id
 
     def execute(self):
         self._factory()
@@ -139,7 +139,7 @@ class GetFacultyUseCase(BaseUseCase):
 
     def _factory(self):
         try:
-            self._faculty = Faculty.objects.filter(pk = self._faculty)
+            self._faculty = Faculty.objects.get(pk = self._faculty_id)
 
         except Faculty.DoesNotExist:
             raise FacultyNotFound

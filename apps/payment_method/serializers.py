@@ -7,8 +7,8 @@ class AddProviderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Provider
         fields = (
-            'provider_id',
-            'provider_name',
+            'provider',
+            'receiver',
         )
 
 class ListProviderNameSerializer(serializers.ModelSerializer):
@@ -23,8 +23,8 @@ class ListProviderSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'institute',
-            'provider_name',
-            'provider_id',
+            'receiver',
+            'provider',
             'name',
             'created_at',
             'updated_at',
