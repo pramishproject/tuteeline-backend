@@ -139,7 +139,7 @@ class GetFacultyUseCase(BaseUseCase):
 
     def _factory(self):
         try:
-            self._faculty = Faculty.objects.filter(pk = self._factory)
+            self._faculty = Faculty.objects.filter(pk = self._faculty)
 
         except Faculty.DoesNotExist:
             raise FacultyNotFound
