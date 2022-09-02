@@ -536,6 +536,7 @@ class CheckedAcademicDocumentInstituteSerializer(serializers.ModelSerializer):
         )
 
 class StudentProfileDetailSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(source='get_email')
     address_relation = GetStudentAddressSerializer(many=True, read_only=True)
     parents = ParentsDetailSerializer(many=True,read_only=True)
     class Meta:
@@ -548,6 +549,7 @@ class StudentProfileDetailSerializer(serializers.ModelSerializer):
             'dob',
             'address_relation',
             'parents',
+            'gender',
         )
 
 class CheckedStudentEssayForInstituteSerializer(serializers.ModelSerializer):
