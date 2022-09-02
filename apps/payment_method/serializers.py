@@ -4,11 +4,12 @@ from apps.payment_method.models import Provider, VoucherPayment, ProviderName,Tr
 
 
 class AddProviderSerializer(serializers.ModelSerializer):
+    receiver_id = serializers.CharField(max_length=200)
     class Meta:
         model = Provider
         fields = (
             'provider',
-            'receiver',
+            'receiver_id',
         )
 
 class ListProviderNameSerializer(serializers.ModelSerializer):

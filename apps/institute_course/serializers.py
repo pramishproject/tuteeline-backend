@@ -550,6 +550,7 @@ class StudentProfileDetailSerializer(serializers.ModelSerializer):
             'address_relation',
             'parents',
             'gender',
+            'email',
         )
 
 class CheckedStudentEssayForInstituteSerializer(serializers.ModelSerializer):

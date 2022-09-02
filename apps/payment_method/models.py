@@ -26,6 +26,7 @@ class ProviderName(BaseModel):
 
 class Receiver(BaseModel):
     receiver_id = models.CharField(max_length=200)
+
 class Provider(BaseModel):
     institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE)
     provider = models.ForeignKey(to=ProviderName, on_delete=models.CASCADE,null=True,blank=True)

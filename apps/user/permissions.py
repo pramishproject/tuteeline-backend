@@ -43,9 +43,9 @@ class CheckPermission:
         staff = InstituteStaff.objects.get(user=self._user)
         self.lst1 = self._permission
         self.lst2 = staff.role.permission_list
-        if not isinstance(self.lst1, list):
+        if not isinstance(self.lst1, dict):
             return False
-        if not isinstance(self.lst2, list):
+        if not isinstance(self.lst2, dict):
             return False
 
         present = self.intersection()
