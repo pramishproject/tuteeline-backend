@@ -405,4 +405,3 @@ TIME_FIELD_FORMAT = strftime("%H:%M: %p")
 DATE_FIELD_FORMAT = strftime("%Y-%m-%d")
 DATE_AND_TIME_FORMAT = strftime("%Y-%m-%d %H:%M: %p")
 
-
