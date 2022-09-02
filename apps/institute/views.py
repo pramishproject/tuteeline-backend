@@ -36,6 +36,7 @@ class InitView(APIView):
             "email":staff.user.email,
             "contact":staff.contact,
             "address":staff.address,
+            "permission":staff.role.permission_list
         }
         serializer = serializers.InitSerilizer(instance=data)
         data = serializer.data

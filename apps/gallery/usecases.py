@@ -81,7 +81,6 @@ class AddInstituteGalleryUseCase(BaseUseCase):
         self._factory()
 
     def _factory(self):
-        print(self._data.get("uploaded_image"))
         InstituteGallery.objects.create(
             institute=self._institute,
             **self._data

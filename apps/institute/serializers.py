@@ -22,8 +22,9 @@ class InitSerilizer(serializers.Serializer):
     name =  serializers.CharField()
     institute_type = serializers.CharField()
     email =  serializers.EmailField()
-    contact: serializers.CharField()
-    address: serializers.CharField()
+    contact= serializers.CharField()
+    address= serializers.CharField()
+    permission = serializers.JSONField()
 
 class InstituteSerializer(serializers.ModelSerializer):
     class Meta:
