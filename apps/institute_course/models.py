@@ -169,6 +169,15 @@ class InstituteApply(BaseModel):
             "contact":self.institute.contact,
             "country":self.institute.country,
         }
+
+    @property
+    def student_email(self):
+        return self.student.user.email
+
+    @property
+    def student_contact(self):
+        return self.student.contact
+
     @property
     def assign_institute_staff(self):
         if self.institute_staff_assign != None:

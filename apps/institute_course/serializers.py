@@ -300,6 +300,8 @@ class AssignStudentApplicationToInstituteStaff(serializers.ModelSerializer):
 
 class GetStudentApplicationInstituteSerializer(serializers.ModelSerializer):
     student_name = serializers.CharField(source='get_student_user_name')
+    email = serializers.EmailField(source="student_email")
+    contact = serializers.CharField(source="student_contact")
     consultancy_name = serializers.CharField(source='get_consultancy_name')
     course_name = serializers.CharField(source='get_student_course') 
     address = serializers.DictField(source='student_address')
@@ -314,6 +316,8 @@ class GetStudentApplicationInstituteSerializer(serializers.ModelSerializer):
             'student',
             'student_name',
             'course_name',
+            'email',
+            'contact',
             'course',
             'consultancy_name',
             'consultancy',
