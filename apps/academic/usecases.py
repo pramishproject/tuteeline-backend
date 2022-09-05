@@ -222,7 +222,16 @@ class DeleteLorUseCase(usecases.BaseUseCase):
         self._factory()
 
     def _factory(self):
+        self.student = self._lor.student
         self._lor.delete()
+        try:
+            student_lor = StudentLor.objects.filter(student=self.student).count()
+            if student_lor <= 0:
+                complete_profile=CompleteProfileTracker.objects.get(student=self.student)
+                complete_profile.complete_lor_field=False
+                complete_profile.save()
+        except CompleteProfileTracker.DoesNotExist:
+            pass
 
 class CreateStudentEssayUseCase(usecases.CreateUseCase):
     def __init__(self, serializer ,student):
@@ -289,14 +298,23 @@ class GetPersonalEssayUseCase(BaseUseCase):
             raise EssayNotFound
 
 class DeleteSopUseCase(BaseUseCase):
-    def __init__(self,sop):
+    def __init__(self,sop:StudentSop):
         self._sop = sop
     
     def execute(self):
         self._factory()
 
     def _factory(self):
+        self.student = self._sop.student
         self._sop.delete()
+        try:
+            student_lor = StudentSop.objects.filter(student=self.student).count()
+            if student_lor <= 0:
+                complete_profile=CompleteProfileTracker.objects.get(student=self.student)
+                complete_profile.complete_sop_field=False
+                complete_profile.save()
+        except CompleteProfileTracker.DoesNotExist:
+            pass
 
 class UpdateEssayUseCase(BaseUseCase):
     def __init__(self,serializer,essay:PersonalEssay):
@@ -315,15 +333,23 @@ class UpdateEssayUseCase(BaseUseCase):
         self._essay.save()
 
 class DeleteEssayUseCase(BaseUseCase):
-    def __init__(self,essay):
+    def __init__(self,essay:PersonalEssay):
         self._essay = essay
     
     def execute(self):
         self._factory()
 
     def _factory(self):
+        self.student= self._essay.student
         self._essay.delete()
-
+        try:
+            student_lor = PersonalEssay.objects.filter(student=self.student).count()
+            if student_lor <= 0:
+                complete_profile=CompleteProfileTracker.objects.get(student=self.student)
+                complete_profile.complete_personalessay_field=False
+                complete_profile.save()
+        except CompleteProfileTracker.DoesNotExist:
+            pass
 
 class DeleteAcademicUseCase(BaseUseCase):
     def __init__(self,academic):
@@ -333,4 +359,13 @@ class DeleteAcademicUseCase(BaseUseCase):
         self._factory()
 
     def _factory(self):
+        self.student = self._academic.student
         self._academic.delete()
+        try:
+            student_lor = Academic.objects.filter(student=self.student).count()
+            if student_lor <= 0:
+                complete_profile = CompleteProfileTracker.objects.get(student=self.student)
+                complete_profile.complete_academic_detail = False
+                complete_profile.save()
+        except CompleteProfileTracker.DoesNotExist:
+            pass

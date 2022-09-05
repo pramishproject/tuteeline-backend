@@ -12,7 +12,8 @@ from apps.consultancy.models import Consultancy
 from apps.core.usecases import BaseUseCase
 from apps.institute.models import Institute, InstituteStaff
 from apps.institute_course.exceptions import CourseNotFound, FacultyNotFound, InstituteApplyNotFound, InstituteNotFound, \
-    InstituteStaffNotFound, UniqueStudentApply, VoucherNotFound, CheckDocumentDoesntExist, DocTypeNotFound
+    InstituteStaffNotFound, UniqueStudentApply, VoucherNotFound, CheckDocumentDoesntExist, DocTypeNotFound, \
+    VoucherFileDoesntExist
 from apps.institute_course.models import CommentApplicationInstitute, InstituteApply, InstituteCourse, Course, Faculty, \
     CheckedAcademicDocument, CheckStudentIdentity, CheckedStudentLor, CheckedStudentSop, CheckedStudentEssay, \
     ApplyAction, ActionApplyByConsultancy, VoucherFile
@@ -483,6 +484,14 @@ class ApproveApplicationVoucher(BaseUseCase):
 
     def _factory(self):
         staff_id = self._data.pop('approve_by')
+        voucher_id = self._data.pop("voucher_id")
+        voucher = None
+        if voucher_id != None or len(voucher_id) >0:
+            try:
+                voucher = VoucherFile.objects.get(pk=voucher_id)
+
+            except VoucherFile.DoesNotExist:
+                raise VoucherFileDoesntExist
         try:
 
             staff = InstituteStaff.objects.get(pk=staff_id)
@@ -505,6 +514,10 @@ class ApproveApplicationVoucher(BaseUseCase):
             self._apply.action = "payment_verify"
             self._apply.updated_at = datetime.now()
             self._apply.save()
+            if voucher:
+                voucher.approve=True
+                voucher.updated_at = datetime.now()
+                voucher.save()
         except InstituteStaff.DoesNotExist:
             raise InstituteStaffNotFound
 

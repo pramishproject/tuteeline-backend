@@ -86,7 +86,9 @@ class AddInstituteCourseSerializer(serializers.ModelSerializer):
             'essay', 
             'lor', 
             'sop',
+            'reg_fee',
             'no_of_seats',
+            'qualification',
         )
         # validators = [UniqueTogetherValidator(
         #     queryset=InstituteCourse.objects.all(),
@@ -456,6 +458,7 @@ class CheckedAcademicDocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = CheckedAcademicDocument
         fields = (
+            'id',
             'academic',
             'doc_name',
         )
@@ -465,6 +468,7 @@ class CheckedStudentEssaySerializer(serializers.ModelSerializer):
     class Meta:
         model = CheckedStudentEssay
         fields = (
+            'id',
             'essay',
             'essay_name'
         )
@@ -473,6 +477,7 @@ class CheckStudentIdentitySerializer(serializers.ModelSerializer):
     class Meta:
         model = CheckStudentIdentity
         fields = (
+            'id',
             'citizenship',
             'passport',
         )
@@ -482,6 +487,7 @@ class CheckedStudentLorSerializer(serializers.ModelSerializer):
     class Meta:
         model =CheckedStudentLor
         fields = (
+            'id',
             'lor',
             'lor_name',
         )
@@ -491,6 +497,7 @@ class GetCheckedStudentSopSerializer(serializers.ModelSerializer):
     class Meta:
         model = CheckedStudentSop
         fields = (
+            'id',
             'sop',
             'name',
         )

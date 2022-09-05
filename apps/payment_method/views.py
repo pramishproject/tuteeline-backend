@@ -1,5 +1,7 @@
 from apps.core import generics
 from apps.institute.mixins import InstituteMixins
+from apps.institute_course.mixins import CourseMixin
+from apps.institute_course.models import InstituteCourse
 from apps.payment_method import usecases
 from apps.payment_method.mixins import ProviderMixins, VoucherMixins
 from apps.payment_method.serializers import AddProviderSerializer, AddVoucherPaymentSerializer, ListProviderSerializer, \
@@ -94,3 +96,8 @@ class ListVoucherPaymentView(generics.ListAPIView,InstituteMixins):
         ).execute()
 
 
+class EsewaVerifyView(generics.CreateAPIView,CourseMixin):
+    def get_object(self):
+        return self.get_institutecourse()
+    def perform_create(self, serializer):
+        pass

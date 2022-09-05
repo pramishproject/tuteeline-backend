@@ -66,7 +66,7 @@ class ListBookingView(generics.ListAPIView):
         return usecases.ListBookingUseCase().execute()
 
 
-class UpdateCounselorScheduleView(generics.UpdateAPIView, CounselingScheduleMixin):
+class UpdateCounselorScheduleView(generics.UpdateWithMessageAPIView, CounselingScheduleMixin):
     """
     Use this endpoint to update counsellor schedules
     """
@@ -96,7 +96,7 @@ class DeleteCounsellorScheduleView(generics.DestroyAPIView,CounselingScheduleMix
         ).execute()
 
 
-class UpdateBookingView(generics.UpdateAPIView, BookingMixin):
+class UpdateBookingView(generics.UpdateWithMessageAPIView, BookingMixin):
     """
     Use this endpoint to update booking
     """

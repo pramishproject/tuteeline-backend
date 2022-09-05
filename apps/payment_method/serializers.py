@@ -48,10 +48,12 @@ class ListVoucherPaymentSerializer(serializers.ModelSerializer):
 
 class TransactionSerializer(serializers.ModelSerializer):
     approve_by = serializers.UUIDField()
+    voucher_id = serializers.UUIDField(required=False)
     class Meta:
         model = Transaction
         fields = (
             'payment_method',
             'payment_type',
             'approve_by',
+            'voucher_id',
         )

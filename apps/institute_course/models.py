@@ -110,6 +110,7 @@ ACTION_OPTION=(
         ('verify','verify'),
         ('accept','accept'),
         ('reject','reject'),
+        ('cancel','cancel'),
         ('pending','pending'),
         ('applied','applied'),
         ('payment_requested','payment_requested'),
@@ -259,7 +260,7 @@ class VoucherFile(BaseModel):
     )
     transaction_id = models.CharField(max_length=200,blank=True,null=True)
     doc_type = models.CharField(max_length=100, blank=True, null=True)
-
+    approve = models.BooleanField(default=False)
     def save(self, *args, **kwargs):
         name, extension = os.path.splitext(str(self.file))
         self.doc_type = extension

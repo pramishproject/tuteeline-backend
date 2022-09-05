@@ -20,6 +20,9 @@ class InstituteApplyNotFound(NotFound):
 class InstituteStaffNotFound(NotFound):
     default_detail = _("staff not found following id")
 
+class VoucherFileDoesntExist(NotFound):
+    default_detail = _("voucher file doesnt exist")
+
 class UniqueStudentApply(NotFound):
     default_detail = _("Student Already apply this course")
 

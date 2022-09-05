@@ -46,7 +46,7 @@ class DeleteBlogView(BlogsMixin, generics.DestroyAPIView):
         ).execute()
 
 
-class UpdateBlogView(generics.UpdateAPIView, BlogsMixin):
+class UpdateBlogView(generics.UpdateWithMessageAPIView, BlogsMixin):
     """
     Use this end-point to Update   blogs.
     """
@@ -102,7 +102,7 @@ class DeleteRelationView(RelationMixin, generics.DestroyAPIView):
         ).execute()
 
 
-class UpdateRelationView(generics.UpdateAPIView, RelationMixin):
+class UpdateRelationView(generics.UpdateWithMessageAPIView, RelationMixin):
     """
     Use this end-point to Update   relations.
     """
@@ -153,7 +153,7 @@ class ListInstituteBlogsView(generics.ListAPIView,InstituteMixins):
             institute=self.get_object(),
         ).execute()
 
-class UpdateInstituteBlogView(generics.UpdateAPIView,InstituteBlogMixin):
+class UpdateInstituteBlogView(generics.UpdateWithMessageAPIView,InstituteBlogMixin):
     """
     this end point is use to update blogs
     """

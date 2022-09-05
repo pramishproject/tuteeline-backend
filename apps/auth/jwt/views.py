@@ -211,7 +211,7 @@ class ForgetPasswordInstituteView(generics.CreateAPIView):
         ).execute()
 
 
-class ChangeForgetPasswordView(generics.UpdateAPIView,StudentUserMixin):
+class ChangeForgetPasswordView(generics.UpdateWithMessageAPIView,StudentUserMixin):
     serializer_class = serializers.ChangeForgetPasswordSerializer
     def get_object(self):
         return self.get_student_user()
@@ -222,7 +222,7 @@ class ChangeForgetPasswordView(generics.UpdateAPIView,StudentUserMixin):
             user=self.get_object()
         ).execute()
 
-class ChangeInstituteForgetPassword(generics.UpdateAPIView,InstituteUserMixin):
+class ChangeInstituteForgetPassword(generics.UpdateWithMessageAPIView,InstituteUserMixin):
     serializer_class = serializers.ChangeForgetPasswordSerializer
     def get_object(self):
         return self.get_institute_user()

@@ -108,7 +108,7 @@ class ListConsultancyReview(generics.ListAPIView,ConsultancyMixin):
         context.update({"request": self.request})
         return context
 
-class UpdateConsultancyReview(generics.UpdateAPIView,ConsultancyReviewMixins):
+class UpdateConsultancyReview(generics.UpdateWithMessageAPIView,ConsultancyReviewMixins):
 
     serializer_class = UpdateConsultancyReviewSerializer
     permission_classes = (IsAuthenticated, IsStudentUser)

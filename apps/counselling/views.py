@@ -110,7 +110,7 @@ class AssignCouncilingListView(generics.ListAPIView,InstituteStaffMixins): #todo
             staff=self.get_object()
         ).execute()
 
-class ActionCounsellingView(generics.UpdateAPIView,InstituteCounsellingMixin):
+class ActionCounsellingView(generics.UpdateWithMessageAPIView,InstituteCounsellingMixin):
     serializer_class = serializers.ActionCounselling
 
     def get_object(self):
@@ -156,7 +156,7 @@ class ListConsultancyCounsellingForStudent(generics.ListAPIView,StudentMixin):
             student=self.get_object()
         ).execute()
 
-class AddConsultancyNotes(generics.UpdateAPIView,ConsultancyCounsellingMixin): #todo
+class AddConsultancyNotes(generics.UpdateWithMessageAPIView,ConsultancyCounsellingMixin): #todo
     serializer_class = serializers.UpdateConsultancyUser
 
     def get_object(self):
