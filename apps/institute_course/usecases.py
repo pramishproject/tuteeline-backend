@@ -496,6 +496,7 @@ class ApproveApplicationVoucher(BaseUseCase):
 
             staff = InstituteStaff.objects.get(pk=staff_id)
             self._apply.approve_application_fee = staff
+
             dictionary = {
                 "apply_id": str(self._apply.id)
             }
@@ -511,7 +512,13 @@ class ApproveApplicationVoucher(BaseUseCase):
                 student=self._apply.student,
                 json_data=json_object,
             )
+            user_action = ApplyAction.objects.create(
+                apply=self._apply,
+                institute_user = staff,
+                action= 'payment_verify',
+            )
             self._apply.action = "payment_verify"
+            self._apply.action_field = user_action
             self._apply.updated_at = datetime.now()
             self._apply.save()
             if voucher:

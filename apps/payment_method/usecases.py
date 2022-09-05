@@ -1,6 +1,7 @@
 from apps.core.usecases import BaseUseCase
 from apps.payment_method.models import Provider, VoucherPayment, ProviderName, Receiver
 from django.utils.datetime_safe import datetime
+import requests as req
 
 class GetProviderUseCase(BaseUseCase):
     def __init__(self,provider_payment_id):
@@ -117,3 +118,23 @@ class DeleteVoucherUseCase(BaseUseCase):
 
     def execute(self):
         self._voucher.delete()
+
+class EsewaVerifyUseCase(BaseUseCase):
+    def __init__(self,apply):
+        self._apply = apply
+    def execute(self):
+        self._factory()
+    def _factory(self):
+        url = "https://uat.esewa.com.np/epay/main"
+        apply = self.get_object()
+        fee = apply.course.reg_fee
+        d = {'amt': fee,
+             'pdc': 0,
+             'psc': 0,
+             'txAmt': 0,
+             'tAmt': 100,
+             'pid': apply.id,
+             'scd': 'EPAYTEST',
+             'su': 'http://merchant.com.np/page/esewa_payment_success?q=su',
+             'fu': 'http://merchant.com.np/page/esewa_payment_failed?q=fu'}
+        resp = req.post(url, d)
