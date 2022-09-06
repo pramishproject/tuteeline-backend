@@ -381,13 +381,13 @@ class CheckedStudentEssay(BaseModel):
 
     @property
     def get_essay_data(self):
-        essayUrl = None
-        if self.essay.essay != None:
-            essayUrl = self.essay.essay.url
+        # essayUrl = None
+        # if self.essay.essay != None:
+        #     essayUrl = self.essay.essay.url
         return {
             "name":self.essay.name,
             "content":self.essay.content,
-            "essay":essayUrl,
+            # "essay":essayUrl,
             "type":self.essay.doc_type
         }
 
